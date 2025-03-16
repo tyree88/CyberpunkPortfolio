@@ -223,7 +223,7 @@
     margin-bottom: 2rem;
   }
   
-  .hero-title {
+  :global(.hero-title) {
     font-size: 3rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
@@ -387,8 +387,8 @@
     animation: blink 2s infinite;
   }
   
-  /* Scan line animation */
-  .scan-line {
+  /* Scan line animation - added as element in JS */
+  :global(.scan-line) {
     position: absolute;
     top: 0;
     left: 0;
@@ -411,7 +411,7 @@
   
   /* Responsive styles */
   @media (max-width: 768px) {
-    .hero-title {
+    :global(.hero-title) {
       font-size: 2rem;
     }
     

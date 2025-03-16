@@ -82,8 +82,14 @@
   class="glitch-text {class_name}" 
   bind:this={container} 
   on:mouseenter={startGlitchEffect}
-  role="text"
+  on:keydown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      startGlitchEffect();
+    }
+  }}
+  role="presentation"
   aria-label={text}
+  tabindex="0"
 >
   {text}
 </span>

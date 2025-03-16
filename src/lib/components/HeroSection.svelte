@@ -230,11 +230,30 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/cyberpunk-bg-gradient.svg');
+    background-image: 
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)),
+      radial-gradient(at 20% 30%, rgba(73, 197, 182, 0.4) 0%, transparent 60%),
+      radial-gradient(at 80% 70%, rgba(255, 82, 82, 0.4) 0%, transparent 60%);
     background-size: cover;
     background-position: center;
     z-index: 0;
-    opacity: 0.8;
+    opacity: 1;
+    animation: backgroundPulse 8s ease-in-out infinite alternate;
+  }
+  
+  @keyframes backgroundPulse {
+    0% {
+      filter: hue-rotate(0deg) brightness(1);
+      background-position: 0% 0%;
+    }
+    50% {
+      filter: hue-rotate(30deg) brightness(1.1);
+      background-position: 20% 10%;
+    }
+    100% {
+      filter: hue-rotate(-10deg) brightness(0.9);
+      background-position: 10% 20%;
+    }
   }
   
   .hero-content {
@@ -317,8 +336,52 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     border: 1px solid #49c5b6;
-    box-shadow: 0 0 30px rgba(73, 197, 182, 0.2);
+    box-shadow: 0 0 30px rgba(73, 197, 182, 0.3);
     overflow: hidden;
+    animation: circuitGlow 5s ease-in-out infinite alternate;
+    position: relative;
+  }
+  
+  .cyber-circuits::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(73, 197, 182, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(255, 82, 82, 0.15) 0%, transparent 40%);
+    filter: blur(20px);
+    animation: glowShift 8s ease-in-out infinite alternate;
+    z-index: 0;
+  }
+  
+  @keyframes circuitGlow {
+    0% {
+      box-shadow: 0 0 20px rgba(73, 197, 182, 0.3), inset 0 0 15px rgba(73, 197, 182, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(255, 82, 82, 0.2), inset 0 0 20px rgba(255, 82, 82, 0.1);
+    }
+    100% {
+      box-shadow: 0 0 30px rgba(236, 208, 111, 0.3), inset 0 0 25px rgba(236, 208, 111, 0.1);
+    }
+  }
+  
+  @keyframes glowShift {
+    0% {
+      opacity: 0.7;
+      background-position: 0% 0%;
+    }
+    50% {
+      opacity: 0.9; 
+      background-position: 10% 20%;
+    }
+    100% {
+      opacity: 0.8;
+      background-position: 20% 10%;
+    }
   }
   
   /* Core element in the center */
@@ -374,6 +437,7 @@
       transparent 1px,
       transparent 50px
     );
+    animation: gridSlideVertical 30s linear infinite;
   }
   
   .grid-vertical {
@@ -384,6 +448,7 @@
       transparent 1px,
       transparent 50px
     );
+    animation: gridSlideHorizontal 30s linear infinite;
   }
   
   .grid-diagonal-1 {
@@ -394,6 +459,7 @@
       transparent 1px,
       transparent 100px
     );
+    animation: gridSlidePositive 60s linear infinite;
   }
   
   .grid-diagonal-2 {
@@ -404,6 +470,27 @@
       transparent 1px,
       transparent 100px
     );
+    animation: gridSlideNegative 60s linear infinite;
+  }
+  
+  @keyframes gridSlideVertical {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 50px; }
+  }
+  
+  @keyframes gridSlideHorizontal {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 0; }
+  }
+  
+  @keyframes gridSlidePositive {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+  }
+  
+  @keyframes gridSlideNegative {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px -100px; }
   }
   
   /* Floating skills */
@@ -417,6 +504,10 @@
     white-space: nowrap;
     z-index: 3;
     transform-origin: center;
+    box-shadow: 0 0 5px rgba(73, 197, 182, 0.5);
+    text-shadow: 0 0 5px rgba(73, 197, 182, 0.8);
+    backdrop-filter: blur(1px);
+    animation: skillGlow 3s infinite alternate;
   }
   
   :global(.floating-skill)::before {
@@ -428,6 +519,32 @@
     height: 5px;
     border-top: 1px solid #ff5252;
     border-left: 1px solid #ff5252;
+  }
+  
+  :global(.floating-skill)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 5px;
+    height: 5px;
+    border-bottom: 1px solid #ff5252;
+    border-right: 1px solid #ff5252;
+  }
+  
+  @keyframes skillGlow {
+    0% {
+      box-shadow: 0 0 5px rgba(73, 197, 182, 0.5);
+      border-color: rgba(73, 197, 182, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 8px rgba(255, 82, 82, 0.5);
+      border-color: rgba(255, 82, 82, 0.5);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(236, 208, 111, 0.5);
+      border-color: rgba(236, 208, 111, 0.5);
+    }
   }
   
   /* Data flow lines */
@@ -482,7 +599,7 @@
     animation: blink 2s infinite;
   }
   
-  /* Scan line animation - added as element in JS */
+  /* Scan line animation */
   :global(.scan-line) {
     position: absolute;
     top: 0;
@@ -497,6 +614,62 @@
     );
     z-index: 10;
     pointer-events: none;
+    animation: scanAnimation 4s linear infinite;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 2px rgba(73, 197, 182, 0.8));
+  }
+  
+  :global(.scan-interference) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(73, 197, 182, 0.02) 50%,
+      transparent 100%
+    );
+    z-index: 9;
+    pointer-events: none;
+    animation: interferenceAnimation 4s ease-in-out infinite;
+    opacity: 0.3;
+  }
+  
+  @keyframes scanAnimation {
+    0% {
+      top: 0;
+      opacity: 0.7;
+    }
+    25% {
+      opacity: 0.9;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    75% {
+      opacity: 0.9;
+    }
+    100% {
+      top: 100%;
+      opacity: 0.7;
+    }
+  }
+  
+  @keyframes interferenceAnimation {
+    0% {
+      background-position: 0 -100%;
+      opacity: 0.2;
+    }
+    50% {
+      background-position: 0 100%;
+      opacity: 0.3;
+    }
+    100% {
+      background-position: 0 300%;
+      opacity: 0.2;
+    }
   }
   
   /* Animations */

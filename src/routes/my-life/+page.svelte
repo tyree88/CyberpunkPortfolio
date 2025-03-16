@@ -29,7 +29,7 @@
       title: "FRONTAL CORTEX",
       icon: "🧠",
       color: "#49c5b6",
-      position: { top: '15%', left: '15%' },
+      position: { top: '8%', left: '50%', transform: 'translateX(-50%)' }, // Top center, near the head
       items: [
         { name: "Problem-Solving OS", level: 92, description: "Enhanced cognitive processing for complex problem-solving" },
         { name: "Creative Framework", level: 88, description: "Boost to creative thinking and innovation abilities" },
@@ -41,7 +41,7 @@
       title: "OPERATING SYSTEM",
       icon: "💻",
       color: "#ECD06F",
-      position: { top: '15%', right: '15%' },
+      position: { top: '35%', left: '50%', transform: 'translateX(-50%)' }, // Center of the body
       items: [
         { name: "Multitasking Processor", level: 90, description: "Efficient management of multiple concurrent tasks" },
         { name: "Focus Enhancer", level: 85, description: "Sustained concentration on complex problems" }
@@ -52,7 +52,7 @@
       title: "FACE",
       icon: "👁️",
       color: "#ff5252",
-      position: { top: '25%', right: '10%' },
+      position: { top: '15%', left: '50%', transform: 'translateX(-50%)' }, // Near the neck
       items: [
         { name: "Kiroshi Optics", level: 95, description: "Enhanced visual perception for design and attention to detail" },
         { name: "Vocal Modulator", level: 88, description: "Clear and effective communication skills" }
@@ -63,7 +63,7 @@
       title: "ARMS",
       icon: "💪",
       color: "#9059ff",
-      position: { top: '30%', left: '10%' },
+      position: { top: '30%', right: '10%' }, // Right arm position
       items: [
         { name: "Gorilla Arms", level: 87, description: "Rapid keyboard input and precision coding" }
       ]
@@ -73,7 +73,7 @@
       title: "SKELETON",
       icon: "🦴",
       color: "#2ecc71",
-      position: { top: '40%', left: '5%' },
+      position: { top: '40%', left: '10%' }, // Left side of body
       items: [
         { name: "Endoskeleton", level: 84, description: "Sustained work stamina and posture support" },
         { name: "Reinforced Tendons", level: 82, description: "Comfort during long development sessions" },
@@ -85,7 +85,7 @@
       title: "HANDS",
       icon: "✋",
       color: "#1abc9c",
-      position: { top: '40%', right: '5%' },
+      position: { top: '40%', right: '5%' }, // Right hand position
       items: [
         { name: "Precision Grip", level: 95, description: "Micro-precision for detailed coding and design work" },
         { name: "Smart Link", level: 90, description: "Enhanced human-computer interface interaction" }
@@ -96,7 +96,7 @@
       title: "NERVOUS SYSTEM",
       icon: "⚡",
       color: "#f39c12",
-      position: { top: '55%', left: '10%' },
+      position: { top: '50%', left: '50%', transform: 'translateX(-50%)' }, // Central nervous system position
       items: [
         { name: "Kerenzikov", level: 88, description: "Rapid reaction time for debugging and problem-solving" },
         { name: "Reflexes", level: 85, description: "Quick adaptation to changing project requirements" },
@@ -108,7 +108,7 @@
       title: "CIRCULATORY SYSTEM",
       icon: "❤️",
       color: "#e74c3c",
-      position: { top: '55%', right: '10%' },
+      position: { top: '25%', left: '50%', transform: 'translateX(-50%)' }, // Heart/chest area
       items: [
         { name: "Biomonitor", level: 86, description: "Stress management during challenging projects" },
         { name: "Blood Pump", level: 82, description: "Maintained performance during high-pressure deadlines" },
@@ -120,7 +120,7 @@
       title: "INTEGUMENTARY SYSTEM",
       icon: "🛡️",
       color: "#3498db",
-      position: { bottom: '25%', left: '10%' },
+      position: { top: '60%', left: '15%' }, // Skin/surface area - left side
       items: [
         { name: "Heat Converter", level: 79, description: "Comfortable work under varying environmental conditions" },
         { name: "Pain Editor", level: 76, description: "Reduced fatigue during extended work sessions" },
@@ -132,7 +132,7 @@
       title: "LEGS",
       icon: "🦿",
       color: "#8e44ad",
-      position: { bottom: '15%', right: '10%' },
+      position: { bottom: '15%', left: '50%', transform: 'translateX(-50%)' }, // Bottom of body
       items: [
         { name: "Reinforced Joints", level: 75, description: "Stability and endurance during long work sessions" },
         { name: "Lynx Paws", level: 72, description: "Silent and efficient movement throughout work environments" }
@@ -510,6 +510,7 @@
                  left: {system.position.left || 'auto'}; 
                  right: {system.position.right || 'auto'}; 
                  bottom: {system.position.bottom || 'auto'};
+                 transform: {system.position.transform || 'none'};
                  border-color: {system.color};"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
@@ -970,6 +971,7 @@
     transition: all 0.3s ease;
     z-index: 10;
     overflow: hidden;
+    transform: translateX(0); /* Default transform to support the inline style transform */
   }
   
   .node-content {

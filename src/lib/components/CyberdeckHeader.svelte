@@ -89,18 +89,17 @@
   
   <div class="header-right">
     <a href="/about-me" class="header-link">
-      <div class="connection-status">
-        <span class="icon">⚡</span>
-        <span class="text">MORE ABOUT ME</span>
-      </div>
-    </a>
-    
-    <a href="/my-life" class="header-link">
-      <div class="health-container">
-        <span class="label">HEALTH</span>
-        <div class="health-bar">
-          <div class="health-fill" style="width: {healthValue}%"></div>
-          <span class="health-text">{healthValue}%</span>
+      <div class="combined-status">
+        <div class="connection-status">
+          <span class="icon">⚡</span>
+          <span class="text">MORE ABOUT ME</span>
+        </div>
+        
+        <div class="health-container">
+          <div class="health-bar">
+            <div class="health-fill" style="width: {healthValue}%"></div>
+            <span class="health-text">{healthValue}%</span>
+          </div>
         </div>
       </div>
     </a>
@@ -157,7 +156,6 @@
     color: inherit;
     transition: transform 0.2s ease;
     display: block;
-    margin-left: 1rem;
   }
   
   .header-link:hover {
@@ -173,9 +171,19 @@
     align-items: center;
   }
   
+  .combined-status {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(73, 197, 182, 0.4);
+    padding: 0.5rem;
+    border-radius: 2px;
+  }
+  
   .health-container {
     display: flex;
     flex-direction: column;
+    margin-top: 0.5rem;
   }
   
   .health-bar {

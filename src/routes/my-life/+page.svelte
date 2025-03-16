@@ -3,7 +3,8 @@
   import { gsap } from 'gsap';
   import { fade } from 'svelte/transition';
   import TypewriterText from '$lib/components/TypewriterText.svelte';
-  import { navigateBack } from '$lib/stores/navigationStore';
+  import { navigateTo } from '$lib/stores/navigationStore';
+  import { goto } from '$app/navigation';
   
   let isLoaded = false;
   let currentSection = 0;
@@ -73,7 +74,8 @@
   }
   
   function handleBack() {
-    navigateBack();
+    // Navigate back to the main page
+    goto('/');
   }
 </script>
 
@@ -110,7 +112,7 @@
           }}
           tabindex="0"
           role="button"
-          aria-selected={currentSection === i}
+          aria-pressed={currentSection === i}
         >
           <span class="nav-icon">></span>
           <span class="nav-text">{story.title}</span>

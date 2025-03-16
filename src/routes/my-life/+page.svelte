@@ -903,11 +903,13 @@
     position: relative;
     width: 80%;
     height: 80%;
-    background-image: url('/images/cyberware/body-silhouette.svg');
+    background-image: url('/images/cyberware/x-ray-body.gif');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     filter: drop-shadow(0 0 10px rgba(73, 197, 182, 0.3));
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
   }
   
   .scan-effect {

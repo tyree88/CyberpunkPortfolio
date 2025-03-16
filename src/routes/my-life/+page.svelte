@@ -907,7 +907,7 @@
     width: 100%;
     height: 95%;
     background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
-    background-position: 40% center;
+    background-position: left center;
     background-repeat: no-repeat;
     background-size: cover;
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));

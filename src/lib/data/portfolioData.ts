@@ -71,28 +71,48 @@ export const portfolioData = {
       { name: "JavaScript/TypeScript", level: 90 },
       { name: "GSAP Animations", level: 92 },
       { name: "Three.js/WebGL", level: 85 },
-      { name: "CSS/SASS", level: 88 }
+      { name: "Next.js", level: 80 },
+      { name: "React", level: 60 },
+      { name: "CSS/SASS", level: 50 },
+      { name: "Loveable", level: 80 },
+      { name: "Bolt.new", level: 75 },
+      { name: "Webflow", level: 82 },
+      { name: "Framer", level: 85 },
     ],
-    "BACKEND TECH": [
-      { name: "Node.js", level: 80 },
-      { name: "GraphQL", level: 75 },
-      { name: "Firebase", level: 82 },
-      { name: "RESTful APIs", level: 85 },
-      { name: "Database Design", level: 78 }
+    "LLM TOOLS": [
+      { name: "Cursor", level: 78 },
+      { name: "Replit", level: 75 },
+      { name: "Winsurf", level: 70 },
+      { name: "ChatGPT", level: 65 },
+      { name: "Claude", level: 60 },
+      { name: "DeepSeek", level: 50 },
     ],
-    "CYBERDECK AUGMENTS": [
+
+    "AGENTIC TECH": [
+      { name: "Hugging Face", level: 50 },
+      { name: "Langchain", level: 50 },
+      { name: "CrewAI", level: 50 },
+      { name: "N8N Automation", level: 83 },
+
+    ],
+    "AI TOOL AUGMENTATIONS": [
       { name: "UI/UX Design", level: 88 },
-      { name: "Motion Design", level: 90 },
-      { name: "3D Visualization", level: 83 },
+      { name: "MCP Servers", level: 88 },
+      { name: "Notion AI", level: 90 },
+      { name: "Obsidian", level: 90 },
+      { name: "Midjourney", level: 55 },
+      { name: "Runaway AI", level: 50 },
+      { name: "Google AI Studio", level: 50 },
+      { name: "Hugging Face", level: 50 },
+      { name: "NotebookLM", level: 50 },
       { name: "Performance Optimization", level: 87 },
       { name: "Security Implementation", level: 80 }
     ]
   },
   
   contact: {
-    email: "v@cyberpunk-dev.io",
-    phone: "+1 (123) 456-7890",
-    linkedin: "https://linkedin.com/in/cyberpunk-dev",
-    github: "https://github.com/cyberpunk-dev"
+    email: "tyreepearson88@gmail.com",
+    linkedin: "https://www.linkedin.com/in/tyreepearson/",
+    github: "https://github.com/tyree88"
   }
 };

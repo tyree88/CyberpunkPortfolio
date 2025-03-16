@@ -343,11 +343,22 @@
         duration: 0.5 
       })
       .from('.system-node', { 
-        scale: 0.8, 
+        scale: 0.5, 
         opacity: 0, 
-        stagger: 0.05, 
-        duration: 0.3,
-        ease: "back.out(1.7)"
+        y: 20,
+        stagger: 0.1, 
+        duration: 0.5,
+        ease: "back.out(2)",
+        onComplete: () => {
+          // Add a pulsing animation to each node to draw attention
+          gsap.to('.system-node', {
+            boxShadow: '0 0 25px rgba(73, 197, 182, 0.8)',
+            border: '2px solid rgba(236, 208, 111, 0.9)',
+            duration: 0.8,
+            repeat: 2,
+            yoyo: true
+          });
+        }
       }, '-=0.2')
       .from('.system-details', { 
         opacity: 0,
@@ -423,32 +434,59 @@
   function setupGlowEffects() {
     if (!browser) return;
     
-    // Default subtle glow on system nodes
-    gsap.to('.system-node', {
-      boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
-      duration: 2,
-      repeat: -1,
-      yoyo: true
-    });
-    
-    // Enhanced glow on hover
-    document.querySelectorAll('.system-node').forEach(node => {
-      node.addEventListener('mouseenter', () => {
-        gsap.to(node, {
-          boxShadow: '0 0 15px rgba(236, 208, 111, 0.7)',
-          scale: 1.05,
-          duration: 0.3
-        });
-      });
+    // Wait a moment to ensure DOM elements are ready
+    setTimeout(() => {
+      // Default subtle glow on system nodes
+      const systemNodes = document.querySelectorAll('.system-node');
       
-      node.addEventListener('mouseleave', () => {
-        gsap.to(node, {
-          boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
-          scale: 1,
-          duration: 0.3
+      if (systemNodes.length > 0) {
+        // Animate each node individually to ensure targeting
+        systemNodes.forEach((node, index) => {
+          // Add a staggered highlight effect for each node
+          gsap.to(node, {
+            boxShadow: '0 0 15px rgba(73, 197, 182, 0.7)',
+            duration: 1.5,
+            delay: index * 0.2,
+            repeat: -1,
+            yoyo: true,
+            ease: "power1.inOut"
+          });
+          
+          // Add event listeners for enhanced hover effect
+          node.addEventListener('mouseenter', () => {
+            gsap.to(node, {
+              boxShadow: '0 0 20px rgba(236, 208, 111, 0.8)',
+              borderColor: '#ECD06F',
+              scale: 1.05,
+              duration: 0.3
+            });
+          });
+          
+          node.addEventListener('mouseleave', () => {
+            gsap.to(node, {
+              boxShadow: '0 0 15px rgba(73, 197, 182, 0.7)',
+              borderColor: '#49c5b6',
+              scale: 1,
+              duration: 0.3
+            });
+          });
         });
-      });
-    });
+        
+        // Add special animation for interactive dots
+        const interactiveDots = document.querySelectorAll('.interactive-dot');
+        if (interactiveDots.length > 0) {
+          interactiveDots.forEach((dot) => {
+            gsap.to(dot, {
+              boxShadow: '0 0 20px rgba(255, 82, 82, 0.9)',
+              scale: 1.2,
+              duration: 1,
+              repeat: -1,
+              yoyo: true
+            });
+          });
+        }
+      }
+    }, 500); // Wait 500ms to ensure DOM is ready
   }
 </script>
 

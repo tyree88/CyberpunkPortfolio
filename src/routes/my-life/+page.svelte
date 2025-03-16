@@ -29,7 +29,7 @@
       title: "FRONTAL CORTEX",
       icon: "🧠",
       color: "#49c5b6",
-      position: { top: '8%', left: '50%', transform: 'translateX(-50%)' }, // Top center, near the head
+      position: { top: '5%', left: '50%', transform: 'translateX(-50%)' }, // Top center, near the head
       items: [
         { name: "Problem-Solving OS", level: 92, description: "Enhanced cognitive processing for complex problem-solving" },
         { name: "Creative Framework", level: 88, description: "Boost to creative thinking and innovation abilities" },
@@ -41,7 +41,7 @@
       title: "OPERATING SYSTEM",
       icon: "💻",
       color: "#ECD06F",
-      position: { top: '35%', left: '50%', transform: 'translateX(-50%)' }, // Center of the body
+      position: { top: '45%', left: '50%', transform: 'translateX(-50%)' }, // Center of the body
       items: [
         { name: "Multitasking Processor", level: 90, description: "Efficient management of multiple concurrent tasks" },
         { name: "Focus Enhancer", level: 85, description: "Sustained concentration on complex problems" }
@@ -63,7 +63,7 @@
       title: "ARMS",
       icon: "💪",
       color: "#9059ff",
-      position: { top: '30%', right: '10%' }, // Right arm position
+      position: { top: '30%', right: '2%' }, // Right arm position
       items: [
         { name: "Gorilla Arms", level: 87, description: "Rapid keyboard input and precision coding" }
       ]
@@ -549,7 +549,8 @@
                  right: {system.position.right || 'auto'}; 
                  bottom: {system.position.bottom || 'auto'};
                  transform: {system.position.transform || 'none'};
-                 border-color: {system.color};"
+                 border-color: {system.color};
+                 outline: 5px solid rgba(255, 0, 0, 0.5);"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -562,8 +563,8 @@
         >
           <div class="interactive-dot"></div>
           <div class="node-content">
-            <span class="node-icon">{system.icon}</span>
-            <span class="node-title">{system.title}</span>
+            <span class="node-icon" style="font-size: 1.5rem;">{system.icon}</span>
+            <span class="node-title" style="font-size: 0.9rem; color: #ECD06F; font-weight: bold;">{system.title}</span>
           </div>
           <div class="node-connector"></div>
         </div>
@@ -946,7 +947,7 @@
     position: relative;
     width: 100%;
     height: 95%;
-    background-image: url('/images/cyberware/Ultimate-Upscale-Raw.jpg');
+    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
     background-position: 60% center;
     background-repeat: no-repeat;
     background-size: cover;

@@ -1,16 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
   import { fade } from 'svelte/transition';
   import TypewriterText from '$lib/components/TypewriterText.svelte';
   import GlitchText from '$lib/components/GlitchText.svelte';
   import { portfolioData } from '$lib/data/portfolioData';
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
-  
-  // Register GSAP plugins
-  gsap.registerPlugin(ScrollTrigger);
   
   // Page state
   let isLoaded = false;
@@ -391,7 +387,6 @@
       }
       
       // Kill all GSAP animations
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       gsap.killTweensOf('*');
     };
   });
@@ -674,6 +669,10 @@
     padding: 0;
     position: relative;
     overflow: hidden;
+    background-image: url('/images/cyberware/cyber-grid.svg');
+    background-position: center;
+    background-repeat: repeat;
+    background-size: 500px 500px;
   }
   
   /* Cursor trail */
@@ -723,6 +722,46 @@
     border-bottom: 1px solid #49c5b6;
     position: relative;
     z-index: 10;
+  }
+  
+  .cyberware-title {
+    color: #49c5b6;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(73, 197, 182, 0.5);
+  }
+  
+  .header-stats {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    color: #ECD06F;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #49c5b6;
+  }
+  
+  .stat-value {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: #ECD06F;
+  }
+  
+  .stat-divider {
+    width: 1px;
+    height: 20px;
+    background-color: #49c5b6;
+    margin: 0 1rem;
   }
   
   .back-button {
@@ -879,6 +918,10 @@
     height: 100%;
     pointer-events: none;
     opacity: 0.5;
+    background-image: url('/images/cyberware/scan-frame.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
   }
   
   .system-node {

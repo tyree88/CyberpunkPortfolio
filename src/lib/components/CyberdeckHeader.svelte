@@ -1,14 +1,19 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
+  import { browser } from '$app/environment';
   import RamBar from './RamBar.svelte';
   import GlitchText from './GlitchText.svelte';
 
-  let currentTime = '';
+  // Initialize with a static time for SSR
+  let currentTime = '00:00:00';
   let recordingBlink = false;
   
   // Update the time every second
   onMount(() => {
+    // Skip browser-specific code if not in browser environment
+    if (!browser) return;
+    
     const updateTime = () => {
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, '0');
@@ -28,7 +33,9 @@
       yoyo: true
     });
     
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   });
 </script>
 

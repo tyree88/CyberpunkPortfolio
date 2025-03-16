@@ -1,10 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
+  import { browser } from '$app/environment';
   
   let scanLinesContainer: HTMLElement;
   
   onMount(() => {
+    // Skip animations if not in browser environment
+    if (!browser) return;
+    
     // Add slight animation to scan lines
     gsap.to(scanLinesContainer, {
       backgroundPosition: "0 100%",

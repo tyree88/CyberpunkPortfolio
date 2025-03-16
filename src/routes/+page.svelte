@@ -2,13 +2,24 @@
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
   import { currentSection } from '$lib/stores/navigationStore';
+  import { browser } from '$app/environment';
   import CyberdeckHeader from '$lib/components/CyberdeckHeader.svelte';
   import QuickhackList from '$lib/components/QuickhackList.svelte';
   import ContentPanel from '$lib/components/ContentPanel.svelte';
 
-  let loaded = false;
+  // Initialize loaded to true for server-side rendering
+  let loaded = !browser;
 
   onMount(() => {
+    // Skip animations if not in browser environment
+    if (!browser) {
+      loaded = true;
+      return;
+    }
+    
+    // Set loaded to false for browser animation
+    loaded = false;
+    
     // Loading sequence
     const timeline = gsap.timeline();
     

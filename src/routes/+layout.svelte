@@ -1,12 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
+  import { browser } from '$app/environment';
   import ScanLines from '$lib/components/ScanLines.svelte';
   import CursorTrail from '$lib/components/CursorTrail.svelte';
   import '../lib/styles/global.css';
   import '../lib/styles/cyberpunk.css';
 
   onMount(() => {
+    // Skip animations if not in browser environment
+    if (!browser) return;
+    
     // Initialize GSAP animations
     gsap.to('body', { 
       opacity: 1, 

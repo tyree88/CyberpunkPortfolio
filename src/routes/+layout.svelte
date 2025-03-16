@@ -6,7 +6,6 @@
   import CursorTrail from '$lib/components/CursorTrail.svelte';
   import '../lib/styles/global.css';
   import '../lib/styles/cyberpunk.css';
-  import FluidBackground from '$lib/components/FluidBackground.svelte'; // Import added
 
   // Register GSAP plugins conditionally when in browser
   if (browser) {
@@ -18,7 +17,7 @@
   onMount(() => {
     // Skip animations if not in browser environment
     if (!browser) return;
-
+    
     // Initialize GSAP animations
     gsap.to('body', { 
       opacity: 1, 
@@ -52,7 +51,6 @@
 </script>
 
 <div class="cyberpunk-container">
-  <FluidBackground/> {/* Added FluidBackground component */}
   <ScanLines />
   <CursorTrail />
   <slot />

@@ -1,0 +1,119 @@
+/* Global styles for Cyberpunk Portfolio */
+
+/* Base reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  cursor: none; /* Hide default cursor for custom cursor */
+}
+
+/* Show default cursor on touch devices */
+@media (pointer: coarse) {
+  html, body {
+    cursor: auto;
+  }
+}
+
+/* Links */
+a {
+  color: #49c5b6;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+a:hover {
+  color: #ECD06F;
+  text-shadow: 0 0 8px rgba(73, 197, 182, 0.5);
+}
+
+/* Selection style */
+::selection {
+  background-color: rgba(73, 197, 182, 0.3);
+  color: #ECD06F;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(73, 197, 182, 0.5);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(73, 197, 182, 0.8);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  line-height: 1.2;
+  color: #ECD06F;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+/* Paragraphs */
+p {
+  margin-bottom: 1rem;
+}
+
+/* Inputs and buttons */
+input, textarea, button {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1rem;
+}
+
+input:focus, textarea:focus, button:focus {
+  outline: none;
+}
+
+/* Media queries */
+@media (max-width: 992px) {
+  html, body {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  html, body {
+    font-size: 14px;
+    cursor: auto; /* Enable default cursor on mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  html, body {
+    font-size: 13px;
+  }
+}

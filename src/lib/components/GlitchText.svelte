@@ -5,105 +5,36 @@
   export let text: string = '';
   export let class_name: string = '';
   
-  let container: HTMLElement;
-  let isGlitching = false;
+  // Simpler implementation without dynamically changing text content
+  let containerElement: HTMLElement;
+  let isHovered = false;
   
-  function startGlitchEffect() {
-    if (!browser || isGlitching || !container) return;
-    
-    isGlitching = true;
-    
-    // Get random characters
-    const glitchChars = '!<>-_\\/[]{}—=+*^?#________';
-    
-    // Store original text
-    const originalText = text;
-    let iterations = 0;
-    
-    // Set data-text attribute for CSS pseudo-elements
-    container.setAttribute('data-text', originalText);
-    
-    // Clear any running interval
-    const interval = setInterval(() => {
-      // Check if container still exists
-      if (!container) {
-        clearInterval(interval);
-        isGlitching = false;
-        return;
-      }
-      
-      // Create new text
-      const newText = originalText.split('')
-        .map((char, index) => {
-          // If we've done many iterations, start returning original characters
-          if(index < iterations) {
-            return originalText[index];
-          }
-          
-          // Otherwise return a random character
-          return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-        })
-        .join('');
-      
-      container.innerText = newText;
-      
-      // Once we've gone through all characters, stop interval
-      if(iterations >= originalText.length) {
-        clearInterval(interval);
-        container.innerText = originalText;
-        isGlitching = false;
-      }
-      
-      iterations += 1 / 3; // Slow down iterations for a more visible effect
-    }, 50);
+  function handleMouseEnter() {
+    isHovered = true;
+  }
+  
+  function handleMouseLeave() {
+    isHovered = false;
   }
   
   onMount(() => {
-    if (!browser) return;
+    if (!browser || !containerElement) return;
     
-    let glitchInterval: ReturnType<typeof setInterval>;
-    
-    // Safely initialize component after DOM is ready
-    setTimeout(() => {
-      // Initialize the data-text attribute for CSS effects
-      if (container) {
-        container.setAttribute('data-text', text);
-        
-        // Initial glitch effect
-        setTimeout(() => {
-          startGlitchEffect();
-        }, 500);
-        
-        // Set up interval to trigger glitch effect periodically
-        glitchInterval = setInterval(() => {
-          if (Math.random() > 0.8) { // 20% chance to glitch
-            startGlitchEffect();
-          }
-        }, 5000);
-      }
-    }, 100);
-    
-    // Clean up on component unmount
-    return () => {
-      if (glitchInterval) {
-        clearInterval(glitchInterval);
-      }
-    };
+    // Just set the data-text attribute once
+    containerElement.setAttribute('data-text', text);
   });
 </script>
 
 <span 
-  class="glitch-text {class_name}" 
-  bind:this={container} 
-  on:mouseenter={startGlitchEffect}
-  role="button"
+  class="glitch-text {class_name} {isHovered ? 'hover' : ''}" 
+  bind:this={containerElement} 
+  on:mouseenter={handleMouseEnter}
+  on:mouseleave={handleMouseLeave}
+  on:focus={handleMouseEnter}
+  on:blur={handleMouseLeave}
+  role="presentation"
   aria-label={text}
-  tabindex="0"
-  on:keydown={(e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      startGlitchEffect();
-    }
-  }}
+  data-text={text}
 >
   {text}
 </span>
@@ -125,6 +56,8 @@
     width: 100%;
     height: 100%;
     left: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
   
   .glitch-text::before {
@@ -139,6 +72,19 @@
     text-shadow: -1px 0 #49c5b6;
     clip: rect(44px, 450px, 56px, 0);
     animation: glitch-anim-2 5s infinite linear alternate-reverse;
+  }
+  
+  /* Show glitch effect on hover or periodically */
+  .glitch-text.hover::before,
+  .glitch-text.hover::after {
+    opacity: 0.8;
+  }
+  
+  /* Random pseudo-elements to simulate glitching */
+  .glitch-text:nth-child(3n)::before,
+  .glitch-text:nth-child(3n)::after {
+    animation-duration: 3.7s;
+    opacity: 0.3;
   }
   
   @keyframes glitch-anim-1 {

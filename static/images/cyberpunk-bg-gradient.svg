@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440" height="800" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1440" height="800" fill="#000000"/>
+  
+  <!-- Main gradient background -->
+  <radialGradient id="redGlow" cx="30%" cy="30%" r="70%" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#ff5252" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+  </radialGradient>
+  
+  <radialGradient id="cyanGlow" cx="70%" cy="70%" r="70%" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#49c5b6" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+  </radialGradient>
+
+  <!-- Blend the two gradients -->
+  <rect width="1440" height="800" fill="url(#redGlow)"/>
+  <rect width="1440" height="800" fill="url(#cyanGlow)"/>
+  
+  <!-- Grid lines -->
+  <g opacity="0.1">
+    <!-- Horizontal grid lines -->
+    <path d="M0,100 L1440,100" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M0,200 L1440,200" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M0,300 L1440,300" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M0,400 L1440,400" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M0,500 L1440,500" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M0,600 L1440,600" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M0,700 L1440,700" stroke="#49c5b6" stroke-width="1"/>
+    
+    <!-- Vertical grid lines -->
+    <path d="M100,0 L100,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M200,0 L200,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M300,0 L300,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M400,0 L400,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M500,0 L500,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M600,0 L600,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M700,0 L700,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M800,0 L800,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M900,0 L900,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M1000,0 L1000,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M1100,0 L1100,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M1200,0 L1200,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M1300,0 L1300,800" stroke="#49c5b6" stroke-width="1"/>
+    <path d="M1400,0 L1400,800" stroke="#49c5b6" stroke-width="1"/>
+  </g>
+  
+  <!-- Accent elements -->
+  <circle cx="400" cy="400" r="100" fill="none" stroke="#ff5252" stroke-width="1" opacity="0.1"/>
+  <circle cx="1000" cy="400" r="100" fill="none" stroke="#49c5b6" stroke-width="1" opacity="0.1"/>
+  
+  <!-- Digital noise pattern (random small squares) -->
+  <g opacity="0.05">
+    <rect x="120" y="80" width="2" height="2" fill="#49c5b6"/>
+    <rect x="350" y="210" width="2" height="2" fill="#49c5b6"/>
+    <rect x="780" y="150" width="2" height="2" fill="#49c5b6"/>
+    <rect x="510" y="320" width="2" height="2" fill="#49c5b6"/>
+    <rect x="940" y="540" width="2" height="2" fill="#49c5b6"/>
+    <rect x="1200" y="320" width="2" height="2" fill="#49c5b6"/>
+    <rect x="200" y="600" width="2" height="2" fill="#49c5b6"/>
+    <rect x="420" y="680" width="2" height="2" fill="#49c5b6"/>
+    <rect x="1100" y="750" width="2" height="2" fill="#49c5b6"/>
+    <rect x="180" y="450" width="2" height="2" fill="#ff5252"/>
+    <rect x="630" y="230" width="2" height="2" fill="#ff5252"/>
+    <rect x="880" y="410" width="2" height="2" fill="#ff5252"/>
+    <rect x="1300" y="180" width="2" height="2" fill="#ff5252"/>
+    <rect x="500" y="500" width="2" height="2" fill="#ff5252"/>
+    <rect x="730" y="650" width="2" height="2" fill="#ff5252"/>
+    <rect x="1020" y="620" width="2" height="2" fill="#ff5252"/>
+    <rect x="1280" y="540" width="2" height="2" fill="#ff5252"/>
+  </g>
+</svg>

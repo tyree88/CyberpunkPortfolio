@@ -1,111 +1,87 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { gsap } from 'gsap';
+  import { browser } from '$app/environment';
   
   export let text: string = '';
-  export let speed: number = 20; // Characters per second
-  export let startDelay: number = 0; // Delay before typing starts
-  export let cursor: boolean = true;
-  export let typingVariability: number = 0.2; // Randomness in typing (0-1)
+  export let speed: number = 50; // Characters per second
+  export let delay: number = 0; // Delay before starting in ms
+  export let cursor: boolean = true; // Show cursor
   
+  let container: HTMLElement;
   let displayText = '';
-  let textElement: HTMLElement;
-  let cursorElement: HTMLElement;
-  let isTyping = false;
-  let initialRender = true;
+  let typingComplete = false;
   
   onMount(() => {
-    if (initialRender) {
-      initialRender = false;
-      startTyping();
+    if (!browser) {
+      // For server-side rendering, show the full text
+      displayText = text;
+      typingComplete = true;
+      return;
     }
     
-    return () => {
-      // Clear any running animations on unmount
-      gsap.killTweensOf({});
-    };
-  });
-  
-  function startTyping() {
-    if (isTyping) return;
-    isTyping = true;
+    // Reset for client-side animation
     displayText = '';
+    typingComplete = false;
     
-    // Calculate duration based on text length and speed
-    const baseDuration = text.length / speed;
+    // Calculate typing interval
+    const typingInterval = 1000 / speed;
     
-    // Create GSAP timeline for typing
-    const timeline = gsap.timeline({
-      delay: startDelay,
-      onComplete: () => {
-        isTyping = false;
-        
-        // Blink cursor after typing is complete
-        if (cursor && cursorElement) {
-          gsap.to(cursorElement, {
-            opacity: 0,
-            repeat: -1,
-            yoyo: true,
-            duration: 0.6
-          });
+    // Start typing after delay
+    const typingTimeout = setTimeout(() => {
+      let index = 0;
+      
+      const typingTimer = setInterval(() => {
+        if (index < text.length) {
+          displayText += text.charAt(index);
+          index++;
+        } else {
+          clearInterval(typingTimer);
+          typingComplete = true;
         }
-      }
-    });
-    
-    // Type out text character by character
-    timeline.to(textElement, {
-      duration: baseDuration,
-      text: {
-        value: text,
-        delimiter: "", // Type character by character
-        speed: 1, // Speed multiplier
-        scramble: {
-          chars: "!<>-_\\/[]{}%#", // Characters for scramble effect
-          chance: 0.1, // Chance of scramble
-          revealDelay: 0.1 // Delay before revealing correct character
-        },
-        type: "diff" // Use efficient diffing algorithm
-      },
-      ease: "none",
-      onUpdate: function() {
-        // Random glitch effect during typing
-        if (Math.random() < 0.01) { // 1% chance each update
-          const glitchDuration = 0.05;
-          gsap.to(textElement, {
-            opacity: 0.7,
-            skewX: 5,
-            duration: glitchDuration,
-            yoyo: true,
-            repeat: 1
-          });
-        }
-      }
-    });
-  }
+      }, typingInterval);
+      
+      return () => {
+        clearInterval(typingTimer);
+        clearTimeout(typingTimeout);
+      };
+    }, delay);
+  });
 </script>
 
-<div class="typewriter-container">
-  <span class="typewriter-text" bind:this={textElement}>{displayText}</span>
+<span class="typewriter-container" bind:this={container}>
+  <span class="typewriter-text">{displayText}</span>
   {#if cursor}
-    <span class="cursor" bind:this={cursorElement}>_</span>
+    <span class="cursor" class:blinking={typingComplete}>|</span>
   {/if}
-</div>
+</span>
 
 <style>
   .typewriter-container {
-    position: relative;
     display: inline-block;
+    position: relative;
   }
   
   .typewriter-text {
-    white-space: pre-wrap;
-    line-height: 1.6;
+    font-family: 'Roboto Mono', monospace;
   }
   
   .cursor {
     display: inline-block;
-    color: #49c5b6;
-    font-weight: bold;
+    width: 2px;
+    height: 1em;
+    background-color: #49c5b6;
     margin-left: 2px;
+    animation: none;
+    vertical-align: middle;
+    opacity: 0.8;
+  }
+  
+  .cursor.blinking {
+    animation: blink 1s infinite step-end;
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0; }
   }
 </style>

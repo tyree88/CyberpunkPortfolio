@@ -7,6 +7,13 @@
   import '../lib/styles/global.css';
   import '../lib/styles/cyberpunk.css';
 
+  // Register GSAP plugins conditionally when in browser
+  if (browser) {
+    import('gsap/TextPlugin').then(module => {
+      gsap.registerPlugin(module.TextPlugin);
+    });
+  }
+
   onMount(() => {
     // Skip animations if not in browser environment
     if (!browser) return;

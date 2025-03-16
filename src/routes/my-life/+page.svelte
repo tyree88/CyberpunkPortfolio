@@ -908,7 +908,7 @@
     position: relative;
     width: 100%;
     height: 95%;
-    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
+    background-image: url('/images/cyberware/Ultimate-Upscale-Raw.jpg');
     background-position: 60% center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -960,18 +960,19 @@
   
   .system-node {
     position: absolute;
-    width: 120px;
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0.8);
-    border: 1px solid #49c5b6;
+    width: 150px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 2px solid #49c5b6;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 10;
+    z-index: 50; /* Higher z-index to ensure visibility */
     overflow: hidden;
     transform: translateX(0); /* Default transform to support the inline style transform */
+    box-shadow: 0 0 15px rgba(73, 197, 182, 0.5);
   }
   
   .node-content {
@@ -1005,14 +1006,14 @@
   
   .interactive-dot {
     position: absolute;
-    top: -5px;
-    left: -5px;
-    width: 10px;
-    height: 10px;
+    top: -8px;
+    left: -8px;
+    width: 16px;
+    height: 16px;
     background-color: #ff5252;
     border-radius: 50%;
-    z-index: 11;
-    box-shadow: 0 0 10px rgba(255, 82, 82, 0.8);
+    z-index: 60; /* Higher z-index than parent node */
+    box-shadow: 0 0 15px rgba(255, 82, 82, 0.8);
     animation: pulse-dot 2s infinite;
   }
   

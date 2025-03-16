@@ -162,11 +162,11 @@
   function handleBack() {
     if (!browser) return;
     
-    // Navigate back to the cyberdeck/homepage with a glitch effect
+    // Navigate back to the cyberdeck page with a glitch effect
     const timeline = gsap.timeline({
       onComplete: () => {
-        // Use goto to navigate to the homepage
-        goto('/', { replaceState: false });
+        // Use goto to navigate to the cyberdeck page (which appears to be at the root path)
+        goto('/');
       }
     });
     
@@ -557,7 +557,7 @@
                  transform: {system.position.transform || 'none'};
                  border-color: {system.color};
                  outline: 6px solid rgba(255, 82, 82, 0.7);
-                 z-index: 80;"
+                 z-index: 100;"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {

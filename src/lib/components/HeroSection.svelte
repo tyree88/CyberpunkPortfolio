@@ -25,140 +25,358 @@
     // Skip animations if not in browser environment
     if (!browser) return;
     
-    // Set up animations
-    const timeline = gsap.timeline({ defaults: { ease: "power2.inOut" }});
+    // Set up main animation timeline
+    const timeline = gsap.timeline({ 
+      defaults: { ease: "power2.inOut" },
+      onComplete: () => {
+        // Add occasional glitch effect to the hero section after initial animation
+        scheduleGlitchEffect();
+      }
+    });
     
-    // Animate title & subtitle
+    // Enhanced intro animation sequence
     timeline
       .from('.title-section', { 
         y: -30, 
         opacity: 0, 
-        duration: 1 
+        duration: 1,
+        ease: "power3.out"
       })
+      .from('.description', {
+        clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)",
+        opacity: 0.5,
+        duration: 0.8,
+        ease: "power2.inOut"
+      }, "-=0.3")
       .from('.cyber-circuits', { 
         opacity: 0, 
-        scale: 0.9, 
-        duration: 0.8 
-      }, '-=0.5');
+        scale: 0.95,
+        filter: "hue-rotate(90deg) brightness(0.7)",
+        duration: 1.2,
+        ease: "back.out(1.2)"
+      }, '-=0.5')
+      .from('.system-stats', {
+        y: 20,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.7
+      }, "-=0.8");
     
-    // Create and animate floating text elements
+    // Add both scan effect elements
     if (cyberCircuits) {
+      const scanLine = document.createElement('div');
+      scanLine.classList.add('scan-line');
+      cyberCircuits.appendChild(scanLine);
+      
+      const scanInterference = document.createElement('div');
+      scanInterference.classList.add('scan-interference');
+      cyberCircuits.appendChild(scanInterference);
+    }
+    
+    // Create and animate floating skills with cyberpunk aesthetics
+    if (cyberCircuits) {
+      // Cyberpunk prefixes and suffixes for visual diversity
+      const cyberpunkPrefixes = ['>', 'SYS:', '[v]', '//', 'NET:', '*', 'RAM:'];
+      const cyberpunkSuffixes = ['<<', '.exe', '::', '_v2', '--', '+'];
+      
+      // Create skills with more visual variety
       skills.forEach((skill, index) => {
-        // Create a floating skill tag
+        // Apply cyberpunk formatting to some skills
+        let displaySkill = skill;
+        if (index % 4 === 0) {
+          const prefix = cyberpunkPrefixes[Math.floor(Math.random() * cyberpunkPrefixes.length)];
+          displaySkill = `${prefix} ${skill}`;
+        } else if (index % 5 === 0) {
+          const suffix = cyberpunkSuffixes[Math.floor(Math.random() * cyberpunkSuffixes.length)];
+          displaySkill = `${skill} ${suffix}`;
+        }
+        
+        // Create element with enhanced styling
         const skillElement = document.createElement('div');
         skillElement.classList.add('floating-skill');
-        skillElement.innerText = skill;
+        skillElement.innerText = displaySkill;
         
-        // Random position
-        const randomX = Math.floor(Math.random() * 80) + 10; // 10-90%
-        const randomY = Math.floor(Math.random() * 80) + 10; // 10-90%
+        // Better distribution to avoid clumping
+        const section = Math.floor(index / (skills.length / 4)); // Divide into 4 sections
+        let randomX, randomY;
         
-        // Set initial position
+        // Distribute skills more evenly across the container
+        switch (section) {
+          case 0: // Top left
+            randomX = 10 + Math.random() * 35;
+            randomY = 10 + Math.random() * 35;
+            break;
+          case 1: // Top right
+            randomX = 55 + Math.random() * 35;
+            randomY = 10 + Math.random() * 35;
+            break;
+          case 2: // Bottom left
+            randomX = 10 + Math.random() * 35;
+            randomY = 55 + Math.random() * 35;
+            break;
+          case 3: // Bottom right
+            randomX = 55 + Math.random() * 35;
+            randomY = 55 + Math.random() * 35;
+            break;
+        }
+        
+        // Apply initial position with slight rotation for dynamic feel
         skillElement.style.left = `${randomX}%`;
         skillElement.style.top = `${randomY}%`;
+        skillElement.style.transform = `rotate(${-2 + Math.random() * 4}deg)`;
+        skillElement.style.opacity = '0'; // Start invisible for staggered reveal
         
         // Add to DOM
         cyberCircuits.appendChild(skillElement);
         
-        // Animate each skill with random movement
+        // Delayed appearance for a cascading effect
         gsap.to(skillElement, {
-          x: `random(-50, 50)`,
-          y: `random(-50, 50)`,
-          opacity: `random(0.4, 1)`,
-          duration: `random(5, 15)`,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: index * 0.1
+          opacity: 1,
+          duration: 0.5,
+          delay: 1 + (index * 0.05), // Staggered reveal
+          ease: "power1.inOut"
         });
         
-        // Random pulse effect
+        // More dynamic floating animation
         gsap.to(skillElement, {
-          scale: `random(0.8, 1.2)`,
-          duration: `random(2, 5)`,
+          x: `random(-15, 15)`,
+          y: `random(-15, 15)`,
+          rotation: `random(-3, 3)`,
+          duration: `random(4, 8)`,
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
-          delay: `random(0, 3)`
+          delay: index * 0.08
         });
+        
+        // Add slight pulsing effect
+        gsap.to(skillElement, {
+          scale: `random(0.95, 1.05)`,
+          boxShadow: index % 2 === 0 
+            ? '0 0 8px rgba(73, 197, 182, 0.7)' 
+            : '0 0 8px rgba(255, 82, 82, 0.7)',
+          duration: `random(2, 4)`,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: `random(0, 2)`
+        });
+        
+        // Add occasional glitch effect to some skills
+        if (index % 6 === 0) {
+          scheduleSkillGlitch(skillElement);
+        }
+        
+        // Add connecting data flow lines with enhanced visuals
+        addDataFlowLine(cyberCircuits, randomX, randomY, index);
       });
     }
     
-    // Add data flow lines
-    const numLines = 20;
-    for (let i = 0; i < numLines; i++) {
-      const line = document.createElement('div');
-      line.classList.add('data-flow-line');
+    // Add additional cyber pulse effects in various positions
+    addCyberPulseEffects(cyberCircuits, 8);
+    
+    // Function to schedule random glitch effects
+    function scheduleGlitchEffect() {
+      const delay = 5 + Math.random() * 15; // Random delay between 5-20 seconds
       
-      // Random position and size
-      const randomLeft = Math.random() * 100;
-      const randomWidth = Math.random() * 50 + 50;
-      const randomDuration = Math.random() * 5 + 3;
-      const randomDelay = Math.random() * 5;
-      
-      line.style.left = `${randomLeft}%`;
-      line.style.width = `${randomWidth}px`;
-      
-      cyberCircuits.appendChild(line);
-      
-      // Animate data flow
-      gsap.fromTo(line, 
-        { top: '-5%', opacity: 0 },
-        { 
-          top: '105%', 
-          opacity: `random(0.3, 0.7)`,
-          duration: randomDuration,
-          delay: randomDelay,
-          repeat: -1,
-          ease: "none"
-        }
-      );
+      gsap.delayedCall(delay, () => {
+        // Create a quick glitch sequence
+        const glitchTl = gsap.timeline({
+          onComplete: scheduleGlitchEffect // Schedule next glitch when done
+        });
+        
+        glitchTl
+          .to(heroContainer, {
+            filter: 'hue-rotate(90deg) brightness(1.2) contrast(1.2)',
+            duration: 0.08,
+            ease: "steps(1)"
+          })
+          .to(heroContainer, {
+            filter: 'hue-rotate(-40deg) brightness(0.8) contrast(1.3)',
+            duration: 0.08,
+            ease: "steps(1)"
+          })
+          .to(heroContainer, {
+            filter: 'hue-rotate(0deg) brightness(1) contrast(1)',
+            duration: 0.08,
+            ease: "steps(1)"
+          });
+      });
     }
     
-    // Add scan line effect
-    if (heroContainer) {
-      const scanLine = document.createElement('div');
-      scanLine.classList.add('scan-line');
-      heroContainer.appendChild(scanLine);
+    // Function to add data flow lines with enhanced visuals
+    function addDataFlowLine(container, targetX, targetY, index) {
+      const dataLine = document.createElement('div');
+      dataLine.classList.add('data-flow-line');
       
-      // Animate the scan line
-      gsap.to(scanLine, {
-        top: '100%',
-        duration: 3,
-        ease: "power1.inOut",
+      // Center point (origin of data flow)
+      const centerX = 50;
+      const centerY = 50;
+      
+      // Calculate angle and distance for positioning
+      const angle = Math.atan2(targetY - centerY, targetX - centerX);
+      const distance = Math.sqrt(Math.pow(targetX - centerX, 2) + Math.pow(targetY - centerY, 2));
+      
+      // Set line dimensions with variation
+      dataLine.style.width = `${distance}%`;
+      dataLine.style.height = `${0.5 + Math.random() * 1}px`;
+      
+      // Position and rotate the line
+      dataLine.style.top = `${centerY}%`;
+      dataLine.style.left = `${centerX}%`;
+      dataLine.style.transformOrigin = 'left center';
+      dataLine.style.transform = `rotate(${angle}rad)`;
+      dataLine.style.opacity = '0'; // Start invisible
+      
+      container.appendChild(dataLine);
+      
+      // Delayed appearance and pulsing animation
+      gsap.to(dataLine, {
+        opacity: 0.7,
+        duration: 0.8,
+        delay: 1.2 + (index * 0.03),
+        ease: "power1.inOut"
+      });
+      
+      // Pulsing animation
+      gsap.to(dataLine, {
+        opacity: index % 2 === 0 ? 0.3 : 0.6,
+        scale: 1,
+        duration: 1 + Math.random(),
         repeat: -1,
-        yoyo: false,
-        repeatDelay: 1
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: Math.random()
       });
+      
+      // Add data pulse traveling along some lines
+      if (index % 3 === 0) {
+        addDataPulse(dataLine);
+      }
     }
     
-    // Add circular pulse effects
-    const numPulses = 5;
-    for (let i = 0; i < numPulses; i++) {
-      const pulse = document.createElement('div');
-      pulse.classList.add('cyber-pulse');
+    // Function to add a traveling data pulse on a line
+    function addDataPulse(dataLine) {
+      const dataPulse = document.createElement('div');
+      dataPulse.style.position = 'absolute';
+      dataPulse.style.width = '4px';
+      dataPulse.style.height = '4px';
+      dataPulse.style.borderRadius = '50%';
+      dataPulse.style.backgroundColor = '#49c5b6';
+      dataPulse.style.boxShadow = '0 0 4px #49c5b6';
+      dataPulse.style.top = '50%';
+      dataPulse.style.transform = 'translateY(-50%)';
+      dataPulse.style.opacity = '0.8';
+      dataPulse.style.zIndex = '5';
+      dataLine.appendChild(dataPulse);
       
-      // Random position
-      const randomX = Math.random() * 80 + 10;
-      const randomY = Math.random() * 80 + 10;
-      
-      pulse.style.left = `${randomX}%`;
-      pulse.style.top = `${randomY}%`;
-      
-      cyberCircuits.appendChild(pulse);
-      
-      // Animate pulse
-      gsap.fromTo(pulse,
-        { scale: 0, opacity: 0.8 },
-        {
-          scale: `random(1, 2)`,
-          opacity: 0,
-          duration: `random(2, 5)`,
-          delay: i * 0.5,
+      // Animation for the pulse traveling along the line
+      gsap.fromTo(dataPulse,
+        { left: '0%' },
+        { 
+          left: '100%', 
+          duration: 1.5 + Math.random(),
           repeat: -1,
-          ease: "sine.out"
+          ease: "power1.inOut",
+          delay: Math.random() * 2
         }
       );
+    }
+    
+    // Function to add cyber pulse effects
+    function addCyberPulseEffects(container, count) {
+      for (let i = 0; i < count; i++) {
+        const pulse = document.createElement('div');
+        pulse.classList.add('cyber-pulse');
+        
+        // Position with better distribution
+        const sector = i % 4; // Divide into 4 sectors
+        let randomX, randomY;
+        
+        switch (sector) {
+          case 0: // Top left
+            randomX = Math.random() * 40 + 10;
+            randomY = Math.random() * 40 + 10;
+            break;
+          case 1: // Top right
+            randomX = Math.random() * 40 + 50;
+            randomY = Math.random() * 40 + 10;
+            break;
+          case 2: // Bottom left
+            randomX = Math.random() * 40 + 10;
+            randomY = Math.random() * 40 + 50;
+            break;
+          case 3: // Bottom right
+            randomX = Math.random() * 40 + 50;
+            randomY = Math.random() * 40 + 50;
+            break;
+        }
+        
+        pulse.style.left = `${randomX}%`;
+        pulse.style.top = `${randomY}%`;
+        
+        // Alternate colors for visual variety
+        if (i % 3 === 0) {
+          pulse.style.borderColor = 'rgba(255, 82, 82, 0.6)';
+        } else if (i % 3 === 1) {
+          pulse.style.borderColor = 'rgba(236, 208, 111, 0.6)';
+        }
+        
+        container.appendChild(pulse);
+        
+        // Pulse animation with slight delay for each
+        gsap.fromTo(pulse,
+          { scale: 0, opacity: 0.8 },
+          {
+            scale: 2 + Math.random() * 3,
+            opacity: 0,
+            duration: 2 + Math.random() * 3,
+            delay: i * 0.3 + Math.random(),
+            repeat: -1,
+            ease: "sine.out"
+          }
+        );
+      }
+    }
+    
+    // Function to schedule glitch effect for skills
+    function scheduleSkillGlitch(element) {
+      const delay = 3 + Math.random() * 10;
+      
+      gsap.delayedCall(delay, () => {
+        // Quick glitch sequence
+        const glitchTl = gsap.timeline({
+          onComplete: () => scheduleSkillGlitch(element) // Schedule next glitch
+        });
+        
+        // Store original values to restore later
+        const originalColor = element.style.color || '#49c5b6';
+        const originalTransform = element.style.transform;
+        
+        glitchTl
+          .to(element, {
+            x: '+=3',
+            color: '#ff5252',
+            textShadow: '0 0 5px #ff5252',
+            duration: 0.08,
+            ease: "steps(1)"
+          })
+          .to(element, {
+            x: '-=6',
+            color: '#ecd06f',
+            textShadow: '0 0 5px #ecd06f',
+            duration: 0.08,
+            ease: "steps(1)"
+          })
+          .to(element, {
+            x: '+=3',
+            color: originalColor,
+            textShadow: '0 0 5px rgba(73, 197, 182, 0.8)',
+            transform: originalTransform,
+            duration: 0.08,
+            ease: "steps(1)"
+          });
+      });
     }
   });
 </script>

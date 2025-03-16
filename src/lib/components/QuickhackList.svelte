@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { gsap } from 'gsap';
-  import { currentSection } from '$lib/stores/navigationStore';
+  import { currentSection, navigateTo, goBack } from '$lib/stores/navigationStore';
   import GlitchText from './GlitchText.svelte';
+  import { browser } from '$app/environment';
   
   type QuickhackItem = {
     id: string;
@@ -87,13 +88,72 @@
         duration: 0.05 
       });
 
-    currentSection.set(id);
+    // Use navigateTo instead of directly setting currentSection
+    // This will update the navigation history
+    navigateTo(id);
   }
 
   function handleHover(id: string | null) {
     hoveredItem = id;
   }
 
+  // Function to handle back navigation
+  function handleBack() {
+    // Attempt to go back to previous section
+    const success = goBack();
+    
+    if (success) {
+      // Get current section to update UI
+      let currentSectionValue = 'about'; 
+      const unsubscribe = currentSection.subscribe(value => {
+        currentSectionValue = value;
+      });
+      unsubscribe();
+      
+      // Update UI to reflect the new section
+      gsap.to('.quick-hack-item', {
+        opacity: 0.7,
+        color: '#49c5b6',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        duration: 0.3
+      });
+
+      gsap.to(`.quick-hack-item[data-id="${currentSectionValue}"]`, {
+        opacity: 1,
+        color: '#ECD06F',
+        backgroundColor: 'rgba(73, 197, 182, 0.2)',
+        duration: 0.3
+      });
+      
+      // Create glitch effect on back navigation
+      const timeline = gsap.timeline();
+      timeline
+        .to('.content-wrapper', { 
+          x: -3, 
+          opacity: 0.8, 
+          duration: 0.05 
+        })
+        .to('.content-wrapper', { 
+          x: 3, 
+          opacity: 0.9, 
+          duration: 0.05 
+        })
+        .to('.content-wrapper', { 
+          x: 0, 
+          opacity: 1, 
+          duration: 0.05 
+        });
+    }
+  }
+  
+  // Handle keyboard events for navigation
+  function handleKeydown(event: KeyboardEvent) {
+    // Q key for back navigation
+    if (event.key.toLowerCase() === 'q') {
+      handleBack();
+    }
+  }
+  
   onMount(() => {
     // Set default section
     selectSection('about');
@@ -106,6 +166,16 @@
       stagger: 0.1,
       ease: 'power2.out'
     });
+    
+    // Add keyboard event listener
+    if (browser) {
+      window.addEventListener('keydown', handleKeydown);
+      
+      // Clean up event listener on component unmount
+      return () => {
+        window.removeEventListener('keydown', handleKeydown);
+      };
+    }
   });
 </script>
 
@@ -121,8 +191,16 @@
         data-id={quickhack.id}
         class:locked={quickhack.isLocked}
         on:click={() => !quickhack.isLocked && selectSection(quickhack.id)}
+        on:keydown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            !quickhack.isLocked && selectSection(quickhack.id);
+          }
+        }}
         on:mouseenter={() => handleHover(quickhack.id)}
         on:mouseleave={() => handleHover(null)}
+        role="button"
+        tabindex="0"
       >
         <div class="hack-details">
           <span class="hack-name">
@@ -151,9 +229,20 @@
       <span class="key">F</span>
       <span class="hint">EXECUTE</span>
     </div>
-    <div class="key-hint">
+    <div 
+      class="key-hint" 
+      on:click={handleBack} 
+      on:keydown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleBack();
+        }
+      }}
+      role="button" 
+      tabindex="0"
+    >
       <span class="key">Q</span>
-      <span class="hint">BACK</span>
+      <span class="hint">PREVIOUS</span>
     </div>
   </div>
 </div>

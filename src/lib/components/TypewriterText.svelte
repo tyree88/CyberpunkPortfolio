@@ -3,8 +3,8 @@
   import { browser } from '$app/environment';
   
   export let text: string = '';
-  export let speed: number = 50; // Characters per second
-  export let delay: number = 0; // Delay before starting in ms
+  export let speed: number = 1500; // Characters per second
+  export let delay: number = 5; // Delay before starting in ms
   export let cursor: boolean = true; // Show cursor
   
   let container: HTMLElement;

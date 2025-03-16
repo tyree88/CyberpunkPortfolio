@@ -2,12 +2,12 @@
 
 export const portfolioData = {
   about: {
-    name: "V",
-    title: "NETRUNNER / FULL-STACK DEVELOPER",
+    name: "TYREE PEARSON",
+    title: "NETRUNNER / FULL-STACK VIBE CODER",
     specialty: "Web Development & UI/UX Design",
     location: "Night City",
     status: "AVAILABLE FOR HIRE",
-    bio: "Elite netrunner specializing in cyberpunk-inspired web development. Expertise in creating immersive digital experiences using cutting-edge technologies. Proficient in breach protocols and ICE penetration. My code doesn't just run - it dances through the architecture of the net, leaving a trail of neon in its wake."
+    bio: "Vibe developer building software with web frameworks like Svelte, React, and Three.js. Using AI code editors like Cursor, Winsurf and Replit to cross collaborate and develop. Also using low code no code web development sites like Loveable, Bolt.new, Webflow, and Framer. Expert in creating immersive digital experiences with cutting-edge technologies. Proficient in combining technologies to create unique and engaging user experiences."
   },
   
   projects: [

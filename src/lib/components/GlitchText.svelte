@@ -9,7 +9,7 @@
   let isGlitching = false;
   
   function startGlitchEffect() {
-    if (!browser || isGlitching) return;
+    if (!browser || isGlitching || !container) return;
     
     isGlitching = true;
     
@@ -25,6 +25,13 @@
     
     // Clear any running interval
     const interval = setInterval(() => {
+      // Check if container still exists
+      if (!container) {
+        clearInterval(interval);
+        isGlitching = false;
+        return;
+      }
+      
       // Create new text
       const newText = originalText.split('')
         .map((char, index) => {
@@ -54,26 +61,33 @@
   onMount(() => {
     if (!browser) return;
     
-    // Initialize the data-text attribute for CSS effects
-    if (container) {
-      container.setAttribute('data-text', text);
-    }
+    let glitchInterval: ReturnType<typeof setInterval>;
     
-    // Initial glitch effect
+    // Safely initialize component after DOM is ready
     setTimeout(() => {
-      startGlitchEffect();
-    }, 500);
-    
-    // Set up interval to trigger glitch effect periodically
-    const glitchInterval = setInterval(() => {
-      if (Math.random() > 0.8) { // 20% chance to glitch
-        startGlitchEffect();
+      // Initialize the data-text attribute for CSS effects
+      if (container) {
+        container.setAttribute('data-text', text);
+        
+        // Initial glitch effect
+        setTimeout(() => {
+          startGlitchEffect();
+        }, 500);
+        
+        // Set up interval to trigger glitch effect periodically
+        glitchInterval = setInterval(() => {
+          if (Math.random() > 0.8) { // 20% chance to glitch
+            startGlitchEffect();
+          }
+        }, 5000);
       }
-    }, 5000);
+    }, 100);
     
     // Clean up on component unmount
     return () => {
-      clearInterval(glitchInterval);
+      if (glitchInterval) {
+        clearInterval(glitchInterval);
+      }
     };
   });
 </script>
@@ -82,14 +96,14 @@
   class="glitch-text {class_name}" 
   bind:this={container} 
   on:mouseenter={startGlitchEffect}
+  role="button"
+  aria-label={text}
+  tabindex="0"
   on:keydown={(e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       startGlitchEffect();
     }
   }}
-  role="presentation"
-  aria-label={text}
-  tabindex="0"
 >
   {text}
 </span>

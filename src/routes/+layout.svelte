@@ -4,6 +4,7 @@
   import { browser } from '$app/environment';
   import ScanLines from '$lib/components/ScanLines.svelte';
   import CursorTrail from '$lib/components/CursorTrail.svelte';
+  import InteractiveBackground from '$lib/components/InteractiveBackground.svelte';
   import '../lib/styles/global.css';
   import '../lib/styles/cyberpunk.css';
 
@@ -13,6 +14,11 @@
       gsap.registerPlugin(module.TextPlugin);
     });
   }
+
+  // Interactive background colors
+  const bgColor = '#49c5b6'; // Cyberpunk teal
+  const bgIntensity = 0.8; // Slightly subtle
+  const bgDensity = 100; // More particles for complexity
 
   onMount(() => {
     // Skip animations if not in browser environment
@@ -26,13 +32,13 @@
       delay: 0.3
     });
 
-    // Random glitch effect on load
+    // Random glitch effect on load - more subtle
     const glitchTimeline = gsap.timeline();
     glitchTimeline
       .to('body', { 
-        skewX: 20, 
+        skewX: 10, // Reduced skew
         duration: 0.1,
-        opacity: 0.8
+        opacity: 0.9 // Less opacity change
       })
       .to('body', { 
         skewX: 0, 
@@ -51,9 +57,21 @@
 </script>
 
 <div class="cyberpunk-container">
+  <!-- 3D interactive background -->
+  <InteractiveBackground 
+    color={bgColor} 
+    intensity={bgIntensity} 
+    density={bgDensity} 
+  />
+  
+  <!-- Other UI components -->
   <ScanLines />
   <CursorTrail />
-  <slot />
+  
+  <!-- Page content -->
+  <div class="content-container">
+    <slot />
+  </div>
 </div>
 
 <style>
@@ -65,6 +83,14 @@
     overflow: hidden;
     background-color: #000000;
     color: #49c5b6;
+  }
+
+  .content-container {
+    position: relative;
+    z-index: 10; /* Ensure content stays above background */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   :global(body) {

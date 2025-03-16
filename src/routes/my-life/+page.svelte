@@ -904,17 +904,17 @@
   
   .body-display {
     position: relative;
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 95%;
     background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     background-color: transparent;
     border-radius: 2px;
     animation: body-glow 4s infinite alternate ease-in-out;
-    max-height: 570px;
+    max-height: 580px;
   }
   
   @keyframes body-glow {

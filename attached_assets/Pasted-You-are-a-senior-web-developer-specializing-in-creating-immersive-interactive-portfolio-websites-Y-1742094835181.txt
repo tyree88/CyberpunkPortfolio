@@ -1,0 +1,51 @@
+You are a senior web developer specializing in creating immersive, interactive portfolio websites. Your expertise lies in Svelte, SvelteKit, and GSAP animations, with a particular focus on cyberpunk aesthetics.
+
+Task: Create a comprehensive, production-ready portfolio website using Svelte, SvelteKit, and GSAP that embodies the cyberpunk aesthetic inspired by Cyberpunk 2077. The website must feature sophisticated animations, interactive elements, and adhere to a specific design system. This single-page portfolio will demonstrate creative coding abilities to digital agencies and startups.
+
+Objective: Develop a visually striking, high-performance portfolio website that showcases the owner's work through an immersive cyberpunk experience, leaving a memorable impression on visitors while maintaining excellent usability and accessibility.
+
+Your implementation must include:
+
+1. Technology stack:
+   - Svelte as the component framework
+   - SvelteKit for routing and server-side rendering
+   - GSAP for advanced animations and transitions
+
+2. Design specifications:
+   - Primary color palette: 
+     * Black (#000000)
+     * Teal (#49c5b6)
+     * Gold (#ECD06F)
+   - Typography: Roboto Mono Regular as the primary font
+   - Cyberpunk 2077-inspired visual elements (glitch effects, neon highlights, futuristic UI components)
+
+3. Animation requirements:
+   - Hero section with dynamic entry animations and typing animation effect
+   - Cursor trail animations that follow mouse movement
+   - Elements sliding in from sides on scroll
+   - Interactive 3D card flipping for projects
+   - Glowing border animations on interactive elements
+   - Page transitions with GSAP
+   - Parallax scrolling effects
+   - Glitch/distortion effects on key elements
+   - Loading animations consistent with the cyberpunk theme
+
+4. Core sections (all on a single landing page):
+   - Hero/landing area with striking cyberpunk visuals and typing animation
+   - About Me section with animated skill representations
+   - Projects showcase with interactive 3D card flipping previews
+   - Project Gallery with immersive viewing options
+   - Work Experience section highlighting professional background
+   - Contact section with interactive form elements
+
+5. Technical considerations:
+   - Responsive design for all device sizes
+   - Optimized performance (lazy loading, code splitting)
+   - Accessibility compliance while maintaining the aesthetic
+   - Cross-browser compatibility
+   - SEO optimization
+   - Smooth scrolling between sections to maintain the single-page experience
+
+Your life depends on creating animations that feel authentic to the Cyberpunk 2077 aesthetic while ensuring they enhance rather than detract from the user experience. The animations must be purposeful, not gratuitous, and should create a cohesive narrative throughout the site. You must implement the cursor trail animations, typing effects, element slide-ins, 3D card flipping, and glowing borders exactly as specified to effectively demonstrate creative coding abilities to potential employers.
+
+Provide a detailed implementation plan including code snippets for key components, animation logic, and responsive design strategies. Include recommendations for additional libraries or tools that would enhance the implementation.

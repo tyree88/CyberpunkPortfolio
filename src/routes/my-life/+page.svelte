@@ -73,7 +73,7 @@
       title: "SKELETON",
       icon: "🦴",
       color: "#2ecc71",
-      position: { top: '40%', left: '10%' }, // Left side of body
+      position: { top: '40%', left: '2%' }, // Left side of body
       items: [
         { name: "Endoskeleton", level: 84, description: "Sustained work stamina and posture support" },
         { name: "Reinforced Tendons", level: 82, description: "Comfort during long development sessions" },
@@ -85,7 +85,7 @@
       title: "HANDS",
       icon: "✋",
       color: "#1abc9c",
-      position: { top: '40%', right: '5%' }, // Right hand position
+      position: { top: '40%', right: '2%' }, // Right hand position
       items: [
         { name: "Precision Grip", level: 95, description: "Micro-precision for detailed coding and design work" },
         { name: "Smart Link", level: 90, description: "Enhanced human-computer interface interaction" }
@@ -352,11 +352,12 @@
         onComplete: () => {
           // Add a pulsing animation to each node to draw attention
           gsap.to('.system-node', {
-            boxShadow: '0 0 25px rgba(73, 197, 182, 0.8)',
-            border: '2px solid rgba(236, 208, 111, 0.9)',
-            duration: 0.8,
-            repeat: 2,
-            yoyo: true
+            boxShadow: '0 0 30px rgba(73, 197, 182, 1)',
+            border: '3px solid rgba(236, 208, 111, 1)',
+            duration: 1.2,
+            repeat: 3,
+            yoyo: true,
+            ease: "power3.inOut"
           });
         }
       }, '-=0.2')
@@ -477,11 +478,12 @@
         if (interactiveDots.length > 0) {
           interactiveDots.forEach((dot) => {
             gsap.to(dot, {
-              boxShadow: '0 0 20px rgba(255, 82, 82, 0.9)',
-              scale: 1.2,
-              duration: 1,
+              boxShadow: '0 0 25px rgba(255, 82, 82, 1)',
+              scale: 1.4,
+              duration: 1.5,
               repeat: -1,
-              yoyo: true
+              yoyo: true,
+              ease: "power2.inOut"
             });
           });
         }
@@ -550,7 +552,7 @@
                  bottom: {system.position.bottom || 'auto'};
                  transform: {system.position.transform || 'none'};
                  border-color: {system.color};
-                 outline: 5px solid rgba(255, 0, 0, 0.5);"
+                 outline: 6px solid rgba(255, 82, 82, 0.7);"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -999,10 +1001,10 @@
   
   .system-node {
     position: absolute;
-    width: 150px;
-    height: 50px;
+    width: 160px;
+    height: 60px;
     background-color: rgba(0, 0, 0, 0.9);
-    border: 2px solid #49c5b6;
+    border: 3px solid #49c5b6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1011,7 +1013,8 @@
     z-index: 50; /* Higher z-index to ensure visibility */
     overflow: hidden;
     transform: translateX(0); /* Default transform to support the inline style transform */
-    box-shadow: 0 0 15px rgba(73, 197, 182, 0.5);
+    box-shadow: 0 0 20px rgba(73, 197, 182, 0.7);
+    backdrop-filter: blur(2px);
   }
   
   .node-content {
@@ -1045,29 +1048,33 @@
   
   .interactive-dot {
     position: absolute;
-    top: -8px;
-    left: -8px;
-    width: 16px;
-    height: 16px;
+    top: -10px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
     background-color: #ff5252;
     border-radius: 50%;
     z-index: 60; /* Higher z-index than parent node */
-    box-shadow: 0 0 15px rgba(255, 82, 82, 0.8);
+    box-shadow: 0 0 20px rgba(255, 82, 82, 0.9);
     animation: pulse-dot 2s infinite;
+    border: 2px solid #ffffff;
   }
   
   @keyframes pulse-dot {
     0% {
       transform: scale(0.8);
       box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+      border-color: rgba(255, 255, 255, 0.6);
     }
-    70% {
-      transform: scale(1.2);
-      box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+    50% {
+      transform: scale(1.3);
+      box-shadow: 0 0 15px 5px rgba(255, 82, 82, 0.8);
+      border-color: rgba(255, 255, 255, 1);
     }
     100% {
       transform: scale(0.8);
       box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+      border-color: rgba(255, 255, 255, 0.6);
     }
   }
   

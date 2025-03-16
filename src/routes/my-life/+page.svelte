@@ -160,11 +160,17 @@
   
   // Handle back navigation
   function handleBack() {
-    // Navigate back to the main page with a glitch effect
+    if (!browser) return;
+    
+    // Navigate back to the cyberdeck/homepage with a glitch effect
     const timeline = gsap.timeline({
-      onComplete: () => goto('/')
+      onComplete: () => {
+        // Use goto to navigate to the homepage
+        goto('/', { replaceState: false });
+      }
     });
     
+    // Add cyberpunk-style glitch effect on exit
     timeline
       .to('.cyberware-page', { 
         filter: 'hue-rotate(90deg) brightness(1.2)',

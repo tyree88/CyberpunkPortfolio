@@ -88,7 +88,7 @@
   </div>
   
   <div class="header-right">
-    <a href="/about-me" class="header-link">
+    <a href="/my-life" class="header-link">
       <div class="combined-status">
         <div class="connection-status">
           <span class="icon">⚡</span>

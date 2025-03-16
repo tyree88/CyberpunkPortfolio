@@ -521,6 +521,7 @@
           role="button"
           aria-pressed={currentSystem === system.id}
         >
+          <div class="interactive-dot"></div>
           <div class="node-content">
             <span class="node-icon">{system.icon}</span>
             <span class="node-title">{system.title}</span>
@@ -907,7 +908,7 @@
     width: 100%;
     height: 95%;
     background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
-    background-position: 65% center;
+    background-position: 60% center;
     background-repeat: no-repeat;
     background-size: cover;
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
@@ -998,6 +999,34 @@
     height: 50px;
     background: linear-gradient(to bottom, #49c5b6, transparent);
     z-index: -1;
+  }
+  
+  .interactive-dot {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: #ff5252;
+    border-radius: 50%;
+    z-index: 11;
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.8);
+    animation: pulse-dot 2s infinite;
+  }
+  
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(0.8);
+      box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+    }
+    70% {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+    }
+    100% {
+      transform: scale(0.8);
+      box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+    }
   }
   
   /* System details panel */

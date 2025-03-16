@@ -904,9 +904,9 @@
   
   .body-display {
     position: relative;
-    width: 80%;
-    height: 80%;
-    background-image: url('/images/cyberware/x-ray-body.jpg');
+    width: 90%;
+    height: 90%;
+    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -914,6 +914,7 @@
     background-color: transparent;
     border-radius: 2px;
     animation: body-glow 4s infinite alternate ease-in-out;
+    max-height: 570px;
   }
   
   @keyframes body-glow {

@@ -1,193 +1,211 @@
-<script lang="ts">
+<script>
   import { onMount, onDestroy } from 'svelte';
   import * as THREE from 'three';
-  import { browser } from '$app/environment';
   import { cursorPosition } from '$lib/stores/cursorStore';
-
-  // Props
-  export let color = '#49c5b6'; // Cyberpunk teal as default
-  export let intensity = 1.0;
-  export let density = 80; // Number of particles
-
-  // Local state
-  let container: HTMLElement;
-  let renderer: THREE.WebGLRenderer;
-  let scene: THREE.Scene;
-  let camera: THREE.PerspectiveCamera;
-  let particles: THREE.Points;
-  let particleSystem: THREE.Points;
-  let frameId: number;
+  import { browser } from '$app/environment';
   
+  // Props
+  export let color = '#49c5b6'; // Default cyberpunk teal
+  export let intensity = 0.8;
+  export let density = 100; // Number of particles
+  
+  // Local vars
+  let container;
+  let scene;
+  let camera;
+  let renderer;
+  let particles;
   let mouseX = 0;
   let mouseY = 0;
-  let targetMouseX = 0;
-  let targetMouseY = 0;
+  let width;
+  let height;
+  let animationFrame;
   
-  // Track window dimensions
-  let windowWidth = browser ? window.innerWidth : 1000;
-  let windowHeight = browser ? window.innerHeight : 800;
-
-  // Update cursor position from store
-  const unsubscribe = cursorPosition.subscribe(pos => {
-    targetMouseX = (pos.x / windowWidth) * 2 - 1;
-    targetMouseY = -((pos.y / windowHeight) * 2 - 1);
-  });
-
-  // Initialize ThreeJS scene
-  function init() {
-    if (!browser || !container) return;
+  // Create and initialize Three.js scene
+  function initScene() {
+    // Skip initialization if not in browser environment
+    if (!browser) return;
     
-    // Setup scene
+    // Get container dimensions
+    width = window.innerWidth;
+    height = window.innerHeight;
+    
+    // Create scene and camera
     scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = 30;
     
-    // Setup camera with a wide field of view for immersion
-    camera = new THREE.PerspectiveCamera(
-      70, 
-      container.clientWidth / container.clientHeight, 
-      0.1, 
-      2000
-    );
-    camera.position.z = 700;
-    
-    // Create renderer with cyberpunk aesthetics
+    // Create renderer
     renderer = new THREE.WebGLRenderer({ 
-      alpha: true,  // Transparent background
-      antialias: true
+      alpha: true, 
+      antialias: true 
     });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(width, height);
+    renderer.setClearColor(0x000000, 0); // Transparent background
     container.appendChild(renderer.domElement);
     
-    // Create particle system for 3D grid effect
+    // Create particle system
     createParticles();
-    
-    // Add event listeners
-    window.addEventListener('resize', onWindowResize);
     
     // Start animation loop
     animate();
+    
+    // Set up resize listener
+    window.addEventListener('resize', handleResize);
+    
+    // Set up cursor position subscription
+    const unsubscribe = cursorPosition.subscribe(pos => {
+      mouseX = (pos.x / width - 0.5) * 2;
+      mouseY = -(pos.y / height - 0.5) * 2;
+    });
+    
+    return unsubscribe;
   }
   
   // Create particle system
   function createParticles() {
-    // Geometry with random positions in 3D space
-    const particlesGeometry = new THREE.BufferGeometry();
+    const geometry = new THREE.BufferGeometry();
     const vertices = [];
+    const sizes = [];
     
-    // Create cyberpunk grid pattern in 3D space
-    const gridSize = 1200;
-    const gridStep = gridSize / 10;
-    
-    // Create grid structure - regular interval points
-    for (let x = -gridSize/2; x <= gridSize/2; x += gridStep) {
-      for (let y = -gridSize/2; y <= gridSize/2; y += gridStep) {
-        // Add some randomness to z position for depth
-        const z = (Math.random() - 0.5) * 500;
-        vertices.push(x, y, z);
-      }
-    }
-    
-    // Add random particles for a more dynamic feel
+    // Create particles in a cyberpunk-style grid
     for (let i = 0; i < density; i++) {
-      const x = (Math.random() - 0.5) * 1000;
-      const y = (Math.random() - 0.5) * 1000;
-      const z = (Math.random() - 0.5) * 800;
+      // Create grid-like structure with some randomness
+      let x, y, z;
+      
+      // 75% of particles in a grid pattern, 25% random for organic feel
+      if (Math.random() > 0.25) {
+        // Grid pattern with noise for cyberpunk tech feel
+        const gridSize = 5; // Grid cell size
+        // Create a grid pattern
+        x = Math.floor(Math.random() * 10) * gridSize - 25;
+        y = Math.floor(Math.random() * 10) * gridSize - 25;
+        z = Math.floor(Math.random() * 5) * gridSize - 15;
+        
+        // Add a small offset for less perfect grid
+        x += Math.random() * 2 - 1;
+        y += Math.random() * 2 - 1;
+        z += Math.random() * 2 - 1;
+      } else {
+        // Completely random particles for organic feel
+        x = Math.random() * 50 - 25;
+        y = Math.random() * 50 - 25;
+        z = Math.random() * 30 - 15;
+      }
+      
       vertices.push(x, y, z);
+      
+      // Vary the size of particles
+      const size = Math.random() * 0.3 + 0.1;
+      sizes.push(size);
     }
     
-    particlesGeometry.setAttribute(
-      'position', 
-      new THREE.Float32BufferAttribute(vertices, 3)
-    );
+    // Set positions
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
     
-    // Material for the particles - glowing cyberpunk effect
-    const particlesMaterial = new THREE.PointsMaterial({
-      color: new THREE.Color(color),
-      size: 4,
-      blending: THREE.AdditiveBlending,
+    // Set individual particle sizes
+    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+    
+    // Create shader material for better-looking particles
+    const threeColor = new THREE.Color(color);
+    const material = new THREE.PointsMaterial({
+      color: threeColor,
+      size: 0.4,
       transparent: true,
-      opacity: 0.7,
-      sizeAttenuation: true
+      opacity: intensity,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true, // Particles change size based on distance
+      depthWrite: false, // Prevents particles from being occluded incorrectly
     });
     
     // Create particle system
-    particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particleSystem);
-  }
-  
-  // Handle window resize
-  function onWindowResize() {
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
-    
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    particles = new THREE.Points(geometry, material);
+    scene.add(particles);
   }
   
   // Animation loop
   function animate() {
-    frameId = requestAnimationFrame(animate);
+    animationFrame = requestAnimationFrame(animate);
     
-    // Smooth cursor movement
-    mouseX += (targetMouseX - mouseX) * 0.05;
-    mouseY += (targetMouseY - mouseY) * 0.05;
-    
-    // Tilt scene based on mouse position
-    particleSystem.rotation.x = mouseY * 0.2;
-    particleSystem.rotation.y = mouseX * 0.3;
-    
-    // Slight continuous rotation for ambient movement
-    particleSystem.rotation.z += 0.0005;
-    
-    // Render scene
-    renderer.render(scene, camera);
+    // Only run animation if all components are initialized
+    if (particles && scene && camera && renderer) {
+      try {
+        // Rotate particles based on mouse position - slower rotation for better performance
+        particles.rotation.x += 0.0005;
+        particles.rotation.y += 0.001;
+        
+        // Apply mouse movement influence - more subtle effect
+        particles.rotation.x += mouseY * 0.0005;
+        particles.rotation.y += mouseX * 0.0005;
+        
+        // Get current particle positions
+        const positions = particles.geometry.attributes.position.array;
+        
+        // Animate only a subset of particles each frame for better performance
+        // Using a step to reduce calculations
+        const step = 9; // Process every 3rd particle (3 coordinates per particle)
+        for (let i = 0; i < positions.length; i += step) {
+          // More subtle pulsing effect
+          positions[i + 2] += Math.sin(Date.now() * 0.0005 + i) * 0.005;
+        }
+        
+        particles.geometry.attributes.position.needsUpdate = true;
+        
+        // Render scene
+        renderer.render(scene, camera);
+      } catch (error) {
+        // If we encounter a WebGL error, log it but don't crash
+        console.error("WebGL render error:", error);
+      }
+    }
   }
   
-  // Lifecycle hooks
-  onMount(() => {
-    if (browser) {
-      // Let the DOM fully render
-      setTimeout(init, 100);
-    }
-  });
+  // Handle window resize
+  function handleResize() {
+    if (!browser || !camera || !renderer) return;
+    
+    width = window.innerWidth;
+    height = window.innerHeight;
+    
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  }
   
-  onDestroy(() => {
-    if (browser) {
-      unsubscribe();
-      cancelAnimationFrame(frameId);
-      window.removeEventListener('resize', onWindowResize);
+  // Initialize on mount
+  onMount(() => {
+    const unsubscribe = initScene();
+    
+    return () => {
+      if (unsubscribe) unsubscribe();
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (browser) window.removeEventListener('resize', handleResize);
+      if (container && renderer) container.removeChild(renderer.domElement);
       
-      // Clean up resources
-      if (scene && particleSystem) {
-        scene.remove(particleSystem);
-        particleSystem.geometry.dispose();
-        (particleSystem.material as THREE.Material).dispose();
+      // Clean up THREE.js resources
+      if (particles) {
+        particles.geometry.dispose();
+        particles.material.dispose();
       }
-      
-      if (renderer) {
-        renderer.dispose();
-        if (container && container.contains(renderer.domElement)) {
-          container.removeChild(renderer.domElement);
-        }
-      }
-    }
+      scene = null;
+      camera = null;
+      renderer = null;
+      particles = null;
+    };
   });
 </script>
 
-<div class="interactive-background" bind:this={container}>
-  <!-- Three.js canvas will be inserted here -->
-</div>
+<div class="three-container" bind:this={container}></div>
 
 <style>
-  .interactive-background {
+  .three-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Behind content but above base background */
-    pointer-events: none; /* Allows clicking through to content */
-    opacity: 0.5; /* Subtle effect */
+    z-index: 1; /* Keep background behind everything else */
+    pointer-events: none; /* Allow clicking through to elements underneath */
+    opacity: 0.7; /* Subtle background effect */
   }
 </style>

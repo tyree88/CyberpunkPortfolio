@@ -957,7 +957,7 @@
     border-radius: 2px;
     /* Removed animation to keep the body still */
     max-height: 580px;
-    z-index: 10; /* Ensure proper layering */
+    z-index: 5; /* Decreased z-index to put the body image back a level */
   }
   
   .scan-effect {
@@ -983,7 +983,7 @@
     height: 1px; /* Reduced height */
     background-color: rgba(73, 197, 182, 0.5); /* Reduced opacity */
     box-shadow: 0 0 8px rgba(73, 197, 182, 0.5); /* Less intense glow */
-    z-index: 3;
+    z-index: 6; /* Increased to appear above body but below nodes */
     animation: scan-effect 6s infinite cubic-bezier(0.645, 0.045, 0.355, 1.000); /* Slower animation */
   }
   
@@ -1281,7 +1281,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 5;
+    z-index: 4; /* Reduced to place behind system nodes but in front of body */
   }
   
   .hud-element {

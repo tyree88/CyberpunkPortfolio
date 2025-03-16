@@ -136,7 +136,26 @@
   </div>
 {:else}
   <div class="main-container">
-    <CyberdeckHeader />
+    <CyberdeckHeader on:backToHero={() => {
+      // Animate transition back to hero
+      const tl = gsap.timeline();
+      
+      tl.to('.main-container', {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => {
+          showMainContent = false;
+          
+          // Animate hero back in
+          setTimeout(() => {
+            gsap.from('.hero-container', { 
+              opacity: 0, 
+              duration: 0.8 
+            });
+          }, 100);
+        }
+      });
+    }} />
     <div class="content-container">
       <QuickhackList class="quickhack-list" />
       <ContentPanel class="content-panel" currentSection={$currentSection} />

@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import { gsap } from 'gsap';
   import { browser } from '$app/environment';
   import RamBar from './RamBar.svelte';
   import GlitchText from './GlitchText.svelte';
+
+  // Create event dispatcher
+  const dispatch = createEventDispatcher();
 
   // Initialize with a static time for SSR
   let currentTime = '00:00:00';
@@ -37,10 +40,28 @@
       if (interval) clearInterval(interval);
     };
   });
+
+  // Function to handle going back to the hero section
+  function goBackToHero() {
+    dispatch('backToHero');
+  }
 </script>
 
 <div class="cyberdeck-header">
   <div class="header-left">
+    <button 
+      class="back-button" 
+      on:click={goBackToHero}
+      on:keydown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          goBackToHero();
+        }
+      }}
+      aria-label="Return to home screen"
+    >
+      <span class="back-icon">←</span>
+      <span class="back-text">BACK</span>
+    </button>
     <div class="time-display">
       <span class="label">TIME</span>
       <span class="time-box">{currentTime}</span>
@@ -51,7 +72,7 @@
   </div>
   
   <div class="header-center">
-    <GlitchText text="CYBERDECK RAM" class="cyberdeck-title" />
+    <GlitchText text="CYBERDECK RAM" class="ram-title" />
     <RamBar />
   </div>
   
@@ -107,11 +128,39 @@
     font-size: 0.9rem;
   }
 
-  .cyberdeck-title {
+  :global(.ram-title) {
     font-size: 1rem;
     color: #49c5b6;
     text-transform: uppercase;
     margin-bottom: 0.2rem;
+    letter-spacing: 1px;
+  }
+  
+  .back-button {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #ff5252;
+    color: #ff5252;
+    padding: 0.3rem 0.7rem;
+    margin-right: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .back-button:hover {
+    background: rgba(255, 82, 82, 0.2);
+    box-shadow: 0 0 8px rgba(255, 82, 82, 0.5);
+  }
+  
+  .back-icon {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .back-text {
+    font-size: 0.8rem;
+    font-weight: bold;
     letter-spacing: 1px;
   }
 

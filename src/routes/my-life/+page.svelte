@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount, afterUpdate } from 'svelte';
+  import { onMount } from 'svelte';
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { fade, fly, slide } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
   import TypewriterText from '$lib/components/TypewriterText.svelte';
   import GlitchText from '$lib/components/GlitchText.svelte';
   import { portfolioData } from '$lib/data/portfolioData';
@@ -14,49 +14,242 @@
   
   // Page state
   let isLoaded = false;
-  let currentSection = 'about';
+  let currentSystem = 'frontal-cortex';
   let mousePosition = { x: 0, y: 0 };
   let trailElements: HTMLElement[] = [];
   let trailContainer: HTMLElement | null = null;
-  let aboutContainer: HTMLElement | null = null;
-  let skillsContainer: HTMLElement | null = null;
-  let experienceContainer: HTMLElement | null = null;
-  let projectsContainer: HTMLElement | null = null;
-  let contactContainer: HTMLElement | null = null;
+  let scanEffect: HTMLElement | null = null;
+  let bodyDisplay: HTMLElement | null = null;
   
-  // About sections data
-  const aboutSections = [
+  // Current frame for scan animation
+  let currentFrame = 0;
+  let totalFrames = 12; // Based on the frames you provided
+  let scanIntervalId: number | null = null;
+  
+  // Systems data structure based on the frames
+  const cyberwareSystems = [
     {
-      id: 'about',
-      title: "NEURAL PROFILE",
+      id: 'frontal-cortex',
+      title: "FRONTAL CORTEX",
       icon: "🧠",
-      color: "#49c5b6"
+      color: "#49c5b6",
+      position: { top: '15%', left: '15%' },
+      items: [
+        { name: "Problem-Solving OS", level: 92, description: "Enhanced cognitive processing for complex problem-solving" },
+        { name: "Creative Framework", level: 88, description: "Boost to creative thinking and innovation abilities" },
+        { name: "Memory Booster", level: 85, description: "Improved information retention and recall abilities" }
+      ]
     },
     {
-      id: 'skills',
-      title: "AUGMENTATIONS",
+      id: 'operating-system',
+      title: "OPERATING SYSTEM",
+      icon: "💻",
+      color: "#ECD06F",
+      position: { top: '15%', right: '15%' },
+      items: [
+        { name: "Multitasking Processor", level: 90, description: "Efficient management of multiple concurrent tasks" },
+        { name: "Focus Enhancer", level: 85, description: "Sustained concentration on complex problems" }
+      ]
+    },
+    {
+      id: 'face',
+      title: "FACE",
+      icon: "👁️",
+      color: "#ff5252",
+      position: { top: '25%', right: '10%' },
+      items: [
+        { name: "Kiroshi Optics", level: 95, description: "Enhanced visual perception for design and attention to detail" },
+        { name: "Vocal Modulator", level: 88, description: "Clear and effective communication skills" }
+      ]
+    },
+    {
+      id: 'arms',
+      title: "ARMS",
+      icon: "💪",
+      color: "#9059ff",
+      position: { top: '30%', left: '10%' },
+      items: [
+        { name: "Gorilla Arms", level: 87, description: "Rapid keyboard input and precision coding" }
+      ]
+    },
+    {
+      id: 'skeleton',
+      title: "SKELETON",
+      icon: "🦴",
+      color: "#2ecc71",
+      position: { top: '40%', left: '5%' },
+      items: [
+        { name: "Endoskeleton", level: 84, description: "Sustained work stamina and posture support" },
+        { name: "Reinforced Tendons", level: 82, description: "Comfort during long development sessions" },
+        { name: "Bioplastic Frame", level: 78, description: "Ergonomic adaptation to work environments" }
+      ]
+    },
+    {
+      id: 'hands',
+      title: "HANDS",
+      icon: "✋",
+      color: "#1abc9c",
+      position: { top: '40%', right: '5%' },
+      items: [
+        { name: "Precision Grip", level: 95, description: "Micro-precision for detailed coding and design work" },
+        { name: "Smart Link", level: 90, description: "Enhanced human-computer interface interaction" }
+      ]
+    },
+    {
+      id: 'nervous-system',
+      title: "NERVOUS SYSTEM",
       icon: "⚡",
-      color: "#ECD06F"
+      color: "#f39c12",
+      position: { top: '55%', left: '10%' },
+      items: [
+        { name: "Kerenzikov", level: 88, description: "Rapid reaction time for debugging and problem-solving" },
+        { name: "Reflexes", level: 85, description: "Quick adaptation to changing project requirements" },
+        { name: "Synaptic Accelerator", level: 83, description: "Faster learning of new technologies and frameworks" }
+      ]
     },
     {
-      id: 'experience',
-      title: "MEMORY ARCHIVES",
-      icon: "💾",
-      color: "#ff5252"
+      id: 'circulatory-system',
+      title: "CIRCULATORY SYSTEM",
+      icon: "❤️",
+      color: "#e74c3c",
+      position: { top: '55%', right: '10%' },
+      items: [
+        { name: "Biomonitor", level: 86, description: "Stress management during challenging projects" },
+        { name: "Blood Pump", level: 82, description: "Maintained performance during high-pressure deadlines" },
+        { name: "Adrenaline", level: 80, description: "Heightened focus for critical problem-solving" }
+      ]
     },
     {
-      id: 'projects',
-      title: "BREACH PROTOCOL",
-      icon: "🔓",
-      color: "#9059ff"
+      id: 'integumentary-system',
+      title: "INTEGUMENTARY SYSTEM",
+      icon: "🛡️",
+      color: "#3498db",
+      position: { bottom: '25%', left: '10%' },
+      items: [
+        { name: "Heat Converter", level: 79, description: "Comfortable work under varying environmental conditions" },
+        { name: "Pain Editor", level: 76, description: "Reduced fatigue during extended work sessions" },
+        { name: "Subdermal Socket", level: 85, description: "Enhanced tactile feedback with development tools" }
+      ]
     },
     {
-      id: 'contact',
-      title: "ESTABLISH CONNECTION",
-      icon: "📡",
-      color: "#2ecc71"
+      id: 'legs',
+      title: "LEGS",
+      icon: "🦿",
+      color: "#8e44ad",
+      position: { bottom: '15%', right: '10%' },
+      items: [
+        { name: "Reinforced Joints", level: 75, description: "Stability and endurance during long work sessions" },
+        { name: "Lynx Paws", level: 72, description: "Silent and efficient movement throughout work environments" }
+      ]
     }
   ];
+  
+  // Experience data mapped to memory archives
+  const memoryArchives = portfolioData.experience.map(job => ({
+    title: job.title,
+    company: job.company,
+    duration: job.duration,
+    description: job.description,
+    skills: job.skills
+  }));
+  
+  // Projects mapped to breach protocols
+  const breachProtocols = portfolioData.projects.map(project => ({
+    title: project.title,
+    description: project.description,
+    technologies: project.technologies,
+    link: project.link,
+    github: project.github
+  }));
+  
+  // Handle back navigation
+  function handleBack() {
+    // Navigate back to the main page with a glitch effect
+    const timeline = gsap.timeline({
+      onComplete: () => goto('/')
+    });
+    
+    timeline
+      .to('.cyberware-page', { 
+        filter: 'hue-rotate(90deg) brightness(1.2)',
+        duration: 0.08,
+        ease: "steps(1)"
+      })
+      .to('.cyberware-page', { 
+        filter: 'hue-rotate(-40deg) brightness(0.8)',
+        duration: 0.08,
+        ease: "steps(1)"
+      })
+      .to('.cyberware-page', { 
+        x: 0, 
+        opacity: 0, 
+        filter: 'hue-rotate(0) brightness(1)',
+        duration: 0.2 
+      });
+  }
+  
+  // Set active system and show relevant data
+  function selectSystem(systemId: string) {
+    // Create a glitch effect for transition
+    const timeline = gsap.timeline();
+    timeline
+      .to('.system-details', { 
+        x: 3, 
+        opacity: 0.8, 
+        duration: 0.05,
+        ease: "steps(1)"
+      })
+      .to('.system-details', { 
+        x: -6, 
+        opacity: 0.9, 
+        duration: 0.05,
+        ease: "steps(1)"
+      })
+      .to('.system-details', { 
+        x: 0, 
+        opacity: 1, 
+        duration: 0.05 
+      });
+    
+    // Update current system
+    currentSystem = systemId;
+    
+    // Highlight the active system
+    gsap.to('.system-node', {
+      borderColor: '#49c5b6',
+      boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
+      duration: 0.3
+    });
+    
+    gsap.to(`.system-node[data-system="${systemId}"]`, {
+      borderColor: '#ECD06F',
+      boxShadow: '0 0 15px rgba(236, 208, 111, 0.7)',
+      duration: 0.3
+    });
+  }
+  
+  // Animate scan effect
+  function animateScan() {
+    if (!browser || !scanEffect) return;
+    
+    // Start the scan animation if not already running
+    if (scanIntervalId === null) {
+      scanIntervalId = window.setInterval(() => {
+        // Update to next frame
+        currentFrame = (currentFrame + 1) % totalFrames;
+        
+        // Apply scan effect
+        if (scanEffect) {
+          scanEffect.style.backgroundImage = `linear-gradient(to bottom, 
+            rgba(73, 197, 182, 0.05), 
+            rgba(73, 197, 182, 0.1) ${currentFrame * 8}%, 
+            rgba(73, 197, 182, 0.2) ${currentFrame * 8 + 1}%, 
+            rgba(73, 197, 182, 0.05) ${currentFrame * 8 + 2}%, 
+            rgba(73, 197, 182, 0.0))`;
+        }
+      }, 200);
+    }
+  }
   
   // Create cursor trail elements
   function createTrailElements() {
@@ -75,12 +268,12 @@
     
     // Create new trail elements
     if (trailContainer) {
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 15; i++) {
         const trailElement = document.createElement('div');
-        trailElement.className = 'cursor-dot';
-        trailElement.style.width = `${4 + (i * 0.1)}px`;
-        trailElement.style.height = `${4 + (i * 0.1)}px`;
-        trailElement.style.opacity = `${1 - (i * 0.05)}`;
+        trailElement.className = 'cursor-trail';
+        trailElement.style.width = `${3 + (i * 0.1)}px`;
+        trailElement.style.height = `${3 + (i * 0.1)}px`;
+        trailElement.style.opacity = `${1 - (i * 0.06)}`;
         trailElement.style.backgroundColor = i % 2 === 0 ? '#49c5b6' : '#ECD06F';
         
         trailContainer.appendChild(trailElement);
@@ -90,91 +283,46 @@
   }
   
   // Update cursor trail positions
-  function updateTrailPositions(e: MouseEvent | KeyboardEvent) {
+  function updateTrailPositions(e: MouseEvent) {
     if (!browser || !trailElements.length) return;
     
-    // Only update for mouse events, not keyboard events
-    if (e instanceof MouseEvent) {
-      mousePosition.x = e.clientX;
-      mousePosition.y = e.clientY;
-      
-      // Update trail element positions with delay
-      trailElements.forEach((element, index) => {
-        setTimeout(() => {
-          element.style.left = `${mousePosition.x}px`;
-          element.style.top = `${mousePosition.y}px`;
-        }, index * 20);
-      });
-    }
+    mousePosition.x = e.clientX;
+    mousePosition.y = e.clientY;
+    
+    // Update trail element positions with delay
+    trailElements.forEach((element, index) => {
+      setTimeout(() => {
+        element.style.left = `${mousePosition.x}px`;
+        element.style.top = `${mousePosition.y}px`;
+      }, index * 15);
+    });
   }
   
-  // Handle section navigation
-  function navigateToSection(sectionId: string) {
-    currentSection = sectionId;
-    
-    // Create glitch effect on navigation
+  // Add glitch effect to an element
+  function triggerGlitchEffect(element: HTMLElement) {
     const timeline = gsap.timeline();
-    timeline
-      .to('.about-section-content', { 
-        x: 3, 
-        opacity: 0.8, 
-        duration: 0.05 
-      })
-      .to('.about-section-content', { 
-        x: -3, 
-        opacity: 0.9, 
-        duration: 0.05 
-      })
-      .to('.about-section-content', { 
-        x: 0, 
-        opacity: 1, 
-        duration: 0.05 
-      });
-    
-    // Scroll to the section
-    const targetElement = document.getElementById(sectionId);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    // Highlight active nav item
-    gsap.to('.nav-item', {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      borderColor: '#49c5b6',
-      color: '#ffffff',
-      duration: 0.3
-    });
-    
-    gsap.to(`.nav-item[data-section="${sectionId}"]`, {
-      backgroundColor: 'rgba(73, 197, 182, 0.2)',
-      borderColor: '#ECD06F',
-      color: '#ECD06F',
-      duration: 0.3
-    });
-  }
-  
-  // Handle back navigation
-  function handleBack() {
-    // Navigate back to the main page with a glitch effect
-    const timeline = gsap.timeline({
-      onComplete: () => goto('/')
-    });
     
     timeline
-      .to('.about-page', { 
-        x: 10, 
-        opacity: 0.8, 
-        duration: 0.1 
+      .to(element, {
+        x: '+=' + (Math.random() * 6 - 3),
+        y: '+=' + (Math.random() * 4 - 2),
+        filter: 'hue-rotate(' + (Math.random() * 90) + 'deg) brightness(' + (0.8 + Math.random() * 0.4) + ')',
+        duration: 0.08,
+        ease: "steps(1)"
       })
-      .to('.about-page', { 
-        x: -10, 
-        opacity: 0.6, 
-        duration: 0.1 
+      .to(element, {
+        x: '+=' + (Math.random() * 6 - 3),
+        y: '+=' + (Math.random() * 4 - 2),
+        filter: 'hue-rotate(' + (Math.random() * -90) + 'deg) brightness(' + (0.8 + Math.random() * 0.4) + ')',
+        duration: 0.08,
+        ease: "steps(1)"
       })
-      .to('.about-page', { 
-        x: 0, 
-        opacity: 0, 
-        duration: 0.2 
+      .to(element, {
+        x: 0,
+        y: 0,
+        filter: 'hue-rotate(0) brightness(1)',
+        duration: 0.08,
+        ease: "steps(1)"
       });
   }
   
@@ -186,44 +334,50 @@
     createTrailElements();
     window.addEventListener('mousemove', updateTrailPositions);
     
+    // Start scan animation
+    animateScan();
+    
     // Initialize page animations
     const masterTimeline = gsap.timeline();
     
     masterTimeline
-      .from('.about-header', { 
-        y: -50, 
+      .from('.cyberware-header', { 
+        y: -30, 
         opacity: 0, 
         duration: 0.5 
       })
-      .from('.nav-item', { 
-        x: -30, 
+      .from('.system-node', { 
+        scale: 0.8, 
         opacity: 0, 
-        stagger: 0.1, 
-        duration: 0.3 
+        stagger: 0.05, 
+        duration: 0.3,
+        ease: "back.out(1.7)"
       }, '-=0.2')
-      .from('.about-section-content', { 
-        opacity: 0, 
+      .from('.system-details', { 
+        opacity: 0,
+        y: 20,
         duration: 0.5 
       }, '-=0.1')
-      .from('.scan-lines', {
+      .from('.body-display', {
+        opacity: 0,
+        duration: 0.8
+      }, '-=0.3')
+      .from('.scan-effect', {
         opacity: 0,
         duration: 0.3
-      });
+      }, '-=0.5')
+      .from('.hud-element', {
+        opacity: 0,
+        y: 10,
+        stagger: 0.1,
+        duration: 0.4
+      }, '-=0.3');
     
-    // Set up scroll animations
-    setupScrollAnimations();
+    // Add occasional glitch effects to various elements
+    scheduleRandomGlitches();
     
-    // Highlight the first nav item
-    gsap.to('.nav-item[data-section="about"]', {
-      backgroundColor: 'rgba(73, 197, 182, 0.2)',
-      borderColor: '#ECD06F',
-      color: '#ECD06F',
-      delay: 0.5,
-      duration: 0.3
-    });
-    
-    // Glowing border animation
-    setupGlowingBorders();
+    // Add glow effects to system nodes
+    setupGlowEffects();
     
     isLoaded = true;
     
@@ -231,154 +385,87 @@
       // Clean up event listeners
       window.removeEventListener('mousemove', updateTrailPositions);
       
+      // Clear scan interval
+      if (scanIntervalId !== null) {
+        window.clearInterval(scanIntervalId);
+      }
+      
       // Kill all GSAP animations
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       gsap.killTweensOf('*');
     };
   });
   
-  // Set up scroll-triggered animations
-  function setupScrollAnimations() {
+  // Schedule random glitch effects on elements
+  function scheduleRandomGlitches() {
     if (!browser) return;
     
-    // About section animations
-    ScrollTrigger.create({
-      trigger: '#about',
-      start: 'top 80%',
-      onEnter: () => {
-        gsap.from('.profile-info', {
-          x: -50,
-          opacity: 0,
-          duration: 0.7,
-          stagger: 0.2
-        });
-      }
+    // System nodes glitches
+    document.querySelectorAll('.system-node').forEach(node => {
+      const glitchDelay = 5 + Math.random() * 15; // Random delay between 5-20 seconds
+      
+      setTimeout(() => {
+        if (node instanceof HTMLElement) {
+          triggerGlitchEffect(node);
+          
+          // Reschedule
+          scheduleRandomGlitches();
+        }
+      }, glitchDelay * 1000);
     });
     
-    // Skills section animations
-    ScrollTrigger.create({
-      trigger: '#skills',
-      start: 'top 80%',
-      onEnter: () => {
-        gsap.from('.skill-category', {
-          y: 50,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.2
-        });
-        
-        gsap.from('.skill-bar-fill', {
-          width: 0,
-          duration: 1,
-          stagger: 0.05,
-          delay: 0.5,
-          ease: 'power2.out'
-        });
-      }
-    });
-    
-    // Experience section animations
-    ScrollTrigger.create({
-      trigger: '#experience',
-      start: 'top 80%',
-      onEnter: () => {
-        gsap.from('.experience-item', {
-          x: -100,
-          opacity: 0,
-          duration: 0.7,
-          stagger: 0.3
-        });
-      }
-    });
-    
-    // Projects section animations
-    ScrollTrigger.create({
-      trigger: '#projects',
-      start: 'top 80%',
-      onEnter: () => {
-        gsap.from('.project-card', {
-          scale: 0.8,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.2,
-          ease: 'back.out(1.7)'
-        });
-      }
-    });
-    
-    // Contact section animations
-    ScrollTrigger.create({
-      trigger: '#contact',
-      start: 'top 80%',
-      onEnter: () => {
-        gsap.from('.contact-form', {
-          y: 50,
-          opacity: 0,
-          duration: 0.7
-        });
-        
-        gsap.from('.contact-info', {
-          x: -50,
-          opacity: 0,
-          duration: 0.7,
-          delay: 0.3
-        });
-      }
-    });
+    // Body display glitch
+    if (bodyDisplay) {
+      const bodyGlitchDelay = 8 + Math.random() * 12;
+      
+      setTimeout(() => {
+        triggerGlitchEffect(bodyDisplay);
+      }, bodyGlitchDelay * 1000);
+    }
   }
   
-  // Set up glowing border animations
-  function setupGlowingBorders() {
+  // Set up glow effects for system nodes
+  function setupGlowEffects() {
     if (!browser) return;
     
-    // Animate section borders
-    gsap.to('.section-border', {
-      boxShadow: '0 0 15px rgba(73, 197, 182, 0.7)',
-      duration: 1.5,
+    // Default subtle glow on system nodes
+    gsap.to('.system-node', {
+      boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
+      duration: 2,
       repeat: -1,
       yoyo: true
     });
     
-    // Animate nav items on hover
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        gsap.to(item, {
+    // Enhanced glow on hover
+    document.querySelectorAll('.system-node').forEach(node => {
+      node.addEventListener('mouseenter', () => {
+        gsap.to(node, {
           boxShadow: '0 0 15px rgba(236, 208, 111, 0.7)',
+          scale: 1.05,
           duration: 0.3
         });
       });
       
-      item.addEventListener('mouseleave', () => {
-        gsap.to(item, {
-          boxShadow: '0 0 0px rgba(236, 208, 111, 0)',
+      node.addEventListener('mouseleave', () => {
+        gsap.to(node, {
+          boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
+          scale: 1,
           duration: 0.3
         });
       });
     });
   }
-  
-  // Flip card animation for projects
-  function flipCard(event: MouseEvent | KeyboardEvent, index: number) {
-    const card = event.currentTarget as HTMLElement;
-    const isFlipped = card.classList.contains('flipped');
-    
-    if (isFlipped) {
-      card.classList.remove('flipped');
-    } else {
-      card.classList.add('flipped');
-    }
-  }
 </script>
 
-<div class="about-page" in:fade={{ duration: 300 }}>
+<div class="cyberware-page" in:fade={{ duration: 300 }}>
   <!-- Cursor trail container -->
   <div class="cursor-trail-container" bind:this={trailContainer}></div>
   
-  <!-- Scan lines overlay for cyberpunk effect -->
+  <!-- Scan lines overlay -->
   <div class="scan-lines"></div>
   
   <!-- Header with back button and title -->
-  <div class="about-header">
+  <div class="cyberware-header">
     <button 
       class="back-button" 
       on:click={handleBack}
@@ -393,236 +480,179 @@
       <span class="back-text">BACK</span>
     </button>
     <div class="title-container">
-      <h1 class="about-title"><GlitchText text="CYBERPUNK PROFILE" /></h1>
-      <div class="header-decoration"></div>
+      <h1 class="cyberware-title"><GlitchText text="PERSONAL CYBERWARE SYSTEM" /></h1>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="stat-label">LVL</span>
+          <span class="stat-value">50</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">STREET CRED</span>
+          <span class="stat-value">50</span>
+        </div>
+      </div>
     </div>
   </div>
   
-  <!-- Navigation sidebar -->
-  <div class="about-navigation">
-    {#each aboutSections as section}
-      <div 
-        class="nav-item" 
-        data-section={section.id}
-        on:click={() => navigateToSection(section.id)}
-        on:keydown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            navigateToSection(section.id);
-          }
-        }}
-        tabindex="0"
-        role="button"
-        aria-pressed={currentSection === section.id}
-      >
-        <span class="nav-icon">{section.icon}</span>
-        <span class="nav-text">{section.title}</span>
+  <!-- Main cyberware system interface -->
+  <div class="cyberware-system">
+    <!-- Central body display with system nodes -->
+    <div class="body-display-container">
+      <!-- Body scan visualization -->
+      <div class="body-display" bind:this={bodyDisplay}>
+        <!-- Animated scan effect overlay -->
+        <div class="scan-effect" bind:this={scanEffect}></div>
       </div>
-    {/each}
-  </div>
-  
-  <!-- Main content area -->
-  <div class="about-content">
-    <!-- About/Profile Section -->
-    <section id="about" class="about-section section-border" bind:this={aboutContainer}>
-      <div class="about-section-header">
-        <h2 class="section-title"><GlitchText text="NEURAL PROFILE" /></h2>
-      </div>
-      <div class="about-section-content">
-        <div class="profile-container">
-          <div class="profile-image-container">
-            <div class="profile-image">
-              <!-- Replace with your actual image -->
-              <div class="profile-placeholder">NETRUNNER</div>
-              <div class="profile-scan-effect"></div>
-            </div>
-            <div class="profile-status">STATUS: ONLINE</div>
+      
+      <!-- System nodes positioned around body -->
+      {#each cyberwareSystems as system}
+        <div 
+          class="system-node" 
+          data-system={system.id}
+          style="top: {system.position.top || 'auto'}; 
+                 left: {system.position.left || 'auto'}; 
+                 right: {system.position.right || 'auto'}; 
+                 bottom: {system.position.bottom || 'auto'};
+                 border-color: {system.color};"
+          on:click={() => selectSystem(system.id)}
+          on:keydown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              selectSystem(system.id);
+            }
+          }}
+          tabindex="0"
+          role="button"
+          aria-pressed={currentSystem === system.id}
+        >
+          <div class="node-content">
+            <span class="node-icon">{system.icon}</span>
+            <span class="node-title">{system.title}</span>
           </div>
-          
-          <div class="profile-info">
-            <div class="info-row">
-              <div class="info-label">IDENTITY</div>
-              <div class="info-value">{portfolioData.about.name}</div>
-            </div>
-            <div class="info-row">
-              <div class="info-label">CLASS</div>
-              <div class="info-value">{portfolioData.about.title}</div>
-            </div>
-            <div class="info-row">
-              <div class="info-label">LOCATION</div>
-              <div class="info-value">{portfolioData.about.location}</div>
-            </div>
-            <div class="info-row">
-              <div class="info-label">STATUS</div>
-              <div class="info-value status-available">{portfolioData.about.status}</div>
-            </div>
-          </div>
+          <div class="node-connector"></div>
         </div>
-        
-        <div class="profile-bio">
-          <h3 class="bio-title">NEURAL SCAN RESULTS</h3>
-          <div class="bio-content">
-            <TypewriterText text={portfolioData.about.bio} speed={30} />
-          </div>
-        </div>
-      </div>
-    </section>
+      {/each}
+    </div>
     
-    <!-- Skills Section -->
-    <section id="skills" class="skills-section section-border" bind:this={skillsContainer}>
-      <div class="about-section-header">
-        <h2 class="section-title"><GlitchText text="CYBERNETIC AUGMENTATIONS" /></h2>
-      </div>
-      <div class="about-section-content">
-        {#each Object.entries(portfolioData.skills) as [category, skills]}
-          <div class="skill-category">
-            <h3 class="category-title">{category}</h3>
-            <div class="skills-grid">
-              {#each skills as skill}
-                <div class="skill-item">
-                  <div class="skill-name">{skill.name}</div>
-                  <div class="skill-bar">
-                    <div class="skill-bar-fill" style="width: {skill.level}%"></div>
-                    <div class="skill-level">{skill.level}%</div>
+    <!-- System details panel -->
+    <div class="system-details-panel">
+      {#if currentSystem}
+        <!-- Get current system data -->
+        {@const system = cyberwareSystems.find(sys => sys.id === currentSystem)}
+        
+        {#if system}
+          <div class="system-details">
+            <div class="system-header" style="border-color: {system.color}">
+              <h2 class="system-title"><GlitchText text={system.title} /></h2>
+            </div>
+            
+            <div class="system-items">
+              {#each system.items as item}
+                <div class="system-item">
+                  <div class="item-header">
+                    <h3 class="item-name">{item.name}</h3>
+                    <div class="item-level">
+                      <div class="level-bar">
+                        <div class="level-fill" style="width: {item.level}%; background-color: {system.color}"></div>
+                      </div>
+                      <div class="level-value">{item.level}</div>
+                    </div>
+                  </div>
+                  <div class="item-description">
+                    <TypewriterText text={item.description} speed={20} />
                   </div>
                 </div>
               {/each}
-            </div>
-          </div>
-        {/each}
-      </div>
-    </section>
-    
-    <!-- Experience Section -->
-    <section id="experience" class="experience-section section-border" bind:this={experienceContainer}>
-      <div class="about-section-header">
-        <h2 class="section-title"><GlitchText text="MEMORY ARCHIVES" /></h2>
-      </div>
-      <div class="about-section-content">
-        <div class="experience-timeline">
-          {#each portfolioData.experience as job}
-            <div class="experience-item">
-              <div class="experience-header">
-                <div class="experience-title">{job.title}</div>
-                <div class="experience-company">{job.company}</div>
-                <div class="experience-duration">{job.duration}</div>
-              </div>
-              <div class="experience-description">
-                <TypewriterText text={job.description} speed={20} />
-              </div>
-              <div class="experience-skills">
-                {#each job.skills as skill}
-                  <span class="skill-tag">{skill}</span>
-                {/each}
-              </div>
-            </div>
-          {/each}
-        </div>
-      </div>
-    </section>
-    
-    <!-- Projects Section -->
-    <section id="projects" class="projects-section section-border" bind:this={projectsContainer}>
-      <div class="about-section-header">
-        <h2 class="section-title"><GlitchText text="BREACH PROTOCOL" /></h2>
-      </div>
-      <div class="about-section-content">
-        <div class="projects-grid">
-          {#each portfolioData.projects as project, i}
-            <div 
-              class="project-card" 
-              on:click={(e) => flipCard(e, i)}
-              on:keydown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  flipCard(e, i);
-                }
-              }}
-              tabindex="0"
-              role="button"
-            >
-              <div class="card-inner">
-                <div class="card-front">
-                  <h3 class="project-title">{project.title}</h3>
-                  <div class="project-tech">
-                    {#each project.technologies.slice(0, 3) as tech}
-                      <span class="tech-tag">{tech}</span>
-                    {/each}
-                  </div>
-                  <div class="card-footer">
-                    <span class="flip-hint">CLICK TO HACK</span>
-                  </div>
+              
+              <div class="system-memory">
+                <div class="memory-header">
+                  <h3 class="memory-title">SYSTEM MEMORY</h3>
                 </div>
-                <div class="card-back">
-                  <div class="project-description">
-                    <TypewriterText text={project.description} speed={30} />
-                  </div>
-                  <div class="project-tech-full">
-                    {#each project.technologies as tech}
-                      <span class="tech-tag">{tech}</span>
+                
+                <div class="memory-archives">
+                  {#if system.id === 'frontal-cortex'}
+                    <!-- Profile info when viewing frontal cortex -->
+                    <div class="memory-item profile-data">
+                      <div class="profile-header">
+                        <h4>IDENTITY: {portfolioData.about.name}</h4>
+                      </div>
+                      <div class="profile-data-row">
+                        <span class="data-label">CLASS:</span>
+                        <span class="data-value">{portfolioData.about.title}</span>
+                      </div>
+                      <div class="profile-data-row">
+                        <span class="data-label">LOCATION:</span>
+                        <span class="data-value">{portfolioData.about.location}</span>
+                      </div>
+                      <div class="profile-data-row">
+                        <span class="data-label">STATUS:</span>
+                        <span class="data-value status-active">{portfolioData.about.status}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="memory-item profile-bio">
+                      <div class="bio-content">
+                        <TypewriterText text={portfolioData.about.bio} speed={15} />
+                      </div>
+                    </div>
+                  {:else if system.id === 'operating-system'}
+                    <!-- Projects/Breach protocols for operating system -->
+                    {#each breachProtocols.slice(0, 2) as protocol}
+                      <div class="memory-item breach-protocol">
+                        <h4 class="protocol-name">{protocol.title}</h4>
+                        <div class="protocol-description">
+                          <TypewriterText text={protocol.description} speed={15} />
+                        </div>
+                        <div class="protocol-tech">
+                          {#each protocol.technologies.slice(0, 3) as tech}
+                            <span class="tech-tag">{tech}</span>
+                          {/each}
+                        </div>
+                      </div>
                     {/each}
-                  </div>
-                  <div class="project-links">
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link">DEMO</a>
-                    <a href={project.github} target="_blank" rel="noopener noreferrer" class="project-link">CODE</a>
-                  </div>
-                  <div class="card-footer">
-                    <span class="flip-hint">CLICK TO CLOSE</span>
-                  </div>
+                  {:else}
+                    <!-- Experience/Memory archives for all other systems -->
+                    {#if memoryArchives.length > 0}
+                      <div class="memory-item experience-data">
+                        <h4 class="experience-title">{memoryArchives[0].title}</h4>
+                        <div class="experience-company">{memoryArchives[0].company}</div>
+                        <div class="experience-duration">{memoryArchives[0].duration}</div>
+                        <div class="experience-description">
+                          <TypewriterText text={memoryArchives[0].description} speed={15} />
+                        </div>
+                      </div>
+                    {/if}
+                  {/if}
                 </div>
               </div>
             </div>
-          {/each}
-        </div>
-      </div>
-    </section>
+          </div>
+        {/if}
+      {/if}
+    </div>
+  </div>
+  
+  <!-- HUD elements -->
+  <div class="hud-elements">
+    <div class="hud-element top-right">
+      <div class="hud-value">{portfolioData.about.name}</div>
+      <div class="hud-label">IDENTITY</div>
+    </div>
     
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section section-border" bind:this={contactContainer}>
-      <div class="about-section-header">
-        <h2 class="section-title"><GlitchText text="ESTABLISH CONNECTION" /></h2>
-      </div>
-      <div class="about-section-content">
-        <div class="contact-container">
-          <div class="contact-info">
-            <div class="info-row">
-              <div class="info-label">NETWORK ID</div>
-              <div class="info-value">{portfolioData.contact.email}</div>
-            </div>
-            <div class="social-links">
-              <a href={portfolioData.contact.linkedin} target="_blank" rel="noopener noreferrer" class="social-link">
-                <span class="link-icon">IN</span>
-                <span class="link-text">LINKEDIN</span>
-              </a>
-              <a href={portfolioData.contact.github} target="_blank" rel="noopener noreferrer" class="social-link">
-                <span class="link-icon">GH</span>
-                <span class="link-text">GITHUB</span>
-              </a>
-            </div>
-          </div>
-          
-          <div class="contact-form">
-            <div class="form-header">
-              <h3>TRANSMIT MESSAGE</h3>
-            </div>
-            <div class="form-group">
-              <label for="name">IDENTITY</label>
-              <input type="text" id="name" class="cyber-input" placeholder="Enter your name" />
-            </div>
-            <div class="form-group">
-              <label for="email">NETWORK ID</label>
-              <input type="email" id="email" class="cyber-input" placeholder="Enter your email" />
-            </div>
-            <div class="form-group">
-              <label for="message">MESSAGE</label>
-              <textarea id="message" class="cyber-input" rows="4" placeholder="Enter your message"></textarea>
-            </div>
-            <button class="submit-button">
-              <span class="button-text">TRANSMIT</span>
-              <span class="button-icon">→</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div class="hud-element top-left">
+      <div class="hud-value">v1.0.7625269+</div>
+      <div class="hud-label">OS VERSION</div>
+    </div>
+    
+    <div class="hud-element bottom-left">
+      <div class="hud-value">3.1415</div>
+      <div class="hud-label">TRACE</div>
+    </div>
+    
+    <div class="hud-element bottom-right">
+      <div class="hud-value">100%</div>
+      <div class="hud-label">SYSTEM STATUS</div>
+    </div>
   </div>
 </div>
 
@@ -636,20 +666,14 @@
   }
   
   /* Main container */
-  .about-page {
+  .cyberware-page {
     width: 100%;
     min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.95);
     color: #ffffff;
     padding: 0;
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr;
-    grid-template-areas:
-      "header header"
-      "nav content";
-    overflow-x: hidden;
     position: relative;
+    overflow: hidden;
   }
   
   /* Cursor trail */
@@ -663,12 +687,13 @@
     z-index: 100;
   }
   
-  .cursor-dot {
+  .cursor-trail {
     position: absolute;
     border-radius: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.3s ease;
+    filter: blur(1px);
   }
   
   /* Scan lines overlay */
@@ -690,11 +715,10 @@
   }
   
   /* Header styles */
-  .about-header {
-    grid-area: header;
+  .cyberware-header {
     display: flex;
     align-items: center;
-    padding: 0 2rem;
+    padding: 1rem 2rem;
     background-color: rgba(0, 0, 0, 0.8);
     border-bottom: 1px solid #49c5b6;
     position: relative;
@@ -815,14 +839,352 @@
     letter-spacing: 1px;
   }
   
-  /* Main content area */
-  .about-content {
-    grid-area: content;
+  /* Cyberware system interface */
+  .cyberware-system {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
     padding: 2rem;
+    position: relative;
+    min-height: calc(100vh - 80px);
+  }
+  
+  /* Body display and system nodes */
+  .body-display-container {
+    position: relative;
+    border: 1px solid #49c5b6;
+    background-color: rgba(0, 0, 0, 0.7);
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .body-display {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    background-image: url('/images/cyberware/body-silhouette.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 0 10px rgba(73, 197, 182, 0.3));
+  }
+  
+  .scan-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  .system-node {
+    position: absolute;
+    width: 120px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid #49c5b6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    overflow: hidden;
+  }
+  
+  .node-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .node-icon {
+    font-size: 1rem;
+  }
+  
+  .node-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  .node-connector {
+    position: absolute;
+    width: 2px;
+    height: 50px;
+    background: linear-gradient(to bottom, #49c5b6, transparent);
+    z-index: -1;
+  }
+  
+  /* System details panel */
+  .system-details-panel {
+    border: 1px solid #49c5b6;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1.5rem;
+    max-height: 600px;
     overflow-y: auto;
+    position: relative;
+  }
+  
+  .system-details-panel:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(73, 197, 182, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  
+  .system-header {
+    border-bottom: 2px solid #49c5b6;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .system-title {
+    color: #ECD06F;
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(236, 208, 111, 0.5);
+  }
+  
+  .system-items {
     display: flex;
     flex-direction: column;
-    gap: 4rem;
+    gap: 1.5rem;
+  }
+  
+  .system-item {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-left: 3px solid #49c5b6;
+    padding: 1rem;
+  }
+  
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  
+  .item-name {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .item-level {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .level-bar {
+    width: 100px;
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #49c5b6;
+    overflow: hidden;
+  }
+  
+  .level-fill {
+    height: 100%;
+  }
+  
+  .level-value {
+    font-size: 0.7rem;
+    color: #ECD06F;
+  }
+  
+  .item-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #cccccc;
+  }
+  
+  /* Memory system */
+  .system-memory {
+    margin-top: 2rem;
+    border: 1px solid #49c5b6;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .memory-header {
+    background-color: rgba(73, 197, 182, 0.1);
+    padding: 0.8rem;
+    border-bottom: 1px solid #49c5b6;
+  }
+  
+  .memory-title {
+    margin: 0;
+    color: #49c5b6;
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+  
+  .memory-archives {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .memory-item {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(73, 197, 182, 0.5);
+    padding: 1rem;
+  }
+  
+  /* Profile data styles */
+  .profile-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  
+  .profile-header {
+    color: #ECD06F;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .profile-data-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .data-label {
+    flex: 0 0 90px;
+    color: #49c5b6;
+    font-size: 0.8rem;
+  }
+  
+  .data-value {
+    color: #ffffff;
+    font-size: 0.9rem;
+  }
+  
+  .status-active {
+    color: #2ecc71;
+  }
+  
+  /* Breach protocol styles */
+  .breach-protocol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .protocol-name {
+    color: #ECD06F;
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .protocol-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #cccccc;
+  }
+  
+  .protocol-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  /* Experience data styles */
+  .experience-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  
+  .experience-title {
+    color: #ECD06F;
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  .experience-company {
+    color: #ff5252;
+    font-size: 0.9rem;
+  }
+  
+  .experience-duration {
+    color: #49c5b6;
+    font-size: 0.8rem;
+  }
+  
+  /* HUD elements */
+  .hud-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+  
+  .hud-element {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #49c5b6;
+    padding: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+  }
+  
+  .hud-element.top-right {
+    top: 100px;
+    right: 20px;
+  }
+  
+  .hud-element.top-left {
+    top: 100px;
+    left: 20px;
+  }
+  
+  .hud-element.bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .hud-element.bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+  
+  .hud-value {
+    color: #ECD06F;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.3rem;
+  }
+  
+  .hud-label {
+    color: #49c5b6;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
   }
   
   /* Section styles */

@@ -498,6 +498,7 @@
       <div class="body-display" bind:this={bodyDisplay}>
         <!-- Animated scan effect overlay -->
         <div class="scan-effect" bind:this={scanEffect}></div>
+        <div class="scan-line"></div>
       </div>
       
       <!-- System nodes positioned around body -->
@@ -897,19 +898,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    box-shadow: inset 0 0 20px rgba(73, 197, 182, 0.3);
   }
   
   .body-display {
     position: relative;
     width: 80%;
     height: 80%;
-    background-image: url('/images/cyberware/x-ray-body.gif');
+    background-image: url('/images/cyberware/x-ray-body.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    filter: drop-shadow(0 0 10px rgba(73, 197, 182, 0.3));
-    background-color: rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
+    background-color: transparent;
     border-radius: 2px;
+    animation: body-glow 4s infinite alternate ease-in-out;
+  }
+  
+  @keyframes body-glow {
+    0% {
+      filter: drop-shadow(0 0 10px rgba(73, 197, 182, 0.4));
+    }
+    50% {
+      filter: drop-shadow(0 0 15px rgba(255, 82, 82, 0.3));
+    }
+    100% {
+      filter: drop-shadow(0 0 20px rgba(236, 208, 111, 0.4));
+    }
   }
   
   .scan-effect {
@@ -919,11 +935,24 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.6;
     background-image: url('/images/cyberware/scan-frame.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    z-index: 2;
+  }
+  
+  .scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(73, 197, 182, 0.8);
+    box-shadow: 0 0 10px rgba(73, 197, 182, 0.8);
+    z-index: 3;
+    animation: scan-effect 4s infinite cubic-bezier(0.645, 0.045, 0.355, 1.000);
   }
   
   .system-node {

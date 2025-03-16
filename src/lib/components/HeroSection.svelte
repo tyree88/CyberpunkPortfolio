@@ -333,11 +333,29 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/cyberpunk-bg-gradient.svg');
+    background-image: url('/images/CyberpunkBackground.jpeg');
     background-size: cover;
     background-position: center;
     z-index: 0;
-    opacity: 0.8;
+    opacity: 0.6;
+    filter: contrast(1.1) brightness(0.8);
+  }
+  
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      url('/images/grid-overlay.svg'),
+      url('/images/cyberpunk-bg-gradient.svg');
+    background-size: 100px 100px, cover;
+    background-position: center;
+    z-index: 0;
+    opacity: 0.5;
+    mix-blend-mode: color-dodge;
   }
   
   .hero-content {

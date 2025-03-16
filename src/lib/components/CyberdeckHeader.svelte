@@ -79,13 +79,7 @@
         </button>
       </div>
     </div>
-    <div class="health-container">
-      <span class="label">HEALTH</span>
-      <div class="health-bar">
-        <div class="health-fill" style="width: {healthValue}%"></div>
-        <span class="health-text">{healthValue}%</span>
-      </div>
-    </div>
+    <!-- Health container moved to header-right section -->
   </div>
   
   <div class="header-center">
@@ -94,10 +88,22 @@
   </div>
   
   <div class="header-right">
-    <div class="connection-status">
-      <span class="icon">⚡</span>
-      <span class="text">CAMERA</span>
-    </div>
+    <a href="/about-me" class="header-link">
+      <div class="connection-status">
+        <span class="icon">⚡</span>
+        <span class="text">MORE ABOUT ME</span>
+      </div>
+    </a>
+    
+    <a href="/my-life" class="header-link">
+      <div class="health-container">
+        <span class="label">HEALTH</span>
+        <div class="health-bar">
+          <div class="health-fill" style="width: {healthValue}%"></div>
+          <span class="health-text">{healthValue}%</span>
+        </div>
+      </div>
+    </a>
   </div>
 </div>
 
@@ -146,10 +152,30 @@
     font-size: 0.9rem;
   }
 
+  .header-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+    display: block;
+    margin-left: 1rem;
+  }
+  
+  .header-link:hover {
+    transform: translateY(-2px);
+  }
+  
+  .header-link:first-child {
+    margin-left: 0;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
   .health-container {
     display: flex;
     flex-direction: column;
-    margin-left: 1rem;
   }
   
   .health-bar {

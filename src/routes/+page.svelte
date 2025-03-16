@@ -116,23 +116,25 @@
   </div>
 {:else if !showMainContent}
   <div class="hero-container">
-    <HeroSection />
-    <button 
-      class="enter-button" 
-      on:click={enterMainContent}
-      on:keydown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          enterMainContent();
-        }
-      }}
-      aria-label="Enter Cyberdeck"
-    >
-      <span class="enter-text">ENTER CYBERDECK</span>
-      <div class="button-corner top-left"></div>
-      <div class="button-corner top-right"></div>
-      <div class="button-corner bottom-left"></div>
-      <div class="button-corner bottom-right"></div>
-    </button>
+    <HeroSection>
+      <button 
+        slot="after-description"
+        class="enter-button" 
+        on:click={enterMainContent}
+        on:keydown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            enterMainContent();
+          }
+        }}
+        aria-label="Enter Cyberdeck"
+      >
+        <span class="enter-text">ENTER CYBERDECK</span>
+        <div class="button-corner top-left"></div>
+        <div class="button-corner top-right"></div>
+        <div class="button-corner bottom-left"></div>
+        <div class="button-corner bottom-right"></div>
+      </button>
+    </HeroSection>
   </div>
 {:else}
   <div class="main-container">
@@ -219,17 +221,15 @@
   }
   
   .enter-button {
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    margin: 2rem auto 0 auto;
+    display: block;
     background-color: rgba(0, 0, 0, 0.7);
     border: 1px solid #49c5b6;
     padding: 1rem 2rem;
     cursor: pointer;
     transition: all 0.3s ease;
     z-index: 10;
-    position: relative;
   }
   
   .enter-button:hover {

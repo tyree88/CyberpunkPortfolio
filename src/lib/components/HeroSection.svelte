@@ -389,6 +389,11 @@
       <div class="description">
         <TypewriterText text={description} speed={30} />
       </div>
+      
+      <!-- Slot for adding content after description, like the 'Enter Cyberdeck' button -->
+      <div class="after-description">
+        <slot name="after-description"></slot>
+      </div>
     </div>
     
     <div class="cyber-grid">
@@ -537,6 +542,15 @@
     height: 10px;
     border-bottom: 2px solid #49c5b6;
     border-right: 2px solid #49c5b6;
+  }
+  
+  /* Styling for after-description slot */
+  .after-description {
+    margin-top: 1.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
   }
   
   /* New cyber circuit visualization */

@@ -295,30 +295,28 @@
   }
   
   // Add glitch effect to an element
-  function triggerGlitchEffect(element: HTMLElement) {
+  function triggerGlitchEffect(element: HTMLElement, intensity: number = 0.3, duration: number = 0.2) {
     const timeline = gsap.timeline();
     
+    // Scale displacement by intensity parameter for more control
+    const xDisplacement = (Math.random() * 3 - 1.5) * intensity;
+    const yDisplacement = (Math.random() * 2 - 1) * intensity;
+    
+    // Subtle effect with reduced hue-rotation, smaller brightness changes
     timeline
       .to(element, {
-        x: '+=' + (Math.random() * 6 - 3),
-        y: '+=' + (Math.random() * 4 - 2),
-        filter: 'hue-rotate(' + (Math.random() * 90) + 'deg) brightness(' + (0.8 + Math.random() * 0.4) + ')',
-        duration: 0.08,
-        ease: "steps(1)"
-      })
-      .to(element, {
-        x: '+=' + (Math.random() * 6 - 3),
-        y: '+=' + (Math.random() * 4 - 2),
-        filter: 'hue-rotate(' + (Math.random() * -90) + 'deg) brightness(' + (0.8 + Math.random() * 0.4) + ')',
-        duration: 0.08,
-        ease: "steps(1)"
+        x: '+=' + xDisplacement,
+        y: '+=' + yDisplacement,
+        filter: 'hue-rotate(' + (Math.random() * 20) + 'deg) brightness(' + (0.95 + Math.random() * 0.1) + ')',
+        duration: duration / 3,
+        ease: "power1.inOut" // Smoother transition
       })
       .to(element, {
         x: 0,
         y: 0,
         filter: 'hue-rotate(0) brightness(1)',
-        duration: 0.08,
-        ease: "steps(1)"
+        duration: duration / 3,
+        ease: "power1.inOut"
       });
   }
   
@@ -403,17 +401,24 @@
     };
   });
   
-  // Schedule random glitch effects on elements
+  // Schedule random glitch effects on elements - much less frequent now
   function scheduleRandomGlitches() {
     if (!browser) return;
     
-    // System nodes glitches
+    // Only glitch system nodes, not the body display
     document.querySelectorAll('.system-node').forEach(node => {
-      const glitchDelay = 5 + Math.random() * 15; // Random delay between 5-20 seconds
+      // Much longer delay: 25-60 seconds between glitches
+      const glitchDelay = 25 + Math.random() * 35; 
       
       setTimeout(() => {
         if (node instanceof HTMLElement) {
-          triggerGlitchEffect(node);
+          // Make the glitch very subtle
+          const intensity = 0.2 + Math.random() * 0.2; // Low intensity (0.2-0.4)
+          const duration = 0.2; // Very short duration
+          
+          if (Math.random() > 0.7) { // Only 30% chance to actually trigger glitch
+            triggerGlitchEffect(node, intensity, duration);
+          }
           
           // Reschedule
           scheduleRandomGlitches();
@@ -421,14 +426,7 @@
       }, glitchDelay * 1000);
     });
     
-    // Body display glitch
-    if (bodyDisplay) {
-      const bodyGlitchDelay = 8 + Math.random() * 12;
-      
-      setTimeout(() => {
-        triggerGlitchEffect(bodyDisplay);
-      }, bodyGlitchDelay * 1000);
-    }
+    // No glitches for body display anymore
   }
   
   // Set up glow effects for system nodes
@@ -552,7 +550,8 @@
                  bottom: {system.position.bottom || 'auto'};
                  transform: {system.position.transform || 'none'};
                  border-color: {system.color};
-                 outline: 6px solid rgba(255, 82, 82, 0.7);"
+                 outline: 6px solid rgba(255, 82, 82, 0.7);
+                 z-index: 80;"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -956,20 +955,9 @@
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     background-color: transparent;
     border-radius: 2px;
-    animation: body-glow 4s infinite alternate ease-in-out;
+    /* Removed animation to keep the body still */
     max-height: 580px;
-  }
-  
-  @keyframes body-glow {
-    0% {
-      filter: drop-shadow(0 0 10px rgba(73, 197, 182, 0.4));
-    }
-    50% {
-      filter: drop-shadow(0 0 15px rgba(255, 82, 82, 0.3));
-    }
-    100% {
-      filter: drop-shadow(0 0 20px rgba(236, 208, 111, 0.4));
-    }
+    z-index: 10; /* Ensure proper layering */
   }
   
   .scan-effect {
@@ -979,7 +967,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.4; /* Reduced opacity for more subtle effect */
     background-image: url('/images/cyberware/scan-frame.svg');
     background-position: center;
     background-repeat: no-repeat;
@@ -992,11 +980,11 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 2px;
-    background-color: rgba(73, 197, 182, 0.8);
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.8);
+    height: 1px; /* Reduced height */
+    background-color: rgba(73, 197, 182, 0.5); /* Reduced opacity */
+    box-shadow: 0 0 8px rgba(73, 197, 182, 0.5); /* Less intense glow */
     z-index: 3;
-    animation: scan-effect 4s infinite cubic-bezier(0.645, 0.045, 0.355, 1.000);
+    animation: scan-effect 6s infinite cubic-bezier(0.645, 0.045, 0.355, 1.000); /* Slower animation */
   }
   
   .system-node {
@@ -1050,31 +1038,32 @@
     position: absolute;
     top: -10px;
     left: -10px;
-    width: 20px;
-    height: 20px;
+    width: 24px; /* Larger size */
+    height: 24px; /* Larger size */
     background-color: #ff5252;
     border-radius: 50%;
-    z-index: 60; /* Higher z-index than parent node */
-    box-shadow: 0 0 20px rgba(255, 82, 82, 0.9);
+    z-index: 85; /* Even higher z-index to ensure it's above everything */
+    box-shadow: 0 0 25px rgba(255, 82, 82, 1); /* Brighter glow */
     animation: pulse-dot 2s infinite;
-    border: 2px solid #ffffff;
+    border: 3px solid #ffffff; /* Thicker border */
+    pointer-events: none; /* Don't interfere with clicking */
   }
   
   @keyframes pulse-dot {
     0% {
-      transform: scale(0.8);
-      box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
-      border-color: rgba(255, 255, 255, 0.6);
+      transform: scale(0.9);
+      box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.9);
+      border-color: rgba(255, 255, 255, 0.8);
     }
     50% {
-      transform: scale(1.3);
-      box-shadow: 0 0 15px 5px rgba(255, 82, 82, 0.8);
+      transform: scale(1.4); /* More dramatic scaling */
+      box-shadow: 0 0 20px 8px rgba(255, 82, 82, 1); /* Stronger glow */
       border-color: rgba(255, 255, 255, 1);
     }
     100% {
-      transform: scale(0.8);
+      transform: scale(0.9);
       box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
-      border-color: rgba(255, 255, 255, 0.6);
+      border-color: rgba(255, 255, 255, 0.8);
     }
   }
   

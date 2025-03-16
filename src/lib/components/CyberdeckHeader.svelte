@@ -10,7 +10,7 @@
 
   // Initialize with a static time for SSR
   let currentTime = '00:00:00';
-  let recordingBlink = false;
+  let healthValue = 85; // Current health percentage
   
   // Update the time every second
   onMount(() => {
@@ -28,20 +28,31 @@
     updateTime();
     const interval = setInterval(updateTime, 1000);
     
-    // Blinking REC indicator
-    gsap.to('.recording-indicator', {
-      opacity: 0.3,
-      duration: 1,
-      repeat: -1,
-      yoyo: true
-    });
+    // Animate health bar
+    animateHealthBar();
     
     return () => {
-      if (interval) clearInterval(interval);
+      clearInterval(interval);
     };
   });
 
   // Function to handle going back to the hero section
+  function animateHealthBar() {
+    // Start with 0 and animate to the actual value
+    gsap.fromTo('.health-fill', 
+      { width: '0%' },
+      { width: `${healthValue}%`, duration: 1.5, ease: 'power2.out' }
+    );
+    
+    // Pulse animation for the health bar
+    gsap.to('.health-fill', {
+      opacity: 0.7,
+      duration: 1.2,
+      repeat: -1,
+      yoyo: true
+    });
+  }
+
   function goBackToHero() {
     dispatch('backToHero');
   }
@@ -49,30 +60,36 @@
 
 <div class="cyberdeck-header">
   <div class="header-left">
-    <button 
-      class="back-button" 
-      on:click={goBackToHero}
-      on:keydown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          goBackToHero();
-        }
-      }}
-      aria-label="Return to home screen"
-    >
-      <span class="back-icon">←</span>
-      <span class="back-text">BACK</span>
-    </button>
     <div class="time-display">
       <span class="label">TIME</span>
-      <span class="time-box">{currentTime}</span>
+      <div class="time-controls">
+        <span class="time-box">{currentTime}</span>
+        <button 
+          class="back-button" 
+          on:click={goBackToHero}
+          on:keydown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              goBackToHero();
+            }
+          }}
+          aria-label="Return to home screen"
+        >
+          <span class="back-icon">←</span>
+          <span class="back-text">BACK</span>
+        </button>
+      </div>
     </div>
-    <div class="recording">
-      <span class="recording-indicator">● REC</span>
+    <div class="health-container">
+      <span class="label">HEALTH</span>
+      <div class="health-bar">
+        <div class="health-fill" style="width: {healthValue}%"></div>
+        <span class="health-text">{healthValue}%</span>
+      </div>
     </div>
   </div>
   
   <div class="header-center">
-    <GlitchText text="CYBERDECK RAM" class="ram-title" />
+    <GlitchText text="CYBERDECK RAM" class_name="ram-title" />
     <RamBar />
   </div>
   
@@ -114,6 +131,12 @@
     margin-bottom: 0.2rem;
   }
 
+  .time-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   .time-box {
     font-family: 'Roboto Mono', monospace;
     background-color: rgba(255, 82, 82, 0.2);
@@ -123,9 +146,40 @@
     font-size: 0.9rem;
   }
 
-  .recording-indicator {
-    color: #ff5252;
-    font-size: 0.9rem;
+  .health-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+  }
+  
+  .health-bar {
+    position: relative;
+    width: 100px;
+    height: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #ff5252;
+    overflow: hidden;
+  }
+  
+  .health-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #ff5252 0%, #ff7676 100%);
+    box-shadow: 0 0 8px rgba(255, 82, 82, 0.7);
+  }
+  
+  .health-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.7rem;
+    font-family: 'Roboto Mono', monospace;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    z-index: 1;
   }
 
   :global(.ram-title) {
@@ -143,9 +197,9 @@
     border: 1px solid #ff5252;
     color: #ff5252;
     padding: 0.3rem 0.7rem;
-    margin-right: 1.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    height: 100%;
   }
   
   .back-button:hover {

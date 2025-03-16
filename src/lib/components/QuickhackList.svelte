@@ -155,8 +155,17 @@
   }
   
   onMount(() => {
-    // Set default section
+    // Set default section and highlight it
     selectSection('about');
+    
+    // Explicitly highlight the about section with higher opacity
+    gsap.to('.quick-hack-item[data-id="about"]', {
+      opacity: 1,
+      color: '#ECD06F',
+      backgroundColor: 'rgba(73, 197, 182, 0.2)',
+      duration: 0.3,
+      delay: 0.5 // Add a small delay to ensure it happens after initial animations
+    });
     
     // Stagger animate in items
     gsap.from('.quick-hack-item', {
@@ -164,7 +173,16 @@
       opacity: 0,
       duration: 0.4,
       stagger: 0.1,
-      ease: 'power2.out'
+      ease: 'power2.out',
+      onComplete: () => {
+        // Ensure about section remains highlighted after animation
+        gsap.to('.quick-hack-item[data-id="about"]', {
+          opacity: 1,
+          color: '#ECD06F',
+          backgroundColor: 'rgba(73, 197, 182, 0.2)',
+          duration: 0.3
+        });
+      }
     });
     
     // Add keyboard event listener

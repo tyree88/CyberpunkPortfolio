@@ -4,7 +4,7 @@
   import GlitchText from './GlitchText.svelte';
   import { browser } from '$app/environment';
   import type { CyberwareSystem, MemoryArchive, BreachProtocol } from '$lib/types/cyberware';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   // Props
   export let cyberwareSystems: CyberwareSystem[] = [];
@@ -15,10 +15,10 @@
   // State
   let currentSystem = 'frontal-cortex';
   let scanEffect: HTMLElement | null = null;
-  let bodyDisplay: HTMLElement | null = null;
   let currentFrame = 0;
   let totalFrames = 12;
   let scanIntervalId: number | null = null;
+  let isInitialized = false;
 
   // Set active system and show relevant data
   function selectSystem(systemId: string) {
@@ -46,94 +46,107 @@
     // Update current system
     currentSystem = systemId;
     
-    // Highlight the active system
-    gsap.to('.system-node', {
-      borderColor: '#49c5b6',
-      boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
-      duration: 0.3
+    // Highlight the active system - using more efficient selector targeting
+    const allNodes = document.querySelectorAll('.system-node');
+    allNodes.forEach(node => {
+      gsap.to(node, {
+        borderColor: '#49c5b6',
+        boxShadow: '0 0 8px rgba(73, 197, 182, 0.4)',
+        duration: 0.3
+      });
     });
     
-    gsap.to(`.system-node[data-system="${systemId}"]`, {
-      borderColor: '#ECD06F',
-      boxShadow: '0 0 15px rgba(236, 208, 111, 0.7)',
-      duration: 0.3
-    });
+    const activeNode = document.querySelector(`.system-node[data-system="${systemId}"]`);
+    if (activeNode) {
+      gsap.to(activeNode, {
+        borderColor: '#ECD06F',
+        boxShadow: '0 0 15px rgba(236, 208, 111, 0.7)',
+        duration: 0.3
+      });
+    }
   }
 
-  // Animate scan effect
+  // Animate scan effect with optimized animation
   function animateScan() {
-    if (!browser) return;
+    if (!browser || isInitialized) return;
     
-    // Ensure scanEffect exists
-    setTimeout(() => {
-      scanEffect = document.querySelector('.scan-effect');
-      
-      if (!scanEffect) {
-        console.error('Scan effect element not found');
-        return;
+    scanEffect = document.querySelector('.scan-effect');
+    if (!scanEffect) return;
+    
+    // Use requestAnimationFrame for better performance
+    let lastTimestamp = 0;
+    const frameInterval = 150; // milliseconds between frames
+    
+    function updateScanEffect(timestamp: number) {
+      if (timestamp - lastTimestamp > frameInterval) {
+        lastTimestamp = timestamp;
+        currentFrame = (currentFrame + 1) % totalFrames;
+        
+        if (scanEffect) {
+          scanEffect.style.backgroundImage = `linear-gradient(to bottom, 
+            rgba(73, 197, 182, 0.0), 
+            rgba(73, 197, 182, 0.15) ${currentFrame * 8}%, 
+            rgba(73, 197, 182, 0.35) ${currentFrame * 8 + 1}%, 
+            rgba(73, 197, 182, 0.15) ${currentFrame * 8 + 2}%, 
+            rgba(73, 197, 182, 0.0))`;
+        }
       }
       
-      // Start the scan animation if not already running
-      if (scanIntervalId === null) {
-        scanIntervalId = window.setInterval(() => {
-          // Update to next frame
-          currentFrame = (currentFrame + 1) % totalFrames;
-          
-          // Apply scan effect with enhanced visibility
-          if (scanEffect) {
-            scanEffect.style.backgroundImage = `linear-gradient(to bottom, 
-              rgba(73, 197, 182, 0.0), 
-              rgba(73, 197, 182, 0.15) ${currentFrame * 8}%, 
-              rgba(73, 197, 182, 0.35) ${currentFrame * 8 + 1}%, 
-              rgba(73, 197, 182, 0.15) ${currentFrame * 8 + 2}%, 
-              rgba(73, 197, 182, 0.0))`;
-          }
-        }, 150); // Faster animation speed
-      }
-    }, 500); // Give DOM time to render
+      scanIntervalId = requestAnimationFrame(updateScanEffect);
+    }
+    
+    scanIntervalId = requestAnimationFrame(updateScanEffect);
+    isInitialized = true;
   }
 
-  // Setup glow effects for nodes
+  // Setup glow effects for nodes with optimized approach
   function setupGlowEffects() {
     if (!browser) return;
     
-    // Wait a moment to ensure DOM elements are ready
-    setTimeout(() => {
-      // Add glow effects to system nodes
-      const nodes = document.querySelectorAll('.system-node');
-      
-      if (nodes.length > 0) {
-        nodes.forEach(node => {
-          // Create a subtle pulse animation for each node
-          gsap.to(node, {
-            boxShadow: '0 0 15px rgba(73, 197, 182, 0.7)',
-            duration: 1.5,
-            repeat: -1,
-            yoyo: true,
-            ease: "power2.inOut"
-          });
-        });
-      }
-    }, 500); // Wait 500ms to ensure DOM is ready
+    // Use a single GSAP timeline for all nodes instead of individual animations
+    const nodes = document.querySelectorAll('.system-node');
+    if (nodes.length === 0) return;
+    
+    const nodesTimeline = gsap.timeline();
+    nodes.forEach(node => {
+      nodesTimeline.to(node, {
+        boxShadow: '0 0 15px rgba(73, 197, 182, 0.7)',
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "power2.inOut"
+      }, 0); // Start all animations at the same time
+    });
   }
 
   onMount(() => {
     if (!browser) return;
     
-    // Ensure bodyDisplay is initialized
-    bodyDisplay = document.querySelector('.body-display');
+    // Use a small delay to ensure DOM is ready
+    const initTimer = setTimeout(() => {
+      // Start scan animation
+      animateScan();
+      
+      // Setup glow effects
+      setupGlowEffects();
+      
+      // Initialize page animations with a single timeline
+      gsap.timeline()
+        .from('.cyberware-header', { y: -30, opacity: 0, duration: 0.5 })
+        .from('.system-node', { scale: 0.5, opacity: 0, duration: 0.5, stagger: 0.05 });
+    }, 100);
     
-    // Start scan animation
-    animateScan();
-    
-    // Setup glow effects
-    setupGlowEffects();
-    
-    // Initialize page animations
-    const masterTimeline = gsap.timeline();
-    masterTimeline
-      .from('.cyberware-header', { y: -30, opacity: 0, duration: 0.5 })
-      .from('.system-node', { scale: 0.5, opacity: 0, duration: 0.5 });
+    return () => clearTimeout(initTimer);
+  });
+  
+  // Clean up animations on component destruction
+  onDestroy(() => {
+    if (scanIntervalId !== null) {
+      if (typeof scanIntervalId === 'number') {
+        cancelAnimationFrame(scanIntervalId);
+      }
+      scanIntervalId = null;
+    }
   });
 </script>
 
@@ -142,9 +155,13 @@
   
   <!-- Central body display with system nodes -->
   <div class="body-display-container">
-    <!-- System nodes positioned around body with background image -->
-
+    <!-- System nodes with background image -->
     <div class="system-nodes-container">
+      <!-- Scan effect overlay -->
+      <div class="scan-effect"></div>
+      <div class="scan-line"></div>
+      
+      <!-- Interactive system nodes -->
       {#each cyberwareSystems as system}
         <div 
           class="system-node" 
@@ -154,7 +171,7 @@
                  right: {system.position.right || 'auto'}; 
                  bottom: {system.position.bottom || 'auto'};
                  transform: {system.position.transform || 'none'};
-                 border-color: {system.color};"
+                 border-color: {currentSystem === system.id ? '#ECD06F' : system.color};"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -166,7 +183,7 @@
           aria-pressed={currentSystem === system.id}
         >
           <div class="node-content">
-            <span class="node-title" style="font-size: 0.9rem; color: #ECD06F; font-weight: bold;">{system.title}</span>
+            <span class="node-title">{system.title}</span>
           </div>
         </div>
       {/each}
@@ -274,6 +291,12 @@
 
 <style>
   /* Main component container styles */
+  .cyberware-system {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+  }
 
   /* Body display styles */
   .body-display-container {
@@ -290,47 +313,36 @@
     justify-content: center;
     align-items: center;
     padding: 0;
-    /* z-index removed */
+    will-change: transform; /* Performance optimization */
   }
   
-  .body-display {
+  /* System nodes container with background image */
+  .system-nodes-container {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: transparent;
-    border-radius: 0;
-    /* z-index removed */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    pointer-events: auto;
+    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
+    background-position: 60% center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
+    background-color: #000;
+    will-change: background-position; /* Performance optimization */
   }
   
-  .body-fallback {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* z-index removed */
-    padding: 0;
-  }
-  
-
-  
-  .scan-effect {
+  /* Scan effects - properly scoped to match HTML structure */
+  .system-nodes-container .scan-effect {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    /* z-index removed */
+    will-change: background-image; /* Performance optimization */
   }
   
-  .scan-line {
+  .system-nodes-container .scan-line {
     position: absolute;
     top: 0;
     left: 0;
@@ -338,27 +350,8 @@
     height: 3px;
     background-color: rgba(73, 197, 182, 0.9);
     box-shadow: 0 0 15px rgba(73, 197, 182, 0.9), 0 0 30px rgba(73, 197, 182, 0.5);
-    /* z-index removed */
     animation: scanAnimation 3s linear infinite;
-  }
-  
-  /* System nodes */
-  .system-nodes-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* z-index removed */
-    pointer-events: auto; /* Nodes are interactive by default */
-    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
-    background-position: 60% center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
-    background-color: #000;
-    /* Debug outline to see container boundaries */
-    /* border: 1px solid red; */
+    will-change: transform; /* Performance optimization */
   }
 
   .system-node {
@@ -372,30 +365,22 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 0 10px rgba(73, 197, 182, 0.8), inset 0 0 8px rgba(73, 197, 182, 0.8);
-    /* z-index removed */
     pointer-events: auto;
-    animation: glow 3s infinite alternate;
+    will-change: transform, box-shadow; /* Performance optimization */
   }
   
   .system-node:hover {
     transform: scale(1.3);
     border-color: #ECD06F;
     box-shadow: 0 0 20px rgba(236, 208, 111, 0.9), inset 0 0 12px rgba(236, 208, 111, 0.7);
-    /* z-index removed */
   }
   
-  @keyframes glow {
-    0% {
-      box-shadow: 0 0 10px rgba(73, 197, 182, 0.5), inset 0 0 15px rgba(73, 197, 182, 0.3);
-    }
-    50% {
-      box-shadow: 0 0 15px rgba(73, 197, 182, 0.6), inset 0 0 18px rgba(73, 197, 182, 0.4);
-    }
-    100% {
-      box-shadow: 0 0 20px rgba(73, 197, 182, 0.7), inset 0 0 22px rgba(73, 197, 182, 0.5);
-    }
+  /* Simplified animation using CSS variables for better performance */
+  @keyframes scanAnimation {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
   }
   
   .node-content {
@@ -417,8 +402,8 @@
     white-space: nowrap;
     font-size: 0.8rem;
     text-shadow: 0 0 8px #000000;
-    opacity: 1; /* Changed to visible by default */
-    transition: opacity 0.3s ease;
+    opacity: 1;
+    transition: color 0.3s ease, border-color 0.3s ease;
     color: #ECD06F;
     background-color: rgba(0, 0, 0, 0.8);
     padding: 3px 8px;
@@ -428,7 +413,6 @@
     font-weight: 500;
   }
   
-  /* Node title is already visible by default */
   .system-node:hover .node-title {
     color: #ffffff;
     border-color: #ECD06F;

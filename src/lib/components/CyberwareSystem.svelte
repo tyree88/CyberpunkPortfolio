@@ -285,7 +285,7 @@
   .body-display-container {
     position: relative;
     border: 1px solid #49c5b6;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #000;
     height: 100%;
     flex: 1;
     border-radius: 0;
@@ -295,7 +295,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    padding: 0;
   }
   
   .body-display {
@@ -305,7 +305,7 @@
     background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     background-color: #000;
     border-radius: 0;
@@ -328,29 +328,7 @@
     padding: 0;
   }
   
-  .body-outline {
-    width: 280px;
-    height: 100%;
-    position: relative;
-    opacity: 1;
-    margin-top: 0;
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .body-outline:before {
-    content: '';
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 2px solid #49c5b6;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    box-shadow: 0 0 15px rgba(73, 197, 182, 0.5);
-  }
+
   
   .scan-effect {
     position: absolute;
@@ -450,33 +428,7 @@
     opacity: 1;
   }
   
-  .interactive-dot {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background-color: #ECD06F;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 5px #ECD06F;
-    animation: pulse 2s infinite;
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-    50% {
-      transform: translate(-50%, -50%) scale(1.5);
-      opacity: 0.7;
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-  }
+
   
   /* System details panel */
   .system-details-panel {

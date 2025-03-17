@@ -139,41 +139,43 @@
 
 <!-- Main cyberware system interface -->
 <div class="cyberware-system">
-  <!-- Header elements -->
-  <div class="system-version-indicator">
-    <div class="version-text">v1.0.7625269+</div>
-    <div class="os-text">OS VERSION</div>
-  </div>
+  <!-- Header elements - moved to the overlay layer for proper z-indexing -->
+  <div class="header-elements">
+    <div class="system-version-indicator">
+      <div class="version-text">v1.0.7625269+</div>
+      <div class="os-text">OS VERSION</div>
+    </div>
 
-  <div class="system-title-header">
-    <div class="title-text">PERSONAL CYBERWARE SYSTEM</div>
-    <div class="subtitle-text">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
-  </div>
+    <div class="system-title-header">
+      <div class="title-text">PERSONAL CYBERWARE SYSTEM</div>
+      <div class="subtitle-text">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
+    </div>
 
-  <div class="level-indicator">
-    <div class="level-text">LVL 50</div>
-  </div>
+    <div class="level-indicator">
+      <div class="level-text">LVL 50</div>
+    </div>
 
-  <div class="identity-indicator">
-    <div class="identity-text">TYREE PEARSON</div>
-    <div class="identity-label">IDENTITY</div>
-  </div>
-  
-  <!-- System status indicator -->
-  <div class="system-status-indicator">
-    <div class="status-label">SYSTEM STATUS</div>
-    <div class="status-value">100%</div>
-  </div>
-  
-  <!-- Bottom status indicator -->
-  <div class="bottom-status-indicator">
-    <div class="trace-text">3.1415</div>
-    <div class="trace-label">TRACE</div>
-  </div>
-  
-  <div class="bottom-status-indicator-right">
-    <div class="percentage-text">100%</div>
-    <div class="status-text">SYSTEM STATUS</div>
+    <div class="identity-indicator">
+      <div class="identity-text">TYREE PEARSON</div>
+      <div class="identity-label">IDENTITY</div>
+    </div>
+    
+    <!-- System status indicator -->
+    <div class="system-status-indicator">
+      <div class="status-label">SYSTEM STATUS</div>
+      <div class="status-value">100%</div>
+    </div>
+    
+    <!-- Bottom status indicator -->
+    <div class="bottom-status-indicator">
+      <div class="trace-text">3.1415</div>
+      <div class="trace-label">TRACE</div>
+    </div>
+    
+    <div class="bottom-status-indicator-right">
+      <div class="percentage-text">100%</div>
+      <div class="status-text">SYSTEM STATUS</div>
+    </div>
   </div>
   
   <!-- Central body display with system nodes -->
@@ -198,8 +200,7 @@
                  right: {system.position.right || 'auto'}; 
                  bottom: {system.position.bottom || 'auto'};
                  transform: {system.position.transform || 'none'};
-                 border-color: {system.color};
-                 z-index: 100;"
+                 border-color: {system.color};"
           on:click={() => selectSystem(system.id)}
           on:keydown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -318,6 +319,17 @@
 </div>
 
 <style>
+  /* Header elements container */
+  .header-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 500; /* Higher than nodes to prevent overlapping */
+    pointer-events: none; /* Allow clicks to pass through to nodes */
+  }
+
   /* Body display styles */
   .body-display-container {
     position: relative;
@@ -333,6 +345,7 @@
     justify-content: center;
     align-items: center;
     padding: 0;
+    z-index: 10;
   }
   
   .body-display {
@@ -346,7 +359,7 @@
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     background-color: #000;
     border-radius: 0;
-    z-index: 0;
+    z-index: 5; /* Lower z-index to keep it behind nodes */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -413,7 +426,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 0 5px rgba(73, 197, 182, 0.8), inset 0 0 5px rgba(73, 197, 182, 0.8);
-    z-index: 200;
+    z-index: 400; /* Higher than body display and images but below UI elements */
     pointer-events: auto;
     animation: glow 3s infinite alternate;
   }
@@ -421,7 +434,7 @@
   .system-node:hover {
     transform: scale(1.1);
     box-shadow: 0 0 15px rgba(236, 208, 111, 0.7);
-    z-index: 250;
+    z-index: 450; /* Even higher on hover to stay above other nodes */
   }
   
   @keyframes glow {

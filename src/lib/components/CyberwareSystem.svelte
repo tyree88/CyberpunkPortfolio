@@ -325,10 +325,13 @@
     background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
     background-position: 60% center;
     background-repeat: no-repeat;
-    background-size: cover;
-    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
+    background-size: contain; /* Changed from cover to contain */
     background-color: #000;
+    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     will-change: background-position; /* Performance optimization */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   /* Scan effects - properly scoped to match HTML structure */
@@ -724,7 +727,7 @@
     }
   }
   
-  /* Responsive styles */
+  /* Responsive styles with improved layout */
   @media (max-width: 1024px) {
     .cyberware-system {
       flex-direction: column;
@@ -734,10 +737,17 @@
     .body-display-container {
       margin-bottom: 0;
       height: 50vh;
+      min-height: 400px; /* Ensure minimum height */
     }
     
     .system-details-panel {
       height: auto;
+      min-height: 300px; /* Ensure minimum height */
+    }
+    
+    .system-nodes-container {
+      background-size: contain; /* Ensure background fits */
+      background-position: center;
     }
     
     .system-node {
@@ -750,6 +760,11 @@
   @media (max-width: 768px) {
     .body-display-container {
       height: 45vh;
+      min-height: 350px; /* Ensure minimum height */
+    }
+    
+    .system-nodes-container {
+      background-size: contain; /* Ensure background fits */
     }
     
     .system-node {
@@ -768,6 +783,11 @@
   @media (max-width: 480px) {
     .body-display-container {
       height: 40vh;
+      min-height: 300px; /* Ensure minimum height */
+    }
+    
+    .system-nodes-container {
+      background-size: contain; /* Ensure background fits */
     }
     
     .system-node {

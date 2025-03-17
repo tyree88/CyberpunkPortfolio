@@ -24,16 +24,8 @@
       positions.push({ x: 0, y: 0 });
     }
 
-    // Create and append dots to the DOM
-    for (let i = 0; i < DOT_COUNT; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'cursor-dot';
-      dot.style.opacity = `${1 - (i / DOT_COUNT)}`;
-      dot.style.width = `${4 - (i * 0.3)}px`;
-      dot.style.height = `${4 - (i * 0.3)}px`;
-      cursorContainer.appendChild(dot);
-      dots.push(dot);
-    }
+    // Get references to the pre-rendered dots
+    dots = Array.from(cursorContainer.querySelectorAll('.cursor-dot'));
 
     // Set up event listeners
     window.addEventListener('mousemove', handleMouseMove);
@@ -121,6 +113,15 @@
     <div class="cross-horizontal"></div>
     <div class="target-circle"></div>
   </div>
+  <!-- Pre-render dots with svelte instead of creating them in JS -->
+  {#each Array(DOT_COUNT) as _, i}
+    <div 
+      class="cursor-dot" 
+      style="opacity: {1 - (i / DOT_COUNT)}; 
+             width: {4 - (i * 0.3)}px; 
+             height: {4 - (i * 0.3)}px;"
+    ></div>
+  {/each}
 </div>
 
 <style>

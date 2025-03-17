@@ -136,7 +136,15 @@
   class:flipped={isFlipped} 
   bind:this={card}
   on:click={flipCard}
+  on:keydown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      flipCard();
+    }
+  }}
   style="transform: perspective(1000px) rotateY({rotateY}deg) rotateX({rotateX}deg);"
+  role="button"
+  tabindex="0"
+  aria-pressed={isFlipped}
 >
   <div class="card-inner">
     <div class="card-front">

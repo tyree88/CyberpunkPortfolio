@@ -262,15 +262,95 @@
     margin-right: 0.5rem;
   }
 
+  /* Improved responsive styles */
+  @media (max-width: 1024px) {
+    .cyberdeck-header {
+      padding: 0.8rem;
+    }
+    
+    .health-bar {
+      width: 90px;
+    }
+    
+    :global(.ram-title) {
+      font-size: 0.9rem;
+    }
+  }
+  
   @media (max-width: 768px) {
     .cyberdeck-header {
       height: auto;
-      padding: 0.8rem;
-      flex-direction: column;
+      padding: 0.7rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: 0.5rem;
     }
 
-    .header-left, .header-right, .header-center {
-      margin: 0.5rem 0;
+    .header-left {
+      order: 1;
+      width: auto;
+      margin: 0;
+    }
+    
+    .header-right {
+      order: 2;
+      width: auto;
+      margin: 0;
+    }
+    
+    .header-center {
+      order: 3;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    
+    .time-display {
+      margin-right: 0;
+    }
+    
+    .combined-status {
+      padding: 0.3rem;
+    }
+    
+    .health-bar {
+      width: 80px;
+      height: 14px;
+    }
+    
+    .health-text {
+      font-size: 0.6rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cyberdeck-header {
+      padding: 0.5rem;
+    }
+    
+    .time-box {
+      font-size: 0.8rem;
+      padding: 0.15rem 0.4rem;
+    }
+    
+    .back-button {
+      padding: 0.2rem 0.5rem;
+    }
+    
+    .back-text {
+      font-size: 0.7rem;
+    }
+    
+    .connection-status {
+      font-size: 0.7rem;
+    }
+    
+    .health-container {
+      margin-top: 0.3rem;
+    }
+    
+    .health-bar {
+      width: 70px;
+      height: 12px;
     }
   }
 </style>

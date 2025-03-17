@@ -15,6 +15,16 @@
     <div class="hud-label">IDENTITY</div>
   </div>
   
+  <div class="hud-element top-right-level">
+    <div class="hud-value">50</div>
+    <div class="hud-label">LVL</div>
+  </div>
+  
+  <div class="hud-element top-right-streetcred">
+    <div class="hud-value">50</div>
+    <div class="hud-label">STREET CRED</div>
+  </div>
+  
   <div class="hud-element top-left">
     <div class="hud-value">v1.0.7625269+</div>
     <div class="hud-label">OS VERSION</div>
@@ -58,6 +68,18 @@
   .hud-element.top-right {
     top: 15px;
     right: 15px;
+  }
+  
+  .hud-element.top-right-level {
+    top: 15px;
+    right: 150px;
+    min-width: 70px;
+  }
+  
+  .hud-element.top-right-streetcred {
+    top: 15px;
+    right: 235px;
+    min-width: 110px;
   }
   
   .hud-element.top-left {

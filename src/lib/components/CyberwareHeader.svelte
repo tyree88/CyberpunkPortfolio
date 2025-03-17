@@ -55,15 +55,7 @@
     <div class="subtitle">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
   </div>
   <div class="header-stats">
-    <div class="stat-item">
-      <span class="stat-label">LVL</span>
-      <span class="stat-value">50</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-label">STREET CRED</span>
-      <span class="stat-value">50</span>
-    </div>
+    <!-- Stats moved to HUD Elements -->
   </div>
 </div>
 

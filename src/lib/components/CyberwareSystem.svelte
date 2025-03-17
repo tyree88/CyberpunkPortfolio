@@ -323,15 +323,16 @@
     height: 100%;
     pointer-events: auto;
     background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
-    background-position: 60% center;
+    background-position: 65% 55%; /* Adjusted to move image down */
     background-repeat: no-repeat;
-    background-size: contain; /* Changed from cover to contain */
+    background-size: cover; /* Increased size from contain */
     background-color: #000;
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     will-change: background-position; /* Performance optimization */
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 20px; /* Added padding to move content down */
   }
   
   /* Scan effects - properly scoped to match HTML structure */
@@ -736,8 +737,8 @@
     
     .body-display-container {
       margin-bottom: 0;
-      height: 50vh;
-      min-height: 400px; /* Ensure minimum height */
+      height: 60vh; /* Increased height for better visibility */
+      min-height: 500px; /* Increased minimum height */
     }
     
     .system-details-panel {
@@ -746,8 +747,9 @@
     }
     
     .system-nodes-container {
-      background-size: contain; /* Ensure background fits */
-      background-position: center;
+      background-size: cover; /* Keep cover sizing */
+      background-position: 65% 55%; /* Maintain the same position as desktop */
+      padding-top: 20px; /* Keep the padding consistent */
     }
     
     .system-node {
@@ -759,12 +761,13 @@
   
   @media (max-width: 768px) {
     .body-display-container {
-      height: 45vh;
-      min-height: 350px; /* Ensure minimum height */
+      height: 55vh; /* Adjusted for better visibility */
+      min-height: 450px; /* Increased minimum height */
     }
     
     .system-nodes-container {
-      background-size: contain; /* Ensure background fits */
+      background-size: cover; /* Keep cover sizing */
+      background-position: 65% 55%; /* Maintain the same position */
     }
     
     .system-node {
@@ -782,12 +785,13 @@
   
   @media (max-width: 480px) {
     .body-display-container {
-      height: 40vh;
-      min-height: 300px; /* Ensure minimum height */
+      height: 50vh; /* Adjusted for better visibility */
+      min-height: 400px; /* Increased minimum height */
     }
     
     .system-nodes-container {
-      background-size: contain; /* Ensure background fits */
+      background-size: cover; /* Keep cover sizing */
+      background-position: 65% 60%; /* Slightly adjust for smaller screens */
     }
     
     .system-node {

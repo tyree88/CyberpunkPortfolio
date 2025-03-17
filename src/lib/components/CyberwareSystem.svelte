@@ -146,31 +146,8 @@
       <!-- Animated scan effect overlay -->
       <div class="scan-effect" bind:this={scanEffect}></div>
       <div class="scan-line"></div>
-      <!-- Fallback content in case image doesn't load -->
-      <div class="body-fallback">
-        <div class="body-outline">
-          <svg width="100%" height="100%" viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg">
-            <!-- Head circle -->
-            <circle cx="150" cy="60" r="60" fill="none" stroke="#49c5b6" stroke-width="2.5" stroke-opacity="0.9" filter="drop-shadow(0 0 8px #49c5b6)" />
-            
-            <!-- Body outline -->
-            <path d="M90 120 L90 500 L210 500 L210 120" fill="none" stroke="#49c5b6" stroke-width="2.5" stroke-opacity="0.9" filter="drop-shadow(0 0 8px #49c5b6)" />
-            
-            <!-- Shoulders -->
-            <path d="M90 150 L50 180 M210 150 L250 180" fill="none" stroke="#49c5b6" stroke-width="2.5" stroke-opacity="0.9" filter="drop-shadow(0 0 8px #49c5b6)" />
-            
-            <!-- Arms -->
-            <path d="M50 180 L50 350 M250 180 L250 350" fill="none" stroke="#49c5b6" stroke-width="2.5" stroke-opacity="0.9" filter="drop-shadow(0 0 8px #49c5b6)" />
-            
-            <!-- Legs -->
-            <path d="M120 500 L120 580 M180 500 L180 580" fill="none" stroke="#49c5b6" stroke-width="2.5" stroke-opacity="0.9" filter="drop-shadow(0 0 8px #49c5b6)" />
-            
-            <!-- Horizontal lines for detail -->
-            <path d="M90 300 L210 300" fill="none" stroke="#49c5b6" stroke-width="1.5" stroke-opacity="0.7" filter="drop-shadow(0 0 5px #49c5b6)" />
-            <path d="M90 400 L210 400" fill="none" stroke="#49c5b6" stroke-width="1.5" stroke-opacity="0.7" filter="drop-shadow(0 0 5px #49c5b6)" />
-          </svg>
-        </div>
-      </div>
+      <!-- We don't need fallback content since we're using the real image -->
+      <div class="body-fallback" style="display: none;"></div>
     </div>
     
     <!-- System nodes positioned around body -->
@@ -196,12 +173,9 @@
           role="button"
           aria-pressed={currentSystem === system.id}
         >
-          <div class="interactive-dot"></div>
           <div class="node-content">
-            <span class="node-icon" style="font-size: 1.5rem;">{system.icon}</span>
             <span class="node-title" style="font-size: 0.9rem; color: #ECD06F; font-weight: bold;">{system.title}</span>
           </div>
-          <div class="node-connector"></div>
         </div>
       {/each}
     </div>
@@ -328,11 +302,12 @@
     position: relative;
     width: 100%;
     height: 100%;
+    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #000;
     border-radius: 0;
     z-index: 1;
     display: flex;
@@ -412,21 +387,20 @@
 
   .system-node {
     position: absolute;
-    width: 50px;
-    height: 50px;
-    border: 2px solid #49c5b6;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #49c5b6;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.5), inset 0 0 15px rgba(73, 197, 182, 0.3);
-    z-index: 50;
-    font-size: 1.2rem;
+    box-shadow: 0 0 5px rgba(73, 197, 182, 0.8), inset 0 0 5px rgba(73, 197, 182, 0.8);
+    z-index: 100;
     pointer-events: auto;
-    animation: glow 4s infinite alternate;
+    animation: glow 3s infinite alternate;
   }
   
   .system-node:hover {
@@ -507,7 +481,7 @@
   /* System details panel */
   .system-details-panel {
     flex: 1;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgb(0, 0, 0);
     border: 1px solid #49c5b6;
     border-radius: 0;
     padding: 0;

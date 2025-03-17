@@ -281,16 +281,7 @@
 </div>
 
 <style>
-  /* Header elements container */
-  .header-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 500; /* Higher than nodes to prevent overlapping */
-    pointer-events: none; /* Allow clicks to pass through to nodes */
-  }
+  /* Main component container styles */
 
   /* Body display styles */
   .body-display-container {
@@ -690,23 +681,7 @@
     line-height: 1.4;
   }
   
-  /* Status indicator */
-  .system-status-indicator {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 4px 8px;
-    border: 1px solid #49c5b6;
-    z-index: 300;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
-    text-align: center;
-    min-width: 120px;
-  }
-  
+  /* Text styles */
   .status-label {
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.7rem;
@@ -722,99 +697,17 @@
     letter-spacing: 1px;
   }
 
-  /* Header elements */
-  .system-version-indicator,
-  .level-indicator,
-  .identity-indicator,
-  .bottom-status-indicator,
-  .bottom-status-indicator-right {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 1px solid #49c5b6;
-    z-index: 300;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
-    text-align: center;
-    padding: 4px 8px;
-  }
-  
-  .system-version-indicator {
-    top: 15px;
-    left: 15px;
-    min-width: 120px;
-  }
-  
-  .system-title-header {
-    position: absolute;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    z-index: 300;
-  }
-  
-  .title-text {
-    color: #49c5b6;
-    font-size: 1.2rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-  }
-  
-  .subtitle-text,
-  .os-text,
-  .identity-label,
-  .trace-label,
-  .status-text {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.7rem;
-    letter-spacing: 0.5px;
-    margin-top: 2px;
-  }
-  
-  .version-text,
-  .level-text,
-  .identity-text,
-  .trace-text,
-  .percentage-text {
-    color: #49c5b6;
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-  }
-  
-  .level-indicator {
-    top: 15px;
-    right: 150px;
-    min-width: 70px;
-  }
-  
-  .identity-indicator {
-    top: 15px;
-    right: 235px;
-    min-width: 150px;
-  }
-  
-  .bottom-status-indicator {
-    bottom: 15px;
-    left: 15px;
-    min-width: 80px;
-  }
-  
-  .bottom-status-indicator-right {
-    bottom: 15px;
-    right: 15px;
-    min-width: 80px;
-  }
+  /* Main container styles */
 
   /* Main layout */
   .cyberware-system {
     display: flex;
     padding: 0;
     gap: 0;
-    height: calc(100vh - 110px);
+    height: calc(100vh - 70px); /* Adjusted height to account for header */
     position: relative;
+    overflow: hidden;
+    width: 100%;
   }
   
   /* Animations */

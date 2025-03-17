@@ -441,7 +441,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.8); /* Reduced opacity from 0.95 to 0.8 */
     overflow: hidden;
     padding: 2rem;
   }
@@ -454,9 +454,9 @@
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)),
-      radial-gradient(at 20% 30%, rgba(73, 197, 182, 0.4) 0%, transparent 60%),
-      radial-gradient(at 80% 70%, rgba(255, 82, 82, 0.4) 0%, transparent 60%);
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.1)), /* Reduced opacity */
+      radial-gradient(at 20% 30%, rgba(73, 197, 182, 0.5) 0%, transparent 70%), /* Increased cyan glow */
+      radial-gradient(at 80% 70%, rgba(255, 82, 82, 0.5) 0%, transparent 70%); /* Increased red glow */
     background-size: cover;
     background-position: center;
     z-index: 0;

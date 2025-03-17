@@ -139,44 +139,6 @@
 
 <!-- Main cyberware system interface -->
 <div class="cyberware-system">
-  <!-- Header elements - moved to the overlay layer for proper z-indexing -->
-  <div class="header-elements">
-    <div class="system-version-indicator">
-      <div class="version-text">v1.0.7625269+</div>
-      <div class="os-text">OS VERSION</div>
-    </div>
-
-    <div class="system-title-header">
-      <div class="title-text">PERSONAL CYBERWARE SYSTEM</div>
-      <div class="subtitle-text">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
-    </div>
-
-    <div class="level-indicator">
-      <div class="level-text">LVL 50</div>
-    </div>
-
-    <div class="identity-indicator">
-      <div class="identity-text">TYREE PEARSON</div>
-      <div class="identity-label">IDENTITY</div>
-    </div>
-    
-    <!-- System status indicator -->
-    <div class="system-status-indicator">
-      <div class="status-label">SYSTEM STATUS</div>
-      <div class="status-value">100%</div>
-    </div>
-    
-    <!-- Bottom status indicator -->
-    <div class="bottom-status-indicator">
-      <div class="trace-text">3.1415</div>
-      <div class="trace-label">TRACE</div>
-    </div>
-    
-    <div class="bottom-status-indicator-right">
-      <div class="percentage-text">100%</div>
-      <div class="status-text">SYSTEM STATUS</div>
-    </div>
-  </div>
   
   <!-- Central body display with system nodes -->
   <div class="body-display-container">

@@ -8,8 +8,8 @@
     // Navigate back to the cyberdeck page with a glitch effect
     const timeline = gsap.timeline({
       onComplete: () => {
-        // Use goto to navigate to the cyberdeck page (which appears to be at the root path)
-        goto('/');
+        // Use goto to navigate to the cyberdeck page (root path)
+        goto('/', { replaceState: false });
       }
     });
     
@@ -26,7 +26,6 @@
         ease: "steps(1)"
       })
       .to('.cyberware-page', { 
-        x: 0, 
         opacity: 0, 
         filter: 'hue-rotate(0) brightness(1)',
         duration: 0.2 

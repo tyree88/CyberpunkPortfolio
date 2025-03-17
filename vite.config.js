@@ -20,6 +20,8 @@ export default defineConfig({
       '.repl.co',
       '6fb31245-895b-4d94-88fe-95b745e24d87-00-zkyysqog78l.spock.replit.dev',
       'localhost',
+      'tyreepearson.replit.app',
+      'https://tyreepearson.replit.app',
       'all'
     ]
   },

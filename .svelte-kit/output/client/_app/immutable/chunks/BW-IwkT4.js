@@ -1,0 +1,1 @@
+import{h as n,a as l,w as o}from"./DXGxV7KH.js";function u(f,i,a,s,c){var r;n&&l();var t=(r=i.$$slots)==null?void 0:r[a],e=!1;t===!0&&(t=i[a==="default"?"children":a],e=!0),t===void 0||t(f,e?()=>s:s)}const h=o({x:0,y:0});export{h as c,u as s};

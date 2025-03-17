@@ -1,8 +1,7 @@
-import { g as get_descriptor, r as run_all, i as index_of, d as define_property, a as is_array, b as array_from } from "./utils.js";
+import { H as HYDRATION_ERROR, g as get_descriptor, r as run_all, i as index_of, d as define_property, a as is_array, b as HYDRATION_START, c as HYDRATION_END, e as array_from, f as render, p as push$1, s as setContext, h as pop$1 } from "./index.js";
 import { s as safe_equals, e as equals } from "./equality.js";
-import { H as HYDRATION_ERROR, a as HYDRATION_START, b as HYDRATION_END, r as render, p as push$1, s as setContext, c as pop$1 } from "./index.js";
 import "clsx";
-const BROWSER = false;
+const DEV = false;
 let base = "";
 let assets = base;
 const app_dir = "_app";
@@ -799,8 +798,8 @@ function update_effect(effect2) {
     effect2.wv = write_version;
     var deps = effect2.deps;
     var dep;
-    if (BROWSER && tracing_mode_flag && (effect2.f & DIRTY) !== 0 && deps !== null) ;
-    if (BROWSER) ;
+    if (DEV && tracing_mode_flag && (effect2.f & DIRTY) !== 0 && deps !== null) ;
+    if (DEV) ;
   } catch (error) {
     handle_error(error, effect2, previous_effect, previous_component_context || effect2.ctx);
   } finally {
@@ -1493,7 +1492,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "yls4y8"
+  version_hash: "1io8ixl"
 };
 async function get_hooks() {
   let handle;
@@ -1512,7 +1511,7 @@ async function get_hooks() {
   };
 }
 export {
-  BROWSER as B,
+  DEV as D,
   assets as a,
   base as b,
   app_dir as c,

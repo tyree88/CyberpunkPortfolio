@@ -8,7 +8,6 @@
   import CyberwareHeader from '$lib/components/CyberwareHeader.svelte';
   import HudElements from '$lib/components/HudElements.svelte';
   import ScanLines from '$lib/components/ScanLines.svelte';
-  import { createCursorTrail } from '$lib/utils/cursorEffects';
   
   // Experience data mapped to memory archives
   const memoryArchives = portfolioData.experience.map(job => ({
@@ -28,32 +27,15 @@
     github: project.github
   }));
 
-  // Cursor trail container reference
-  let trailContainer: HTMLElement | null = null;
-  let cursorTrailCleanup: (() => void) | null = null;
-
   onMount(() => {
     if (!browser) return;
-    
-    // Initialize cursor trail
-    const { cleanup } = createCursorTrail({
-      container: trailContainer
-    });
-    
-    cursorTrailCleanup = cleanup;
-    
-    return () => {
-      // Clean up cursor trail on component unmount
-      if (cursorTrailCleanup) {
-        cursorTrailCleanup();
-      }
-    };
+    // Any other initialization can go here if needed
   });
 </script>
 
 <div class="cyberware-page" in:fade={{ duration: 300 }}>
   <!-- Cursor trail container -->
-  <div class="cursor-trail-container" bind:this={trailContainer}></div>
+  
   
   <!-- Scan lines overlay -->
   <ScanLines />
@@ -70,7 +52,7 @@
   />
   
   <!-- HUD elements -->
-  <HudElements userData={portfolioData.about} />
+  <HudElements />
 </div>
 
 <style>
@@ -93,14 +75,5 @@
     flex-direction: column;
   }
   
-  /* Cursor trail container */
-  .cursor-trail-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 100;
-  }
+
 </style>

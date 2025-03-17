@@ -45,14 +45,58 @@ export function createCursorTrail(options: CursorTrailOptions = {}) {
     
     // Create new trail elements
     if (trailContainer) {
+      // Add CSS styles for trail elements
+      const styleElement = document.createElement('style');
+      styleElement.textContent = `
+        .cursor-trail {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          transform: translate(-50%, -50%);
+          mix-blend-mode: screen;
+          box-shadow: 0 0 8px currentColor;
+          transition: all 0.1s ease;
+        }
+        
+        .cursor-trail.primary {
+          filter: blur(1px);
+        }
+        
+        .cursor-trail.secondary {
+          filter: blur(0.5px);
+        }
+      `;
+      document.head.appendChild(styleElement);
+      
+      // Create main cursor point
+      const mainCursor = document.createElement('div');
+      mainCursor.className = 'cursor-trail cursor-main';
+      mainCursor.style.width = '12px';
+      mainCursor.style.height = '12px';
+      mainCursor.style.backgroundColor = colors[0];
+      mainCursor.style.boxShadow = `0 0 15px ${colors[0]}, 0 0 5px ${colors[0]}`;
+      mainCursor.style.zIndex = '1000';
+      trailContainer.appendChild(mainCursor);
+      trailElements.push(mainCursor);
+      
+      // Create trail elements with varying sizes and colors
       for (let i = 0; i < count; i++) {
         const trailElement = document.createElement('div');
-        trailElement.className = 'cursor-trail';
-        trailElement.style.width = `${3 + (i * 0.1)}px`;
-        trailElement.style.height = `${3 + (i * 0.1)}px`;
-        trailElement.style.opacity = `${1 - (i * 0.06)}`;
-        trailElement.style.backgroundColor = i % 2 === 0 ? colors[0] : colors[1];
+        const isPrimary = i % 2 === 0;
         
+        trailElement.className = `cursor-trail ${isPrimary ? 'primary' : 'secondary'}`;
+        
+        // Vary the size based on position in trail
+        const size = isPrimary ? 5 - (i * 0.15) : 4 - (i * 0.1);
+        trailElement.style.width = `${Math.max(size, 2)}px`;
+        trailElement.style.height = `${Math.max(size, 2)}px`;
+        
+        // Alternate colors and adjust opacity
+        const color = isPrimary ? colors[0] : colors[1];
+        trailElement.style.backgroundColor = color;
+        trailElement.style.opacity = `${1 - (i * 0.05)}`;
+        
+        // Add to container and array
         trailContainer.appendChild(trailElement);
         trailElements.push(trailElement);
       }
@@ -71,14 +115,37 @@ export function createCursorTrail(options: CursorTrailOptions = {}) {
   function animateTrail() {
     if (!browser || !trailElements.length) return;
     
-    // Update each trail element with a delay
-    for (let i = 0; i < trailElements.length; i++) {
+    // Update main cursor immediately
+    if (trailElements[0]) {
+      trailElements[0].style.left = `${mousePosition.x}px`;
+      trailElements[0].style.top = `${mousePosition.y}px`;
+    }
+    
+    // Update each trail element with a delay and slight randomization
+    for (let i = 1; i < trailElements.length; i++) {
       setTimeout(() => {
         if (trailElements[i]) {
-          trailElements[i].style.left = `${mousePosition.x}px`;
-          trailElements[i].style.top = `${mousePosition.y}px`;
+          // Add subtle randomization to trail positions for a more dynamic effect
+          const jitter = i > 5 ? (Math.random() - 0.5) * (i * 0.3) : 0;
+          const jitterY = i > 8 ? (Math.random() - 0.5) * (i * 0.2) : 0;
+          
+          trailElements[i].style.left = `${mousePosition.x + jitter}px`;
+          trailElements[i].style.top = `${mousePosition.y + jitterY}px`;
+          
+          // Occasionally add a glitch effect to some elements
+          if (i > 5 && Math.random() > 0.92) {
+            const glitchX = (Math.random() - 0.5) * 15;
+            trailElements[i].style.transform = `translate(-50%, -50%) translateX(${glitchX}px)`;
+            
+            // Reset after a short delay
+            setTimeout(() => {
+              if (trailElements[i]) {
+                trailElements[i].style.transform = 'translate(-50%, -50%)';
+              }
+            }, 100);
+          }
         }
-      }, i * 40);
+      }, i * 30); // Faster follow speed
     }
     
     // Continue animation loop

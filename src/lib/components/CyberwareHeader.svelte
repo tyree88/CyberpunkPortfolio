@@ -1,61 +1,55 @@
 <script lang="ts">
   import { gsap } from 'gsap';
-  import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   import GlitchText from './GlitchText.svelte';
   
-  // Function to handle back navigation
-  function handleBack() {
-    // Navigate back to the cyberdeck page with a glitch effect
-    const timeline = gsap.timeline({
-      onComplete: () => {
-        // Use goto to navigate to the cyberdeck page (root path)
-        goto('/', { replaceState: false });
-      }
-    });
+  // Initialize with a static time for SSR
+  let currentTime = '00:00:00';
+  
+  // Update the time every second
+  onMount(() => {
+    // Skip browser-specific code if not in browser environment
+    if (!browser) return;
     
-    // Add cyberpunk-style glitch effect on exit
-    timeline
-      .to('.cyberware-page', { 
-        filter: 'hue-rotate(90deg) brightness(1.2)',
-        duration: 0.08,
-        ease: "steps(1)"
-      })
-      .to('.cyberware-page', { 
-        filter: 'hue-rotate(-40deg) brightness(0.8)',
-        duration: 0.08,
-        ease: "steps(1)"
-      })
-      .to('.cyberware-page', { 
-        opacity: 0, 
-        filter: 'hue-rotate(0) brightness(1)',
-        duration: 0.2 
-      });
-  }
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      currentTime = `${hours}:${minutes}:${seconds}`;
+    };
+    
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    
+    return () => {
+      clearInterval(interval);
+    };
+  });
 </script>
 
-<!-- Header with back button and title -->
+<!-- Header with title and system information -->
 <div class="cyberware-header">
-  <div class="header-left">
-    <button 
-      class="back-button" 
-      on:click={handleBack}
-      on:keydown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleBack();
-        }
-      }}
-      aria-label="Go back"
-    >
-      <span class="back-icon">←</span>
-      <span class="back-text">BACK</span>
-    </button>
-  </div>
-  <div class="title-container">
-    <h1 class="cyberware-title">PERSONAL CYBERWARE SYSTEM</h1>
-    <div class="subtitle">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
-  </div>
-  <div class="header-stats">
-    <!-- Stats moved to HUD Elements -->
+  <div class="header-content">
+    <a href="/" class="header-link">
+      <div class="connection-status">
+        <span class="icon">⚡</span>
+        <span class="text">BACK TO CYBERDECK</span>
+      </div>
+    </a>
+    
+    <div class="time-display">
+      <span class="label">TIME</span>
+      <div class="time-controls">
+        <span class="time-box">{currentTime}</span>
+      </div>
+    </div>
+    
+    <div class="title-container">
+      <GlitchText text="PERSONAL CYBERWARE SYSTEM" class_name="title-text" />
+      <div class="subtitle">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
+    </div>
   </div>
 </div>
 
@@ -63,121 +57,167 @@
   /* Header styles */
   .cyberware-header {
     display: flex;
+    justify-content: space-evenly;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     background-color: rgba(0, 0, 0, 0.8);
     border-bottom: 1px solid #49c5b6;
+    box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
+    height: 80px;
     position: relative;
-    z-index: 10;
-    height: 70px;
-    box-shadow: 0 0 15px rgba(73, 197, 182, 0.2);
+    overflow: hidden;
   }
   
-  .cyberware-title {
-    color: #49c5b6;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-    margin: 0 0 0.2rem 0;
-    text-shadow: 0 0 10px rgba(73, 197, 182, 0.5);
-    font-weight: 600;
+  .cyberware-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #49c5b6, transparent);
+    animation: headerGlow 4s infinite alternate;
   }
   
-  .subtitle {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.75rem;
-    letter-spacing: 1px;
+  @keyframes headerGlow {
+    0% {
+      opacity: 0.5;
+      box-shadow: 0 0 10px rgba(73, 197, 182, 0.5);
+    }
+    100% {
+      opacity: 1;
+      box-shadow: 0 0 20px rgba(73, 197, 182, 0.8);
+    }
   }
   
-  .header-stats {
+  .header-content {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    gap: 2rem;
   }
   
-  .stat-item {
+  .time-display {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+  
+  .label {
+    font-size: 0.7rem;
+    color: #ff5252;
+    margin-bottom: 0.2rem;
+  }
+  
+  .time-controls {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: rgba(73, 197, 182, 0.1);
-    padding: 0.3rem 0.6rem;
-    border: 1px solid rgba(73, 197, 182, 0.3);
   }
   
-  .stat-label {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.7rem;
-    letter-spacing: 0.5px;
-  }
-  
-  .stat-value {
-    color: #ECD06F;
+  .time-box {
+    font-family: 'Roboto Mono', monospace;
+    background-color: rgba(255, 82, 82, 0.2);
+    border: 1px solid #ff5252;
+    color: #ff5252;
+    padding: 0.2rem 0.5rem;
     font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
   }
   
-  .stat-divider {
-    width: 1px;
-    height: 20px;
-    background-color: rgba(73, 197, 182, 0.5);
-    margin: 0 1rem;
+  .title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
   }
   
-  /* Back button */
-  .back-button {
+  :global(.title-text) {
+    color: #49c5b6;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(73, 197, 182, 0.7);
+    margin-bottom: 0.3rem;
+  }
+  
+  .subtitle {
+    color: #ECD06F;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    text-transform: uppercase;
+  }
+  
+  .subtitle::before {
+    content: '>';
+    color: #49c5b6;
+    margin-right: 5px;
+    animation: blink 1.5s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  
+  .header-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+    display: block;
+    margin-right: 0.5rem;
+  }
+  
+  .header-link:hover {
+    transform: translateY(-2px);
+  }
+  
+  .connection-status {
     display: flex;
     align-items: center;
-    background-color: rgba(73, 197, 182, 0.1);
-    border: 1px solid #49c5b6;
-    color: #49c5b6;
-    padding: 0.3rem 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Roboto Mono', monospace;
+    gap: 0.5rem;
+    background-color: rgba(236, 208, 111, 0.15);
+    padding: 0.3rem 0.6rem;
+    border: 1px solid rgba(236, 208, 111, 0.3);
+  }
+  
+  .icon {
+    color: #ECD06F;
+    font-size: 0.9rem;
+  }
+  
+  .text {
+    color: #ECD06F;
     font-size: 0.8rem;
-    height: 36px;
-  }
-  
-  .back-button:hover {
-    background-color: rgba(73, 197, 182, 0.2);
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.5);
-    transform: translateY(-1px);
-  }
-  
-  .back-icon {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
+    letter-spacing: 1px;
   }
   
   /* Responsive styles */
   @media (max-width: 768px) {
     .cyberware-header {
-      flex-wrap: wrap;
       height: auto;
       padding: 0.5rem;
     }
     
-    .header-left {
-      order: 1;
-      width: 100%;
-      margin-bottom: 0.5rem;
+    .header-content {
+      flex-direction: column;
+      gap: 1rem;
     }
     
-    .title-container {
-      order: 2;
-      width: 100%;
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-    
-    .header-stats {
-      order: 3;
+    .time-display,
+    .title-container,
+    .header-link {
       width: 100%;
       justify-content: center;
+      margin-bottom: 0.5rem;
     }
     
-    .cyberware-title {
-      font-size: 1.2rem;
+    .connection-status {
+      width: fit-content;
+      margin: 0 auto;
     }
   }
 </style>

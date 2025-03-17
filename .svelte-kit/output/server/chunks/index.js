@@ -1,4 +1,25 @@
 import "clsx";
+var is_array = Array.isArray;
+var index_of = Array.prototype.indexOf;
+var array_from = Array.from;
+var define_property = Object.defineProperty;
+var get_descriptor = Object.getOwnPropertyDescriptor;
+const noop = () => {
+};
+function run_all(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i]();
+  }
+}
+function fallback(value, fallback2, lazy = false) {
+  return value === void 0 ? lazy ? (
+    /** @type {() => V} */
+    fallback2()
+  ) : (
+    /** @type {V} */
+    fallback2
+  ) : value;
+}
 const HYDRATION_START = "[";
 const HYDRATION_END = "]";
 const HYDRATION_ERROR = {};
@@ -60,6 +81,9 @@ function to_class(value, hash, directives) {
     }
   }
   return classname === "" ? null : classname;
+}
+function to_style(value, styles) {
+  return value == null ? null : String(value);
 }
 var current_component = null;
 function getContext(key) {
@@ -157,10 +181,14 @@ function attr_class(value, hash, directives) {
   var result = to_class(value, hash, directives);
   return result ? ` class="${escape_html(result, true)}"` : "";
 }
+function attr_style(value, directives) {
+  var result = to_style(value);
+  return result ? ` style="${escape_html(result, true)}"` : "";
+}
 function slot(payload, $$props, name, slot_props, fallback_fn) {
   var slot_fn = $$props.$$slots?.[name];
   if (slot_fn === true) {
-    slot_fn = $$props["children"];
+    slot_fn = $$props[name === "default" ? "children" : name];
   }
   if (slot_fn !== void 0) {
     slot_fn(payload, slot_props);
@@ -175,21 +203,37 @@ function bind_props(props_parent, props_now) {
     }
   }
 }
+function ensure_array_like(array_like_or_iterator) {
+  if (array_like_or_iterator) {
+    return array_like_or_iterator.length !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
+  }
+  return [];
+}
 export {
   HYDRATION_ERROR as H,
-  HYDRATION_START as a,
-  HYDRATION_END as b,
-  pop as c,
-  current_component as d,
-  slot as e,
-  escape_html as f,
-  getContext as g,
-  attr_class as h,
-  attr as i,
-  bind_props as j,
-  stringify as k,
-  head as l,
+  is_array as a,
+  HYDRATION_START as b,
+  HYDRATION_END as c,
+  define_property as d,
+  array_from as e,
+  render as f,
+  get_descriptor as g,
+  pop as h,
+  index_of as i,
+  current_component as j,
+  fallback as k,
+  bind_props as l,
+  slot as m,
+  noop as n,
+  getContext as o,
   push as p,
-  render as r,
-  setContext as s
+  escape_html as q,
+  run_all as r,
+  setContext as s,
+  head as t,
+  ensure_array_like as u,
+  attr as v,
+  attr_style as w,
+  stringify as x,
+  attr_class as y
 };

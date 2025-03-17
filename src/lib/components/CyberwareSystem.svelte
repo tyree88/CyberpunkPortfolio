@@ -79,16 +79,16 @@
           // Update to next frame
           currentFrame = (currentFrame + 1) % totalFrames;
           
-          // Apply scan effect
+          // Apply scan effect with enhanced visibility
           if (scanEffect) {
             scanEffect.style.backgroundImage = `linear-gradient(to bottom, 
-              rgba(73, 197, 182, 0.05), 
-              rgba(73, 197, 182, 0.1) ${currentFrame * 8}%, 
-              rgba(73, 197, 182, 0.2) ${currentFrame * 8 + 1}%, 
-              rgba(73, 197, 182, 0.05) ${currentFrame * 8 + 2}%, 
+              rgba(73, 197, 182, 0.0), 
+              rgba(73, 197, 182, 0.15) ${currentFrame * 8}%, 
+              rgba(73, 197, 182, 0.35) ${currentFrame * 8 + 1}%, 
+              rgba(73, 197, 182, 0.15) ${currentFrame * 8 + 2}%, 
               rgba(73, 197, 182, 0.0))`;
           }
-        }, 200);
+        }, 150); // Faster animation speed
       }
     }, 500); // Give DOM time to render
   }
@@ -142,16 +142,8 @@
   
   <!-- Central body display with system nodes -->
   <div class="body-display-container">
-    <!-- Body scan visualization -->
-    <div class="body-display" bind:this={bodyDisplay}>
-      <!-- Animated scan effect overlay -->
-      <div class="scan-effect" bind:this={scanEffect}></div>
-      <div class="scan-line"></div>
-      <!-- We don't need fallback content since we're using the real image -->
-      <div class="body-fallback" style="display: none;"></div>
-    </div>
-    
-    <!-- System nodes positioned around body -->
+    <!-- System nodes positioned around body with background image -->
+
     <div class="system-nodes-container">
       {#each cyberwareSystems as system}
         <div 
@@ -298,21 +290,16 @@
     justify-content: center;
     align-items: center;
     padding: 0;
-    z-index: 10;
+    /* z-index removed */
   }
   
   .body-display {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
-    background-color: #000;
+    background-color: transparent;
     border-radius: 0;
-    z-index: 5; /* Lower z-index to keep it behind nodes */
+    /* z-index removed */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -327,7 +314,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    /* z-index removed */
     padding: 0;
   }
   
@@ -340,7 +327,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 6;
+    /* z-index removed */
   }
   
   .scan-line {
@@ -348,11 +335,11 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 2px;
-    background-color: rgba(73, 197, 182, 0.7);
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.7);
-    z-index: 7;
-    animation: scanAnimation 4s linear infinite;
+    height: 3px;
+    background-color: rgba(73, 197, 182, 0.9);
+    box-shadow: 0 0 15px rgba(73, 197, 182, 0.9), 0 0 30px rgba(73, 197, 182, 0.5);
+    /* z-index removed */
+    animation: scanAnimation 3s linear infinite;
   }
   
   /* System nodes */
@@ -362,40 +349,52 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 50;
-    pointer-events: none;
+    /* z-index removed */
+    pointer-events: auto; /* Nodes are interactive by default */
+    background-image: url('/images/cyberware/ultimate-upscale-raw.jpg');
+    background-position: 60% center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
+    background-color: #000;
+    /* Debug outline to see container boundaries */
+    /* border: 1px solid red; */
   }
 
   .system-node {
     position: absolute;
-    width: 12px;
-    height: 12px;
-    border: 1px solid #49c5b6;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #49c5b6;
     border-radius: 50%;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 0 5px rgba(73, 197, 182, 0.8), inset 0 0 5px rgba(73, 197, 182, 0.8);
-    z-index: 400; /* Higher than body display and images but below UI elements */
+    box-shadow: 0 0 10px rgba(73, 197, 182, 0.8), inset 0 0 8px rgba(73, 197, 182, 0.8);
+    /* z-index removed */
     pointer-events: auto;
     animation: glow 3s infinite alternate;
   }
   
   .system-node:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(236, 208, 111, 0.7);
-    z-index: 450; /* Even higher on hover to stay above other nodes */
+    transform: scale(1.3);
+    border-color: #ECD06F;
+    box-shadow: 0 0 20px rgba(236, 208, 111, 0.9), inset 0 0 12px rgba(236, 208, 111, 0.7);
+    /* z-index removed */
   }
   
   @keyframes glow {
     0% {
       box-shadow: 0 0 10px rgba(73, 197, 182, 0.5), inset 0 0 15px rgba(73, 197, 182, 0.3);
     }
+    50% {
+      box-shadow: 0 0 15px rgba(73, 197, 182, 0.6), inset 0 0 18px rgba(73, 197, 182, 0.4);
+    }
     100% {
-      box-shadow: 0 0 15px rgba(73, 197, 182, 0.7), inset 0 0 20px rgba(73, 197, 182, 0.5);
+      box-shadow: 0 0 20px rgba(73, 197, 182, 0.7), inset 0 0 22px rgba(73, 197, 182, 0.5);
     }
   }
   
@@ -412,23 +411,27 @@
   
   .node-title {
     position: absolute;
-    top: -25px;
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
-    font-size: 0.7rem;
-    text-shadow: 0 0 5px #000000;
-    opacity: 0;
+    font-size: 0.8rem;
+    text-shadow: 0 0 8px #000000;
+    opacity: 1; /* Changed to visible by default */
     transition: opacity 0.3s ease;
-    color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 2px 6px;
-    border-radius: 3px;
-    border: 1px solid rgba(73, 197, 182, 0.3);
+    color: #ECD06F;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid rgba(73, 197, 182, 0.5);
+    letter-spacing: 1px;
+    font-weight: 500;
   }
   
+  /* Node title is already visible by default */
   .system-node:hover .node-title {
-    opacity: 1;
+    color: #ffffff;
+    border-color: #ECD06F;
   }
   
 
@@ -441,10 +444,14 @@
     border-radius: 0;
     padding: 0;
     box-shadow: 0 0 20px rgba(73, 197, 182, 0.3);
+    /* z-index removed */
     height: 100%;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #49c5b6 #000000;
+    position: relative;
+    /* z-index removed */
+    margin-top: 5px; /* Add a small margin to prevent overlap with header */
   }
   
   .system-details-panel::-webkit-scrollbar {
@@ -465,6 +472,7 @@
     padding: 0.8rem;
     margin-bottom: 0;
     position: relative;
+    /* z-index removed */
   }
   
   .system-title {
@@ -486,6 +494,8 @@
     flex-direction: column;
     gap: 0.8rem;
     padding: 0 0.8rem 0.8rem 0.8rem;
+    position: relative;
+    z-index: 45; /* Ensure content is in front */
   }
   
   .system-item {
@@ -681,21 +691,7 @@
     line-height: 1.4;
   }
   
-  /* Text styles */
-  .status-label {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-  }
-  
-  .status-value {
-    color: #49c5b6;
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-  }
+  /* Text styles - used in other components, keeping for consistency */
 
   /* Main container styles */
 
@@ -704,19 +700,28 @@
     display: flex;
     padding: 0;
     gap: 0;
-    height: calc(100vh - 70px); /* Adjusted height to account for header */
+    height: calc(100vh - 80px); /* Adjusted height to account for header */
     position: relative;
     overflow: hidden;
     width: 100%;
+    margin-top: 5px; /* Add margin to prevent any overlap with header */
   }
   
   /* Animations */
   @keyframes scanAnimation {
     0% {
       top: 0;
+      opacity: 0.7;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
     }
     100% {
       top: 100%;
+      opacity: 0.7;
     }
   }
   
@@ -749,6 +754,43 @@
     
     .system-details-panel {
       height: auto;
+    }
+    
+    .system-node {
+      /* Slightly larger nodes on tablet for better touch targets */
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .body-display-container {
+      height: 45vh;
+    }
+    
+    .system-node {
+      /* Even larger nodes on mobile for better touch targets */
+      width: 20px;
+      height: 20px;
+      border-width: 2.5px;
+    }
+    
+    .node-title {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .body-display-container {
+      height: 40vh;
+    }
+    
+    .system-node {
+      /* Largest nodes on small mobile for easy touch */
+      width: 22px;
+      height: 22px;
+      border-width: 3px;
     }
   }
 </style>

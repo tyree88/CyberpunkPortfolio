@@ -1,6 +1,5 @@
-import { g as getContext, f as escape_html, c as pop, p as push } from "../../chunks/index.js";
+import { n as noop, o as getContext, q as escape_html, h as pop, p as push } from "../../chunks/index.js";
 import "clsx";
-import { n as noop } from "../../chunks/utils.js";
 import { w as writable } from "../../chunks/exports.js";
 const SNAPSHOT_KEY = "sveltekit:snapshot";
 const SCROLL_KEY = "sveltekit:scroll";

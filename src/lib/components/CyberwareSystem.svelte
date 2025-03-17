@@ -309,7 +309,7 @@
     filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.5));
     background-color: #000;
     border-radius: 0;
-    z-index: 1;
+    z-index: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -359,7 +359,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 20;
+    z-index: 50;
     pointer-events: none;
   }
 
@@ -376,7 +376,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 0 5px rgba(73, 197, 182, 0.8), inset 0 0 5px rgba(73, 197, 182, 0.8);
-    z-index: 100;
+    z-index: 200;
     pointer-events: auto;
     animation: glow 3s infinite alternate;
   }
@@ -384,7 +384,7 @@
   .system-node:hover {
     transform: scale(1.1);
     box-shadow: 0 0 15px rgba(236, 208, 111, 0.7);
-    z-index: 60;
+    z-index: 250;
   }
   
   @keyframes glow {

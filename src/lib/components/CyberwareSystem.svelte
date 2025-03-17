@@ -139,6 +139,12 @@
 
 <!-- Main cyberware system interface -->
 <div class="cyberware-system">
+  <!-- System status indicator -->
+  <div class="system-status-indicator">
+    <span class="status-label">SYSTEM STATUS:</span>
+    <span class="status-value">100%</span>
+  </div>
+  
   <!-- Central body display with system nodes -->
   <div class="body-display-container">
     <!-- Body scan visualization -->
@@ -678,12 +684,43 @@
     line-height: 1.4;
   }
   
+  /* Status indicator */
+  .system-status-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 4px 8px;
+    border: 1px solid #49c5b6;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
+  }
+  
+  .status-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .status-value {
+    color: #49c5b6;
+    background-color: rgba(73, 197, 182, 0.2);
+    padding: 0.1rem 0.3rem;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
   /* Main layout */
   .cyberware-system {
     display: flex;
     padding: 0;
     gap: 0;
     height: calc(100vh - 110px);
+    position: relative;
   }
   
   /* Animations */

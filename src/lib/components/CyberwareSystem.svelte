@@ -139,10 +139,41 @@
 
 <!-- Main cyberware system interface -->
 <div class="cyberware-system">
+  <!-- Header elements -->
+  <div class="system-version-indicator">
+    <div class="version-text">v1.0.7625269+</div>
+    <div class="os-text">OS VERSION</div>
+  </div>
+
+  <div class="system-title-header">
+    <div class="title-text">PERSONAL CYBERWARE SYSTEM</div>
+    <div class="subtitle-text">CYBERNETIC ENHANCEMENT INTERFACE v2.77</div>
+  </div>
+
+  <div class="level-indicator">
+    <div class="level-text">LVL 50</div>
+  </div>
+
+  <div class="identity-indicator">
+    <div class="identity-text">TYREE PEARSON</div>
+    <div class="identity-label">IDENTITY</div>
+  </div>
+  
   <!-- System status indicator -->
   <div class="system-status-indicator">
-    <span class="status-label">SYSTEM STATUS:</span>
-    <span class="status-value">100%</span>
+    <div class="status-label">SYSTEM STATUS</div>
+    <div class="status-value">100%</div>
+  </div>
+  
+  <!-- Bottom status indicator -->
+  <div class="bottom-status-indicator">
+    <div class="trace-text">3.1415</div>
+    <div class="trace-label">TRACE</div>
+  </div>
+  
+  <div class="bottom-status-indicator-right">
+    <div class="percentage-text">100%</div>
+    <div class="status-text">SYSTEM STATUS</div>
   </div>
   
   <!-- Central body display with system nodes -->
@@ -694,24 +725,112 @@
     border: 1px solid #49c5b6;
     z-index: 300;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 5px;
     box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
+    text-align: center;
+    min-width: 120px;
   }
   
   .status-label {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
   }
   
   .status-value {
     color: #49c5b6;
-    background-color: rgba(73, 197, 182, 0.2);
-    padding: 0.1rem 0.3rem;
-    border-radius: 2px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  /* Header elements */
+  .system-version-indicator,
+  .level-indicator,
+  .identity-indicator,
+  .bottom-status-indicator,
+  .bottom-status-indicator-right {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #49c5b6;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
+    text-align: center;
+    padding: 4px 8px;
+  }
+  
+  .system-version-indicator {
+    top: 15px;
+    left: 15px;
+    min-width: 120px;
+  }
+  
+  .system-title-header {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 300;
+  }
+  
+  .title-text {
+    color: #49c5b6;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  .subtitle-text,
+  .os-text,
+  .identity-label,
+  .trace-label,
+  .status-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  
+  .version-text,
+  .level-text,
+  .identity-text,
+  .trace-text,
+  .percentage-text {
+    color: #49c5b6;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  .level-indicator {
+    top: 15px;
+    right: 150px;
+    min-width: 70px;
+  }
+  
+  .identity-indicator {
+    top: 15px;
+    right: 235px;
+    min-width: 150px;
+  }
+  
+  .bottom-status-indicator {
+    bottom: 15px;
+    left: 15px;
+    min-width: 80px;
+  }
+  
+  .bottom-status-indicator-right {
+    bottom: 15px;
+    right: 15px;
+    min-width: 80px;
   }
 
   /* Main layout */

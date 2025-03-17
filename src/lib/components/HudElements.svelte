@@ -20,16 +20,6 @@
     <div class="hud-label">LVL</div>
   </div>
   
-  <div class="hud-element top-right-streetcred">
-    <div class="hud-value">50</div>
-    <div class="hud-label">STREET CRED</div>
-  </div>
-  
-  <div class="hud-element top-left">
-    <div class="hud-value">v1.0.7625269+</div>
-    <div class="hud-label">OS VERSION</div>
-  </div>
-  
   <div class="hud-element bottom-left">
     <div class="hud-value">3.1415</div>
     <div class="hud-label">TRACE</div>
@@ -76,16 +66,7 @@
     min-width: 70px;
   }
   
-  .hud-element.top-right-streetcred {
-    top: 15px;
-    right: 235px;
-    min-width: 110px;
-  }
-  
-  .hud-element.top-left {
-    top: 15px;
-    left: 15px;
-  }
+  /* Main HUD positioning */
   
   .hud-element.bottom-left {
     bottom: 15px;

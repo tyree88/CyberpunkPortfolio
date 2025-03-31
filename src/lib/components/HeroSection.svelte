@@ -46,7 +46,7 @@
 
 <div class="hero-section">
   <!-- Cyberpunk Style Background and Effects -->
-  <div class="scan-line"></div>
+
   <div class="noise-overlay"></div>
   
   <div class="start-screen">
@@ -71,13 +71,13 @@
           <div class="button-content">
             <span class="button-text">ENTER THE PORTFOLIO</span>
             <div class="hack-tags">
-              <span class="tag">QUICKHACK</span>
+              <span class="tag">Profile</span>
+              <span class="tag">Projects</span>
+              <span class="tag">Experience</span>
+              <span class="tag">Skills</span>
+              <span class="tag">Contact</span>
+              <span class="tag">Life</span>
             </div>
-          </div>
-          <div class="ram-cost">
-            <span class="cost-value">
-              <span class="plus-sign">+</span> 2
-            </span>
           </div>
         </button>
       </div>
@@ -198,11 +198,6 @@
     background-color: rgba(73, 197, 182, 0.1);
   }
   
-  .enter-button:hover .cost-value,
-  .enter-button:focus .cost-value {
-    color: #ECD06F;
-  }
-  
   .button-content {
     display: flex;
     flex-direction: column;
@@ -218,7 +213,9 @@
   
   .hack-tags {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    margin-top: 0.5rem;
   }
   
   .tag {
@@ -229,21 +226,7 @@
     border: 1px solid rgba(73, 197, 182, 0.3);
   }
   
-  .ram-cost {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .cost-value {
-    font-size: 1.1rem;
-    color: #49c5b6;
-  }
-  
-  .plus-sign {
-    font-size: 0.8rem;
-    font-weight: bold;
-  }
+
   
   .copyright {
     position: absolute;
@@ -255,19 +238,6 @@
   }
   
   /* Visual effects */
-  .scan-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(to right, rgba(73, 197, 182, 0) 0%, rgba(73, 197, 182, 0.5) 50%, rgba(73, 197, 182, 0) 100%);
-    z-index: 10;
-    pointer-events: none;
-    animation: scanAnimation 4s linear infinite;
-    opacity: 0.7;
-  }
-  
   .noise-overlay {
     position: absolute;
     top: 0;
@@ -280,10 +250,7 @@
     pointer-events: none;
   }
   
-  @keyframes scanAnimation {
-    0% { top: 0; }
-    100% { top: 100%; }
-  }
+
   
   /* Responsive styles */
   @media (max-width: 768px) {
@@ -291,7 +258,6 @@
     .menu-container { width: 95%; padding: 1.5rem; }
     .button-text { font-size: 1.3rem; }
     .tag { font-size: 0.55rem; }
-    .cost-value { font-size: 1rem; }
   }
   
   @media (max-width: 480px) {

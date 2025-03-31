@@ -11,14 +11,14 @@
   let displayText = '';
   let typingComplete = false;
   
-  // Cyberpunk style: add occasional random character glitches during typing
-  const glitchChars = '!<>[]{}#$%^&*-_+=|\\/:.;?"\'~←→↑↓■□▲▼';
+  // No glitch characters for readable text
+  const glitchChars = '';
   
-  // Get a random glitch character
-  const getGlitchChar = () => glitchChars[Math.floor(Math.random() * glitchChars.length)];
+  // Get a random glitch character - now returns empty string
+  const getGlitchChar = () => '';
   
   // Performance optimization: Pre-calculate typing effects
-  const shouldGlitch = (i: number) => Math.random() < 0.2 && i > 0; // 20% chance of glitching
+  const shouldGlitch = (i: number) => false; // Disabled glitching
   const getTypingSpeed = () => (1000 / speed) * (0.8 + Math.random() * 0.4); // Varied typing speed
   
   onMount(() => {
@@ -77,36 +77,9 @@
       
     }, delay);
     
-    // Function to occasionally glitch the text after typing is complete
+    // Function to occasionally glitch the text after typing is complete - now disabled
     const scheduleRandomGlitches = () => {
-      setTimeout(() => {
-        if (Math.random() < 0.3) { // 30% chance to trigger a glitch
-          // Save original text
-          const originalText = displayText;
-          
-          // Create glitched version (replace 1-2 random characters)
-          const glitchedChars = originalText.split('');
-          const numGlitchChars = Math.floor(Math.random() * 2) + 1;
-          
-          for (let i = 0; i < numGlitchChars; i++) {
-            const glitchPos = Math.floor(Math.random() * originalText.length);
-            glitchedChars[glitchPos] = getGlitchChar();
-          }
-          
-          // Display glitched text briefly
-          displayText = glitchedChars.join('');
-          
-          // Restore original after brief moment
-          setTimeout(() => {
-            displayText = originalText;
-            // Schedule next potential glitch
-            scheduleRandomGlitches();
-          }, 100);
-        } else {
-          // No glitch this time, schedule next check
-          scheduleRandomGlitches();
-        }
-      }, 3000 + Math.random() * 5000); // Random interval between 3-8 seconds
+      // Do nothing - glitches disabled for clear text reading
     };
     
     return () => {

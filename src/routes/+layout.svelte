@@ -5,6 +5,7 @@
   import ScanLines from '$lib/components/ScanLines.svelte';
   import CursorTrail from '$lib/components/CursorTrail.svelte';
   import InteractiveBackground from '$lib/components/InteractiveBackground.svelte';
+  import '../lib/styles/variables.css';
   import '../lib/styles/global.css';
   import '../lib/styles/cyberpunk.css';
 

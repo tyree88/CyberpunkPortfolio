@@ -59,10 +59,13 @@
       });
   });
   
-  // Function to skip hero and go to main content
-  function enterMainContent() {
+  // Function to skip hero and go to main content with optional section selection
+  function enterMainContent(targetSection = 'about') {
     // If we're already showing main content, do nothing
     if (showMainContent) return;
+    
+    // Set the current section
+    $currentSection = targetSection;
     
     // Animate transition
     const tl = gsap.timeline();
@@ -95,7 +98,16 @@
             x: 50, 
             opacity: 0, 
             duration: 0.8, 
-            delay: 0.6 
+            delay: 0.6,
+            onComplete: () => {
+              // Highlight the current section in the quickhacks list
+              gsap.to(`.quick-hack-item[data-id="${targetSection}"]`, {
+                opacity: 1,
+                color: '#ECD06F',
+                backgroundColor: 'rgba(73, 197, 182, 0.2)',
+                duration: 0.3
+              });
+            }
           });
         }, 100);
       }
@@ -119,11 +131,8 @@
     <HeroSection on:optionSelected={(e) => {
       const optionId = e.detail.optionId;
       console.log('Option selected:', optionId);
-      enterMainContent();
-      // Set initial section based on the option selected
-      if (optionId) {
-        $currentSection = optionId;
-      }
+      // Pass the selected section directly to enterMainContent
+      enterMainContent(optionId);
     }} />
   </div>
 {:else}
@@ -209,69 +218,6 @@
     min-height: 100vh;
     width: 100%;
   }
-  
-  .enter-button {
-    position: relative;
-    margin: 2rem auto 0 auto;
-    display: block;
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 1px solid #49c5b6;
-    padding: 1rem 2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 10;
-  }
-  
-  .enter-button:hover {
-    background-color: rgba(73, 197, 182, 0.1);
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.5);
-  }
-  
-  .enter-button:hover .enter-text {
-    color: #fff;
-  }
-  
-  .enter-text {
-    color: #49c5b6;
-    font-size: 1rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  
-  .button-corner {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-  }
-  
-  .top-left {
-    top: -1px;
-    left: -1px;
-    border-top: 2px solid #ff5252;
-    border-left: 2px solid #ff5252;
-  }
-  
-  .top-right {
-    top: -1px;
-    right: -1px;
-    border-top: 2px solid #ff5252;
-    border-right: 2px solid #ff5252;
-  }
-  
-  .bottom-left {
-    bottom: -1px;
-    left: -1px;
-    border-bottom: 2px solid #ff5252;
-    border-left: 2px solid #ff5252;
-  }
-  
-  .bottom-right {
-    bottom: -1px;
-    right: -1px;
-    border-bottom: 2px solid #ff5252;
-    border-right: 2px solid #ff5252;
-  }
 
   .main-container {
     display: flex;
@@ -290,14 +236,6 @@
   @media (max-width: 768px) {
     .content-container {
       flex-direction: column;
-    }
-    
-    .enter-button {
-      padding: 0.8rem 1.5rem;
-    }
-    
-    .enter-text {
-      font-size: 0.9rem;
     }
   }
 </style>

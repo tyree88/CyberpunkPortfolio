@@ -9,7 +9,11 @@
     technologies: string[];
     link: string;
     github?: string;
-    image?: string;
+    // Updated preview structure
+    preview?: {
+      type: 'image' | 'svg'; // Can be image URL or raw SVG string/URL
+      src: string;
+    };
   };
   
   let card: HTMLElement;
@@ -74,21 +78,8 @@
   });
   
   function flipCard() {
+    // Only toggle the state. CSS handles the animation via the 'flipped' class.
     isFlipped = !isFlipped;
-    
-    if (isFlipped) {
-      gsap.to(card, {
-        rotationY: 180,
-        duration: 0.6,
-        ease: "power2.out"
-      });
-    } else {
-      gsap.to(card, {
-        rotationY: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      });
-    }
   }
   
   function scheduleRandomGlitch() {
@@ -155,14 +146,27 @@
       <div class="card-content">
         <div class="project-preview">
           <div class="project-image">
-            <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" class="placeholder-svg">
-              <rect width="200" height="150" fill="#000" stroke="#49c5b6" stroke-width="2" />
-              <line x1="0" y1="0" x2="200" y2="150" stroke="#49c5b6" stroke-width="1" />
-              <line x1="200" y1="0" x2="0" y2="150" stroke="#49c5b6" stroke-width="1" />
-              <text x="100" y="75" text-anchor="middle" fill="#49c5b6" font-family="monospace" font-size="12">
-                PROJECT DATA
-              </text>
-            </svg>
+            {#if project.preview}
+              {#if project.preview.type === 'image'}
+                <img src={project.preview.src} alt="{project.title} preview" class="project-actual-image" />
+              {:else if project.preview.type === 'svg'}
+                <!-- Assuming src is a path to an SVG file -->
+                <img src={project.preview.src} alt="{project.title} preview SVG" class="project-actual-image svg-image" />
+                <!-- OR if src contains raw SVG markup: -->
+                <!-- {@html project.preview.src} -->
+                <!-- Note: Using {@html} requires careful sanitization if the SVG source is dynamic/user-provided -->
+              {/if}
+            {:else}
+              <!-- Fallback Placeholder SVG -->
+              <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" class="placeholder-svg">
+                <rect width="200" height="150" fill="#000" stroke="#49c5b6" stroke-width="2" />
+                <line x1="0" y1="0" x2="200" y2="150" stroke="#49c5b6" stroke-width="1" />
+                <line x1="200" y1="0" x2="0" y2="150" stroke="#49c5b6" stroke-width="1" />
+                <text x="100" y="75" text-anchor="middle" fill="#49c5b6" font-family="monospace" font-size="12">
+                  PROJECT DATA
+                </text>
+              </svg>
+            {/if}
           </div>
         </div>
         
@@ -173,6 +177,17 @@
           {#if project.technologies.length > 3}
             <span class="tech-tag">+{project.technologies.length - 3}</span>
           {/if}
+        </div>
+
+        <!-- Add Live Site Link Here -->
+        <div class="front-links">
+           <a
+             href={project.link}
+             target="_blank"
+             rel="noopener noreferrer"
+             class="project-link front-link"
+             on:click|stopPropagation
+           >VIEW SITE</a>
         </div>
       </div>
       
@@ -219,7 +234,7 @@
 <style>
   .project-card {
     background-color: rgba(0, 0, 0, 0.7);
-    height: 320px;
+    height: 365px; /* Increased height by 15px */
     perspective: 1000px;
     cursor: pointer;
     transition: box-shadow 0.3s ease;
@@ -236,12 +251,12 @@
     bottom: 0;
     border: 1px solid #49c5b6;
     clip-path: polygon(
-      0% 0%, 
-      95% 0%, 
-      100% 5%, 
-      100% 100%, 
-      5% 100%, 
-      0% 95%
+      0% 0%,      /* Top-left */
+      95% 0%,     /* Top-right corner start */
+      100% 5%,    /* Top-right corner end */
+      100% 120%,  /* Bottom-right (Lowered) */
+      5% 120%,    /* Bottom-left corner (Lowered) */
+      0% 120%     /* Left edge bottom (Lowered) */
     );
     z-index: -1;
     transition: all 0.3s ease;
@@ -318,6 +333,18 @@
     width: 100%;
     height: 100%;
   }
+
+  .project-actual-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area, cropping if needed */
+    object-position: center; /* Center the image */
+  }
+
+  .project-actual-image.svg-image {
+     object-fit: contain; /* Contain for SVGs to prevent distortion */
+     padding: 5px; /* Optional padding for SVGs */
+  }
   
   .tech-tags, .tech-tags-full {
     display: flex;
@@ -380,6 +407,18 @@
   
   .icon {
     font-size: 1rem;
+  }
+
+  .front-links {
+    margin-top: auto; /* Push to bottom of card-content */
+    padding-top: 0.5rem; /* Add some space above */
+    text-align: center; /* Center the link */
+  }
+
+  .front-link {
+    display: inline-block; /* Allow centering */
+    margin: 0 auto; /* Center horizontally */
+    /* Inherits .project-link styles */
   }
   
   @media (max-width: 576px) {

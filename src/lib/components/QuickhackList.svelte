@@ -17,28 +17,28 @@
   const quickhacks: QuickhackItem[] = [
     { 
       id: 'about', 
-      name: 'NEURAL PROFILE', 
+      name: 'PROFILE', 
       ramCost: 2, 
       icon: '🔍', 
       category: 'easy' 
     },
     { 
       id: 'projects', 
-      name: 'BREACH PROTOCOL', 
+      name: 'PROJECTS', 
       ramCost: 5, 
       icon: '💻', 
       category: 'medium' 
     },
     { 
       id: 'experience', 
-      name: 'MEMORY WIPE', 
+      name: 'EXPERIENCE', 
       ramCost: 6, 
       icon: '🧠', 
       category: 'advanced' 
     },
     { 
       id: 'skills', 
-      name: 'CYBERNETIC SPECS', 
+      name: 'SKILLS', 
       ramCost: 3, 
       icon: '🔧', 
       category: 'medium' 

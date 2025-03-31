@@ -93,31 +93,46 @@
   <div class="content-wrapper" bind:this={contentWrapper}>
     {#if currentSection === 'about'}
       <div class="about-section">
-        <div class="info-box">
-          <div class="scan-results">
-            <h2>SCAN RESULTS</h2>
-            <div class="name">{portfolioData.about.name}</div>
-            <div class="title">{portfolioData.about.title}</div>
+        <h2>NEURAL PROFILE SCAN</h2>
+        <div class="profile-grid">
+          
+          <div class="profile-image-container">
+            <img
+              src="/images/portfolio/Profile.png"
+              alt="{portfolioData.about.name} Profile"
+              class="profile-image"
+            />
+            <div class="image-overlay"></div>
+            <div class="image-border-corners"></div>
           </div>
 
-          <div class="bio-text">
-            <TypewriterText text={portfolioData.about.bio} speed={30} />
+          <div class="profile-info-container">
+            <div class="scan-results">
+              
+              <div class="name">{portfolioData.about.name}</div>
+              <div class="title">{portfolioData.about.title}</div>
+            </div>
+
+            <div class="bio-text info-box">
+              <TypewriterText text={portfolioData.about.bio} speed={30} />
+            </div>
+
+            <div class="stats-display">
+              <div class="stat-row">
+                <div class="stat-label">SPECIALTY</div>
+                <div class="stat-value">{portfolioData.about.specialty}</div>
+              </div>
+              <div class="stat-row">
+                <div class="stat-label">LOCATION</div>
+                <div class="stat-value">{portfolioData.about.location}</div>
+              </div>
+              <div class="stat-row">
+                <div class="stat-label">STATUS</div>
+                <div class="stat-value available">{portfolioData.about.status}</div>
+              </div>
+            </div>
           </div>
 
-          <div class="stats-display">
-            <div class="stat-row">
-              <div class="stat-label">SPECIALTY</div>
-              <div class="stat-value">{portfolioData.about.specialty}</div>
-            </div>
-            <div class="stat-row">
-              <div class="stat-label">LOCATION</div>
-              <div class="stat-value">{portfolioData.about.location}</div>
-            </div>
-            <div class="stat-row">
-              <div class="stat-label">STATUS</div>
-              <div class="stat-value available">{portfolioData.about.status}</div>
-            </div>
-          </div>
         </div>
       </div>
     {:else if currentSection === 'projects'}
@@ -274,8 +289,89 @@
     padding-bottom: 0.5rem;
   }
 
-  /* About Section */
-  .info-box {
+  /* About Section - Updated */
+  .about-section h2 { /* Style the new header */
+      color: #ECD06F;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(236, 208, 111, 0.3);
+      padding-bottom: 0.5rem;
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr; /* Fixed width for image, rest for info */
+    gap: 2rem;
+    align-items: start; /* Align items to the top of their grid cells */
+  }
+
+  .profile-image-container {
+    position: relative;
+    width: 200px; /* Match grid column width */
+    height: 250px; /* Adjust height as needed */
+    border: 1px solid rgba(73, 197, 182, 0.5);
+    padding: 5px; /* Inner padding */
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area */
+    object-position: center;
+    filter: saturate(1.2) contrast(1.1); /* Slightly enhance image */
+  }
+
+  .image-overlay { /* Optional: Add subtle scan lines or tint */
+    position: absolute;
+    top: 5px; /* Match padding */
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background: linear-gradient(rgba(73, 197, 182, 0.05) 1px, transparent 1px);
+    background-size: 100% 3px;
+    opacity: 0.5;
+    pointer-events: none;
+    animation: scanOverlay 5s linear infinite;
+  }
+
+  @keyframes scanOverlay {
+    from { background-position: 0 0; }
+    to { background-position: 0 -3px; }
+  }
+
+  .image-border-corners::before,
+  .image-border-corners::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-color: #ff5252; /* Accent color */
+    border-style: solid;
+  }
+  .image-border-corners::before {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px;
+  }
+   .image-border-corners::after {
+    bottom: 0;
+    right: 0;
+    border-width: 0 2px 2px 0;
+  }
+
+
+  .profile-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Space between info blocks */
+  }
+
+  .info-box { /* Reused style for bio */
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(73, 197, 182, 0.5);
     padding: 1rem;

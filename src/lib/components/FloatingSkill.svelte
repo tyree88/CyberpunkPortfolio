@@ -1,165 +1,208 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
   import { gsap } from 'gsap';
+  import { browser } from '$app/environment';
 
-  /**
-   * FloatingSkill.svelte
-   * Represents a single floating skill element with cyberpunk styling and animation.
-   */
-
-  export let skillName: string;
-  export let initialX: number; // Percentage
-  export let initialY: number; // Percentage
-  export let index: number; // For staggering delays
+  export let text: string;
+  export let x: number; // Percentage
+  export let y: number; // Percentage
+  export let initialDelay: number = 0;
+  export let glitch: boolean = false; // Whether to enable occasional glitching
 
   let element: HTMLElement;
-  let ctx: gsap.Context;
+  let floatingTween: gsap.core.Tween | null = null;
+  let pulseTween: gsap.core.Tween | null = null;
+  let glitchTimeline: gsap.core.Timeline | null = null;
+  let glitchTimeout: number | undefined = undefined;
 
-  // Cyberpunk prefixes and suffixes for visual diversity
-  const cyberpunkPrefixes = ['>', 'SYS:', '[v]', '//', 'NET:', '*', 'RAM:'];
-  const cyberpunkSuffixes = ['<<', '.exe', '::', '_v2', '--', '+'];
+  // Function to schedule random glitch effects for this skill
+  function scheduleSkillGlitch() {
+    if (!glitch || !browser || !element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // Apply cyberpunk formatting randomly
-  let displaySkill = skillName;
-  if (index % 4 === 0) {
-    const prefix = cyberpunkPrefixes[Math.floor(Math.random() * cyberpunkPrefixes.length)];
-    displaySkill = `${prefix} ${skillName}`;
-  } else if (index % 5 === 0) {
-    const suffix = cyberpunkSuffixes[Math.floor(Math.random() * cyberpunkSuffixes.length)];
-    displaySkill = `${skillName} ${suffix}`;
-  }
+    // Reduced delay for more frequency
+    const delay = 1.5 + Math.random() * 5; 
 
-  onMount(() => {
-    ctx = gsap.context(() => {
-      // Initial position & appearance animation (handled by parent or Svelte transition)
-      // gsap.from(element, { opacity: 0, scale: 0.5, duration: 0.5, delay: 0.5 + index * 0.05 });
+    glitchTimeout = window.setTimeout(() => {
+      // Store original values to restore later
+      const originalColor = element.style.color || 'var(--color-teal)'; 
+      const originalTransform = element.style.transform; 
+      const originalTextShadow = element.style.textShadow || 'none';
+      const originalBoxShadow = element.style.boxShadow || 'none';
 
-      // Dynamic floating animation
-      gsap.to(element, {
-        x: `random(-15, 15)`,
-        y: `random(-15, 15)`,
-        rotation: `random(-3, 3)`,
-        duration: `random(4, 8)`,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: index * 0.08
+      glitchTimeline = gsap.timeline({
+        onComplete: scheduleSkillGlitch // Schedule next glitch
       });
 
-      // Slight pulsing effect
-      gsap.to(element, {
-        scale: `random(0.95, 1.05)`,
-        boxShadow: index % 2 === 0
-          ? '0 0 8px rgba(73, 197, 182, 0.7)'
-          : '0 0 8px rgba(255, 82, 82, 0.7)',
-        duration: `random(2, 4)`,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: `random(0, 2)`
-      });
-
-      // Occasional glitch effect
-      if (index % 6 === 0) {
-        scheduleSkillGlitch(element);
-      }
-
-    }, element); // Scope animations to this component's element
-  });
-
-  onDestroy(() => {
-    ctx?.revert(); // Cleanup GSAP animations and contexts
-  });
-
-  // Function to schedule glitch effect for this skill
-  function scheduleSkillGlitch(el: HTMLElement) {
-    const delay = 3 + Math.random() * 10;
-
-    gsap.delayedCall(delay, () => {
-      if (!ctx || !ctx.isActive()) return; // Check if context is still active
-
-      const originalColor = el.style.color || '#49c5b6';
-      const originalTransform = el.style.transform;
-
-      const glitchTl = gsap.timeline({
-        onComplete: () => scheduleSkillGlitch(el) // Schedule next glitch
-      });
-
-      glitchTl
-        .to(el, {
-          x: '+=3',
-          color: '#ff5252',
-          textShadow: '0 0 5px #ff5252',
-          duration: 0.08,
+      // Increased intensity glitch animation
+      glitchTimeline
+        .to(element, {
+          x: '+=5', // Increased horizontal shift
+          color: 'var(--color-red)', 
+          textShadow: '0 0 5px var(--color-red)',
+          boxShadow: '0 0 8px var(--color-red)',
+          scale: 1.02, // Slight scale up
+          duration: 0.06, // Slightly longer duration
           ease: "steps(1)"
         })
-        .to(el, {
-          x: '-=6',
-          color: '#ecd06f',
-          textShadow: '0 0 5px #ecd06f',
-          duration: 0.08,
+        .to(element, {
+          x: '-=10', // Increased opposite shift
+          color: 'var(--color-gold)', 
+          textShadow: '0 0 5px var(--color-gold)',
+          boxShadow: '0 0 8px var(--color-gold)',
+          scale: 0.98, // Slight scale down
+          duration: 0.06,
           ease: "steps(1)"
         })
-        .to(el, {
-          x: '+=3',
+        .to(element, {
+          x: '+=5', // Return shift
           color: originalColor,
-          textShadow: '0 0 5px rgba(73, 197, 182, 0.8)',
-          // transform: originalTransform, // Avoid resetting transform if floating animation is running
+          textShadow: originalTextShadow,
+          boxShadow: originalBoxShadow,
+          scale: 1, // Return to normal scale
+          // transform: originalTransform, // Avoid resetting transform directly if floating tween is active
           duration: 0.08,
           ease: "steps(1)"
         });
-    });
+    }, delay * 1000);
   }
 
+  onMount(() => {
+    if (!browser || !element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // If no motion, just set final state
+        gsap.set(element, { opacity: 1 });
+        return;
+    }
+
+    // Initial delayed appearance
+    gsap.to(element, {
+      opacity: 1,
+      duration: 0.5,
+      delay: initialDelay,
+      ease: "power1.inOut"
+    });
+
+    // Floating animation
+    floatingTween = gsap.to(element, {
+      x: `random(-15, 15)`,
+      y: `random(-15, 15)`,
+      rotation: `random(-3, 3)`,
+      duration: `random(4, 8)`,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      delay: initialDelay + Math.random() * 0.5 // Add slight random offset to start
+    });
+
+    // Pulsing animation (scale and shadow)
+    pulseTween = gsap.to(element, {
+      scale: `random(0.95, 1.05)`,
+      // Use CSS variables for colors
+      boxShadow: Math.random() > 0.5
+        ? '0 0 8px rgba(var(--color-teal-rgb), 0.7)' // Assumes --color-teal-rgb exists
+        : '0 0 8px rgba(var(--color-red-rgb), 0.7)', // Assumes --color-red-rgb exists
+      duration: `random(2, 4)`,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      delay: initialDelay + Math.random() * 2
+    });
+
+    // Start glitching if enabled
+    if (glitch) {
+      scheduleSkillGlitch();
+    }
+  });
+
+  onDestroy(() => {
+    floatingTween?.kill();
+    pulseTween?.kill();
+    glitchTimeline?.kill();
+    if (glitchTimeout) clearTimeout(glitchTimeout);
+  });
 </script>
 
 <div
-  bind:this={element}
   class="floating-skill"
-  style="left: {initialX}%; top: {initialY}%; transform: rotate({-2 + Math.random() * 4}deg);"
+  bind:this={element}
+  style="left: {x}%; top: {y}%; opacity: 0;"
 >
-  {displaySkill}
+  {text}
 </div>
 
 <style>
   .floating-skill {
     position: absolute;
+    font-family: 'Roboto Mono', monospace; /* Or your chosen mono font */
     font-size: 0.8rem;
-    color: #49c5b6;
+    color: var(--color-teal); /* Use CSS variable */
     background-color: rgba(0, 0, 0, 0.7);
     padding: 0.25rem 0.5rem;
-    border: 1px solid rgba(73, 197, 182, 0.5);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.5); /* Use RGB version for opacity */
     white-space: nowrap;
     z-index: 3;
     transform-origin: center;
-    box-shadow: 0 0 5px rgba(73, 197, 182, 0.5);
-    text-shadow: 0 0 5px rgba(73, 197, 182, 0.8);
+    box-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.5);
+    text-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.8);
     backdrop-filter: blur(1px);
-    opacity: 0; /* Start hidden, parent/transition will reveal */
-    will-change: transform, opacity, box-shadow, color, text-shadow; /* Optimize animations */
+    will-change: transform, opacity, box-shadow, color, text-shadow; /* Performance hint */
+    animation: cycleSkillGlow 9s ease-in-out infinite; /* Apply new color cycle animation */
+    /* Initial state set by JS */
   }
 
-  .floating-skill::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 5px;
-    height: 5px;
-    border-top: 1px solid #ff5252;
-    border-left: 1px solid #ff5252;
-  }
-
+  /* Corner elements */
+  .floating-skill::before,
   .floating-skill::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    right: 0;
     width: 5px;
     height: 5px;
-    border-bottom: 1px solid #ff5252;
-    border-right: 1px solid #ff5252;
+    border-color: var(--color-red); /* Use CSS variable */
+    border-style: solid;
   }
 
-  /* Removed skillGlow keyframes - handled by GSAP */
+  .floating-skill::before {
+    top: -1px; /* Adjust for border */
+    left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+
+  .floating-skill::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 1px 1px 0;
+  }
+
+  /* Enhanced hover effect */
+  .floating-skill:hover {
+      /* Slightly larger scale on hover */
+      transform: scale(1.15);
+      /* Use gold color for border and glow */
+      border-color: rgba(var(--color-gold-rgb), 0.8);
+      box-shadow: 0 0 12px rgba(var(--color-gold-rgb), 0.7);
+      text-shadow: 0 0 8px rgba(var(--color-gold-rgb), 0.9);
+      /* Ensure it's above others */
+      z-index: 10;
+      /* Smooth transition for the hover effect */
+      transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out, text-shadow 0.2s ease-out;
+      /* Pause the cycling animation on hover for clarity */
+      animation-play-state: paused;
+  }
+
+ @keyframes cycleSkillGlow {
+   0%, 100% { 
+     border-color: rgba(var(--color-teal-rgb), 0.5);
+     box-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.5);
+     text-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.8);
+   }
+   33% { 
+     border-color: rgba(var(--color-red-rgb), 0.5);
+     box-shadow: 0 0 7px rgba(var(--color-red-rgb), 0.5); /* Slightly larger shadow for red */
+     text-shadow: 0 0 5px rgba(var(--color-red-rgb), 0.8);
+   }
+   66% { 
+     border-color: rgba(var(--color-gold-rgb), 0.5);
+     box-shadow: 0 0 6px rgba(var(--color-gold-rgb), 0.5); /* Slightly different shadow for gold */
+     text-shadow: 0 0 5px rgba(var(--color-gold-rgb), 0.8);
+   }
+ }
 </style>

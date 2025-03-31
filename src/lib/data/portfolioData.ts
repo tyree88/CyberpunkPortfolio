@@ -1,6 +1,8 @@
+import type { PortfolioData } from '$lib/types/portfolio'; // Import the type
+
 // Portfolio data store - Replace with your own information
 
-export const portfolioData = {
+export const portfolioData: PortfolioData = { // Apply the type
   about: {
     name: "TYREE PEARSON",
     title: "NETRUNNER / FULL-STACK VIBE CODER",
@@ -12,57 +14,88 @@ export const portfolioData = {
   
   projects: [
     {
-      title: "NEURAL INTERFACE",
-      description: "An immersive, neurally-controlled web application that responds to user thought patterns. Created using advanced BCI protocols and reactive design principles.",
-      technologies: ["Svelte", "WebGL", "Brain.js", "WebXR", "TensorFlow"],
-      link: "https://example.com/neural-interface",
-      github: "https://github.com/example/neural-interface"
+      "title": "PENHOLE",
+      "description": "Social platform connecting citizens with political representatives, providing unbiased information on voting records to foster common ground dialogue. Built with React Native on Firebase Cloud with MongoDB.",
+      "technologies": ["React Native", "Firebase", "MongoDB", "Python", "Data Analytics"],
+      "link": "https://penhole.com/",
+      "github": "https://github.com/yourusername/penhole",
+      "preview": {
+        "type": "image",
+        "src": "/images/portfolio/Penhole.png"
+      }
     },
     {
-      title: "CYBERSPACE NAVIGATOR",
-      description: "3D visualization tool for complex data structures. Navigate through information as if you're jacked into cyberspace.",
-      technologies: ["Three.js", "SvelteKit", "GraphQL", "D3.js"],
-      link: "https://example.com/cyberspace",
-      github: "https://github.com/example/cyberspace"
+      "title": "DATA SCIENCE & AUTOMATION HUB",
+      "description": "Interactive data science portfolio showcasing a collection of Python-powered projects spanning predictive analytics, workflow automation, and cloud-based ETL pipelines. Features include real-time data visualization dashboards, machine learning model demonstrations, and automated data processing workflows with comprehensive metrics tracking.",
+      "technologies": ["Python", "Pandas", "Scikit-learn", "Streamlit", "Prefect", "Matplotlib", "AWS/Azure/GCP", "Docker"],
+      "link": "https://tyreepearson.streamlit.app/",
+      "github": "https://github.com/tyreepearson/data-science-portfolio",
+      "preview": {
+        "type": "image",
+        "src": "/images/portfolio/Streamlit.png"
+      },
     },
     {
-      title: "RIPPERDOC SCHEDULER",
-      description: "Appointment scheduling system for cybernetic enhancement clinics with virtual try-on capabilities.",
-      technologies: ["Vue", "Firebase", "AR.js", "PWA"],
-      link: "https://example.com/ripperdoc",
-      github: "https://github.com/example/ripperdoc"
+      "title": "POLIGRAPH",
+      "description": "Decentralized political data platform empowering citizens through transparent access to voting records and legislative information. Built on decentralized protocols to ensure data integrity while connecting users directly with their representatives without bias or intermediaries.",
+      "technologies": ["React", "Bluesky/ATProtocol", "Neo4j", "Python", "LangChain", "Hugging Face Transformers"],
+      "link": "https://tyreepearson.replit.app/projects/poligraph",
+      "github": "https://github.com/tyreepearson/poligraph",
+      "preview": { // Update to use the SVG icon
+        "type": "svg",
+        "src": "/images/portfolio/poligraph-icon.svg"
+      }
     },
     {
-      title: "DATAFORT SECURITY",
-      description: "End-to-end encrypted communication platform with biometric authentication and breach detection.",
-      technologies: ["React", "WebRTC", "IndexedDB", "WebAuthentication"],
-      link: "https://example.com/datafort",
-      github: "https://github.com/example/datafort"
+      "title": "RESELLR",
+      "description": "All-in-one management platform for e-commerce resellers that consolidates inventory, pricing, and analytics across multiple marketplaces. Optimizes listing strategies and automates cross-platform synchronization to maximize profit margins and streamline operations.",
+      "technologies": ["Loveable", "Bolt.new", "Webflow", "Framer", "21st.dev"],
+      "link": "https://tyreepearson.replit.app/projects/resellr",
+      "github": "https://github.com/tyreepearson/resellr",
+      "preview": { // Add preview for RESELLR
+        "type": "svg",
+        "src": "/images/portfolio/resellr-icon.svg"
+      }
     }
   ],
   
   experience: [
     {
-      title: "SENIOR FRONTEND NETRUNNER",
-      company: "Arasaka Digital",
-      duration: "2021 - PRESENT",
-      description: "Led development of next-gen neural interfaces for corporate clients. Implemented secure, high-performance web applications with cutting-edge animation and interaction patterns.",
-      skills: ["Svelte", "WebGL", "GSAP", "Three.js", "TypeScript"]
+      "title": "CHIEF TECHNOLOGY OFFICER",
+      "company": "Penhole",
+      "duration": "JUNE 2019 - PRESENT",
+      "description": "Founded and lead technology strategy for a social benefit platform connecting users to political representatives. Built and scaled engineering teams while securing acceptance into Capital Factory accelerator program.",
+      "skills": ["React Native", "Firebase", "MongoDB", "Product Strategy", "Team Leadership"]
     },
     {
-      title: "UI/UX ENGINEER",
-      company: "Militech Solutions",
-      duration: "2018 - 2021",
-      description: "Designed and implemented combat-ready interfaces for tactical applications. Created motion design systems and interaction patterns for mission-critical software.",
-      skills: ["React", "Framer Motion", "Figma", "SASS", "Redux"]
+      "title": "STAFF SALES ENGINEER",
+      "company": "Prefect",
+      "duration": "JUNE 2024 - PRESENT",
+      "description": "Lead technical pre-sales activities, delivering demonstrations of data workflow automation solutions using custom Python applications. Create and maintain cloud architecture diagrams spanning Kubernetes and Serverless environments for Fortune 500 clients.",
+      "skills": ["Python", "Streamlit", "Kubernetes", "Cloud Architecture", "Data Engineering"]
     },
     {
-      title: "FULL-STACK DEVELOPER",
-      company: "Trauma Team International",
-      duration: "2016 - 2018",
-      description: "Built responsive emergency dispatch systems capable of handling high-traffic crisis situations. Implemented real-time monitoring dashboards for field operations.",
-      skills: ["Angular", "Node.js", "MongoDB", "Socket.io", "Express"]
-    }
+      "title": "SOLUTIONS ARCHITECT / PROFESSIONAL SERVICES",
+      "company": "Akeyless",
+      "duration": "APRIL 2023 - JUNE 2024",
+      "description": "Led enterprise security implementations and technical enablement programs. Deployed DevSecOps solutions in Azure Kubernetes environments and managed cross-team discovery processes. Reduced demo environment costs by 50% through automation.",
+      "skills": ["DevSecOps", "Kubernetes", "Terraform", "Azure", "Security Architecture"]
+    },
+    {
+      "title": "SOLUTIONS ENGINEER",
+      "company": "HashiCorp",
+      "duration": "JULY 2021 - APRIL 2023",
+      "description": "Conducted technical discovery and delivered POCs for enterprise clients exploring Terraform Cloud and Vault. Delivered workshops to Fortune 500 companies and prestigious institutions while exceeding sales quotas through effective technical pre-sales.",
+      "skills": ["Terraform", "Vault", "GitOps", "Infrastructure as Code", "Cloud Architecture"]
+    },
+    {
+      "title": "ENTERPRISE CLOUD ARCHITECT",
+      "company": "Oracle",
+      "duration": "JULY 2019 - JULY 2021",
+      "description": "Provided technical expertise throughout the sales cycle for Oracle Cloud Infrastructure. Developed Python scripts for enterprise clients that reduced environment management time from one week to two hours.",
+      "skills": ["Python", "Oracle Cloud", "API Integration", "Cloud Migration", "Enterprise Architecture"]
+    },
+
   ],
   
   skills: {

@@ -6,13 +6,15 @@
   // Define component properties
   export let title: string = "CYBERPUNK DEV";
   export let subtitle: string = "PORTFOLIO_2077";
-  export let description: string = "Welcome to my digital portfolio. Navigate with arrow keys and press [ENTER] to select an option.";
+  // Convert description to a const since it's not passed in as a prop
+  export const description: string = "Welcome to my digital portfolio. Navigate with arrow keys and press [ENTER] to select an option.";
   
   // Setup event dispatcher
   const dispatch = createEventDispatcher();
   
   // Menu options
   export let options = [
+    { id: "about", text: "ABOUT ME", description: "View profile details and personal information" },
     { id: "skills", text: "TECHNICAL SKILLS", description: "Browse technical expertise and proficiency ratings" },
     { id: "projects", text: "RECENT PROJECTS", description: "View portfolio highlights and case studies" },
     { id: "experience", text: "WORK EXPERIENCE", description: "Explore professional history and achievements" },
@@ -67,7 +69,15 @@
             class="menu-option {selectedOption === i ? 'selected' : ''}"
             data-id={option.id}
             on:click={() => selectOption(option.id)}
+            on:keydown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectOption(option.id);
+              }
+            }}
             on:mouseenter={() => { selectedOption = i }}
+            role="button"
+            tabindex="0"
           >
             <div class="option-marker">{selectedOption === i ? '>' : ''}</div>
             <div class="option-text">{option.text}</div>

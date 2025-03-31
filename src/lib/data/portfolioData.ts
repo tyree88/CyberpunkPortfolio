@@ -68,7 +68,7 @@ export const portfolioData: PortfolioData = { // Apply the type
       "skills": ["React Native", "Firebase", "MongoDB", "Product Strategy", "Team Leadership"]
     },
     {
-      "title": "STAFF SALES ENGINEER",
+      "title": "SOLUTIONS ENGINEER/ SOLUTIONS ARCHITECT",
       "company": "Prefect",
       "duration": "JUNE 2024 - PRESENT",
       "description": "Lead technical pre-sales activities, delivering demonstrations of data workflow automation solutions using custom Python applications. Create and maintain cloud architecture diagrams spanning Kubernetes and Serverless environments for Fortune 500 clients.",

@@ -4,9 +4,9 @@
   import TypewriterText from './TypewriterText.svelte';
 
   // Define component properties
-  export let title: string = "CYBERPUNK DEV";
+  export const title: string = "CYBERPUNK DEV"; // Changed to const as we're using the logo now
   export let subtitle: string = "PORTFOLIO_2077";
-  // Convert description to a const since it's not passed in as a prop
+  // Use const for description since it's not passed in as a prop
   export const description: string = "Welcome to my digital portfolio. Navigate with arrow keys and press [ENTER] to select an option.";
   
   // Setup event dispatcher
@@ -51,9 +51,9 @@
   <div class="noise-overlay"></div>
   
   <div class="start-screen">
-    <!-- Title Section -->
+    <!-- Title Section - Replaced with logo image -->
     <div class="title-container">
-      <GlitchText text={title} class_name="hero-title" />
+      <img src="/images/tyreepearson-logo.png" alt="CYBERPUNK DEV" class="logo-image" />
       <div class="subtitle">{subtitle}</div>
     </div>
     
@@ -146,12 +146,11 @@
     margin-bottom: 2rem;
   }
   
-  :global(.hero-title) {
-    font-size: 4rem;
-    font-weight: bold;
-    color: #ff004c;
-    text-shadow: 0 0 15px rgba(255, 0, 76, 0.8);
+  .logo-image {
+    max-width: 450px;
+    height: auto;
     margin-bottom: 1rem;
+    filter: drop-shadow(0 0 15px rgba(255, 0, 76, 0.8));
   }
   
   .subtitle {
@@ -162,13 +161,17 @@
   }
   
   .menu-container {
-    background-color: rgba(0, 0, 0, 0.75);
+    background: linear-gradient(135deg, 
+      rgba(0, 30, 60, 0.9) 0%, 
+      rgba(5, 15, 40, 0.95) 50%,
+      rgba(20, 0, 30, 0.9) 100%
+    );
     border: 1px solid rgba(0, 255, 255, 0.3);
     border-left: 4px solid #00ffff;
     width: 90%;
     max-width: 800px;
     padding: 2rem;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
   }
   
   .menu-title h2 {
@@ -281,10 +284,15 @@
   
   /* Responsive styles */
   @media (max-width: 768px) {
-    :global(.hero-title) { font-size: 3rem; }
+    .logo-image { max-width: 300px; }
     .subtitle { font-size: 1.5rem; }
     .menu-container { width: 95%; padding: 1.5rem; }
     .menu-title h2 { font-size: 1.8rem; }
     .menu-option { font-size: 1.1rem; }
+  }
+  
+  @media (max-width: 480px) {
+    .logo-image { max-width: 250px; }
+    .subtitle { font-size: 1.2rem; }
   }
 </style>

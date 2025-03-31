@@ -2,36 +2,48 @@
   import { onMount, afterUpdate } from 'svelte';
   import { gsap } from 'gsap';
   import { portfolioData } from '$lib/data/portfolioData';
+  import type { Skill } from '$lib/types/skills'; // Import Skill type
   import GlitchText from './GlitchText.svelte';
   import TypewriterText from './TypewriterText.svelte';
   import ProjectCard from './ProjectCard.svelte';
   import ContactForm from './ContactForm.svelte';
-  
+  import CyberSkillVisualization from './CyberSkillVisualization.svelte'; // Import the new component
+
   export let currentSection: string = 'about';
   let contentWrapper: HTMLElement;
-  
+
+  // Format skills data for the visualization component
+  $: formattedSkills = Object.entries(portfolioData.skills).flatMap(([category, skillsInCategory]) =>
+    skillsInCategory.map((skill, index) => ({
+      id: `${category.toLowerCase().replace(/\s+/g, '-')}-${skill.name.toLowerCase().replace(/\s+/g, '-')}-${index}`, // Generate unique ID
+      name: skill.name,
+      level: skill.level,
+      category: category // Add category from the key
+    }))
+  ) as Skill[]; // Assert type
+
   afterUpdate(() => {
     // Animation between content changes
     if (contentWrapper) {
       const timeline = gsap.timeline();
-      
+
       timeline
-        .to(contentWrapper, { 
-          opacity: 0, 
-          x: 10, 
+        .to(contentWrapper, {
+          opacity: 0,
+          x: 10,
           duration: 0.2,
           ease: 'power1.out'
         })
-        .set(contentWrapper, { 
-          x: -10 
+        .set(contentWrapper, {
+          x: -10
         })
-        .to(contentWrapper, { 
-          opacity: 1, 
-          x: 0, 
+        .to(contentWrapper, {
+          opacity: 1,
+          x: 0,
           duration: 0.3,
           ease: 'power1.in'
         });
-        
+
       // Random glitch effect
       if (Math.random() > 0.7) {
         timeline.add(() => {
@@ -46,12 +58,12 @@
       }
     }
   });
-  
+
   onMount(() => {
     // Initial animation
-    gsap.from(contentWrapper, { 
-      opacity: 0, 
-      duration: 0.5 
+    gsap.from(contentWrapper, {
+      opacity: 0,
+      duration: 0.5
     });
   });
 </script>
@@ -66,6 +78,10 @@
         <div class="badge active">
           HACKING
         </div>
+      {:else if currentSection === 'skills'}
+         <div class="badge active"> <!-- Make skills badge active too -->
+          AUGMENTS
+        </div>
       {:else}
         <div class="badge">
           Z
@@ -73,7 +89,7 @@
       {/if}
     </div>
   </div>
-  
+
   <div class="content-wrapper" bind:this={contentWrapper}>
     {#if currentSection === 'about'}
       <div class="about-section">
@@ -83,11 +99,11 @@
             <div class="name">{portfolioData.about.name}</div>
             <div class="title">{portfolioData.about.title}</div>
           </div>
-          
+
           <div class="bio-text">
             <TypewriterText text={portfolioData.about.bio} speed={30} />
           </div>
-          
+
           <div class="stats-display">
             <div class="stat-row">
               <div class="stat-label">SPECIALTY</div>
@@ -137,29 +153,13 @@
         </div>
       </div>
     {:else if currentSection === 'skills'}
+      <!-- === REPLACED SKILLS SECTION === -->
       <div class="skills-section">
         <h2>CYBERNETIC AUGMENTATIONS</h2>
-        <div class="skills-container">
-          {#each Object.entries(portfolioData.skills) as [category, skills]}
-            <div class="skill-category">
-              <h3 class="category-title">{category}</h3>
-              <div class="skills-grid">
-                {#each skills as skill}
-                  <div class="skill-item">
-                    <div class="skill-name">{skill.name}</div>
-                    <div class="skill-level">
-                      <div class="level-bar">
-                        <div class="level-fill" style="width: {skill.level}%"></div>
-                      </div>
-                      <div class="level-text">{skill.level}%</div>
-                    </div>
-                  </div>
-                {/each}
-              </div>
-            </div>
-          {/each}
-        </div>
+        <!-- Use the new visualization component -->
+        <CyberSkillVisualization skills={formattedSkills} radius={220} coreSize={90} />
       </div>
+      <!-- === END REPLACED SECTION === -->
     {:else if currentSection === 'contact'}
       <div class="contact-section">
         <h2>ESTABLISH CONNECTION</h2>
@@ -170,10 +170,6 @@
               <span class="contact-value">{portfolioData.contact.email}</span>
             </div>
             <div class="contact-item">
-              <span class="contact-label">COMM LINK</span>
-              <span class="contact-value">{portfolioData.contact.phone}</span>
-            </div>
-            <div class="contact-item">
               <span class="contact-label">NET PRESENCE</span>
               <span class="contact-value">
                 <a href={portfolioData.contact.linkedin} target="_blank" rel="noopener" class="social-link">LINKEDIN</a>
@@ -181,7 +177,7 @@
               </span>
             </div>
           </div>
-          
+
           <ContactForm />
         </div>
       </div>
@@ -232,6 +228,8 @@
     align-items: center;
     justify-content: center;
     font-size: 1rem;
+    text-transform: uppercase; /* Ensure text fits */
+    font-weight: bold;
   }
 
   .badge.active {
@@ -246,7 +244,24 @@
     flex: 1;
     padding: 1.5rem;
     overflow-y: auto;
+    /* Ensure the wrapper allows the visualization to take space */
+    display: flex; /* Use flex for the direct child */
+    flex-direction: column; /* Stack content vertically */
   }
+
+  /* Ensure skills section takes available space */
+  .skills-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* Prevent flex item from growing indefinitely */
+  }
+  /* Make visualization component fill the skills section */
+  .skills-section > :global(.skill-visualization-container) {
+      flex: 1;
+      min-height: 400px; /* Ensure minimum height */
+  }
+
 
   h2 {
     color: #ECD06F;
@@ -387,67 +402,7 @@
     font-size: 0.7rem;
   }
 
-  /* Skills Section */
-  .skills-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .skill-category {
-    margin-bottom: 1.5rem;
-  }
-
-  .category-title {
-    color: #49c5b6;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-
-  .skill-item {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 0.8rem;
-    border-left: 3px solid #49c5b6;
-  }
-
-  .skill-name {
-    margin-bottom: 0.5rem;
-    color: #fff;
-  }
-
-  .skill-level {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .level-bar {
-    flex: 1;
-    height: 5px;
-    background-color: rgba(73, 197, 182, 0.2);
-    overflow: hidden;
-  }
-
-  .level-fill {
-    height: 100%;
-    background-color: #49c5b6;
-  }
-
-  .level-text {
-    color: #49c5b6;
-    font-size: 0.8rem;
-    min-width: 40px;
-    text-align: right;
-  }
+  /* Skills Section - Styles removed as visualization handles its own */
 
   /* Contact Section */
   .connection-details {
@@ -529,7 +484,8 @@
 
   @media (max-width: 768px) {
     .content-panel {
-      height: 60vh;
+      /* Adjust height if needed on mobile, but visualization might need space */
+      /* height: 60vh; */
     }
   }
 </style>

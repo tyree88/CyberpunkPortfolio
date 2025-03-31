@@ -73,7 +73,7 @@
       </div>
     </div>
     
-    <div class="copyright">© 2077 CYBERPUNK DEV. ALL RIGHTS RESERVED.</div>
+    <div class="copyright">© 2025 TYREE PEARSON. ALL RIGHTS RESERVED.</div>
   </div>
 </div>
 

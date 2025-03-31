@@ -6,7 +6,7 @@ export const portfolioData: PortfolioData = { // Apply the type
   about: {
     name: "TYREE PEARSON",
     title: "NETRUNNER / FULL-STACK VIBE CODER",
-    specialty: "Web Development & UI/UX Design",
+    specialty: "Technical Consulting|Solutions Engineering|Full Stack Development",
     location: "Night City",
     status: "AVAILABLE FOR HIRE",
     bio: "Software developer specializing in web frameworks like Svelte, React, and Three.js. I use modern AI-powered code editors for efficient development and collaboration. Also experienced with low-code platforms for rapid prototyping. My focus is creating immersive digital experiences with cutting-edge technologies, combining different tools to build unique and engaging user interfaces."
@@ -25,7 +25,7 @@ export const portfolioData: PortfolioData = { // Apply the type
       }
     },
     {
-      "title": "DATA SCIENCE & AUTOMATION HUB",
+      "title": "DATA & AUTOMATION HUB",
       "description": "A collection of Python-based data science projects featuring predictive analytics, automation tools, and data pipelines. Includes interactive dashboards for data visualization, demonstrations of machine learning models, and automated data processing with performance tracking tools.",
       "technologies": ["Python", "Pandas", "Scikit-learn", "Streamlit", "Prefect", "Matplotlib", "AWS/Azure/GCP", "Docker"],
       "link": "https://tyreepearson.streamlit.app/",

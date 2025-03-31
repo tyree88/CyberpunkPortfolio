@@ -10,7 +10,7 @@
     name: string;
     ramCost: number;
     icon: string;
-    category: 'easy' | 'medium' | 'advanced';
+    category: 'expert' | 'intermediate' | 'advanced';
     isLocked?: boolean;
   };
 
@@ -20,35 +20,35 @@
       name: 'PROFILE', 
       ramCost: 2, 
       icon: '🔍', 
-      category: 'easy' 
+      category: 'whoami' 
     },
     { 
       id: 'projects', 
       name: 'PROJECTS', 
       ramCost: 5, 
       icon: '💻', 
-      category: 'medium' 
+      category: 'ls -la' 
     },
     { 
       id: 'experience', 
       name: 'EXPERIENCE', 
       ramCost: 6, 
       icon: '🧠', 
-      category: 'advanced' 
+      category: 'history' 
     },
     { 
       id: 'skills', 
       name: 'SKILLS', 
       ramCost: 3, 
       icon: '🔧', 
-      category: 'medium' 
+      category: 'chmod' 
     },
     { 
       id: 'contact', 
       name: 'PING', 
       ramCost: 1, 
       icon: '📡', 
-      category: 'easy' 
+      category: 'telnet' 
     }
   ];
 

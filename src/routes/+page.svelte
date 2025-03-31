@@ -6,7 +6,7 @@
   import CyberdeckHeader from '$lib/components/CyberdeckHeader.svelte';
   import QuickhackList from '$lib/components/QuickhackList.svelte';
   import ContentPanel from '$lib/components/ContentPanel.svelte';
-  import HeroSection from '$lib/components/HeroSection.svelte';
+  import EnhancedHeroSection from '$lib/components/EnhancedHeroSection.svelte';
 
   // Initialize loaded to true for server-side rendering
   let loaded = !browser;
@@ -116,25 +116,7 @@
   </div>
 {:else if !showMainContent}
   <div class="hero-container">
-    <HeroSection>
-      <button 
-        slot="after-description"
-        class="enter-button" 
-        on:click={enterMainContent}
-        on:keydown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            enterMainContent();
-          }
-        }}
-        aria-label="Enter Cyberdeck"
-      >
-        <span class="enter-text">ENTER CYBERDECK</span>
-        <div class="button-corner top-left"></div>
-        <div class="button-corner top-right"></div>
-        <div class="button-corner bottom-left"></div>
-        <div class="button-corner bottom-right"></div>
-      </button>
-    </HeroSection>
+    <EnhancedHeroSection />
   </div>
 {:else}
   <div class="main-container">
@@ -220,68 +202,7 @@
     width: 100%;
   }
   
-  .enter-button {
-    position: relative;
-    margin: 2rem auto 0 auto;
-    display: block;
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 1px solid #49c5b6;
-    padding: 1rem 2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 10;
-  }
-  
-  .enter-button:hover {
-    background-color: rgba(73, 197, 182, 0.1);
-    box-shadow: 0 0 10px rgba(73, 197, 182, 0.5);
-  }
-  
-  .enter-button:hover .enter-text {
-    color: #fff;
-  }
-  
-  .enter-text {
-    color: #49c5b6;
-    font-size: 1rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  
-  .button-corner {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-  }
-  
-  .top-left {
-    top: -1px;
-    left: -1px;
-    border-top: 2px solid #ff5252;
-    border-left: 2px solid #ff5252;
-  }
-  
-  .top-right {
-    top: -1px;
-    right: -1px;
-    border-top: 2px solid #ff5252;
-    border-right: 2px solid #ff5252;
-  }
-  
-  .bottom-left {
-    bottom: -1px;
-    left: -1px;
-    border-bottom: 2px solid #ff5252;
-    border-left: 2px solid #ff5252;
-  }
-  
-  .bottom-right {
-    bottom: -1px;
-    right: -1px;
-    border-bottom: 2px solid #ff5252;
-    border-right: 2px solid #ff5252;
-  }
+  /* Hero container styles */
 
   .main-container {
     display: flex;
@@ -300,14 +221,6 @@
   @media (max-width: 768px) {
     .content-container {
       flex-direction: column;
-    }
-    
-    .enter-button {
-      padding: 0.8rem 1.5rem;
-    }
-    
-    .enter-text {
-      font-size: 0.9rem;
     }
   }
 </style>

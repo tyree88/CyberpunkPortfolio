@@ -9,13 +9,13 @@ export const portfolioData: PortfolioData = { // Apply the type
     specialty: "Web Development & UI/UX Design",
     location: "Night City",
     status: "AVAILABLE FOR HIRE",
-    bio: "Vibe developer building software with web frameworks like Svelte, React, and Three.js. Using AI code editors like Cursor, Winsurf and Replit to cross collaborate and develop. Also using low code no code web development sites like Loveable, Bolt.new, Webflow, and Framer. Expert in creating immersive digital experiences with cutting-edge technologies. Proficient in combining technologies to create unique and engaging user experiences."
+    bio: "Software developer specializing in web frameworks like Svelte, React, and Three.js. I use modern AI-powered code editors for efficient development and collaboration. Also experienced with low-code platforms for rapid prototyping. My focus is creating immersive digital experiences with cutting-edge technologies, combining different tools to build unique and engaging user interfaces."
   },
   
   projects: [
     {
       "title": "PENHOLE",
-      "description": "Social platform connecting citizens with political representatives, providing unbiased information on voting records to foster common ground dialogue. Built with React Native on Firebase Cloud with MongoDB.",
+      "description": "A mobile and web platform that connects citizens with their elected representatives. Provides factual information on voting records to encourage informed dialogue between voters and politicians. Built using React Native with Firebase and MongoDB backend.",
       "technologies": ["React Native", "Firebase", "MongoDB", "Python", "Data Analytics"],
       "link": "https://penhole.com/",
       "github": "https://github.com/yourusername/penhole",
@@ -26,7 +26,7 @@ export const portfolioData: PortfolioData = { // Apply the type
     },
     {
       "title": "DATA SCIENCE & AUTOMATION HUB",
-      "description": "Interactive data science portfolio showcasing a collection of Python-powered projects spanning predictive analytics, workflow automation, and cloud-based ETL pipelines. Features include real-time data visualization dashboards, machine learning model demonstrations, and automated data processing workflows with comprehensive metrics tracking.",
+      "description": "A collection of Python-based data science projects featuring predictive analytics, automation tools, and data pipelines. Includes interactive dashboards for data visualization, demonstrations of machine learning models, and automated data processing with performance tracking tools.",
       "technologies": ["Python", "Pandas", "Scikit-learn", "Streamlit", "Prefect", "Matplotlib", "AWS/Azure/GCP", "Docker"],
       "link": "https://tyreepearson.streamlit.app/",
       "github": "https://github.com/tyreepearson/data-science-portfolio",
@@ -37,7 +37,7 @@ export const portfolioData: PortfolioData = { // Apply the type
     },
     {
       "title": "POLIGRAPH",
-      "description": "Decentralized political data platform empowering citizens through transparent access to voting records and legislative information. Built on decentralized protocols to ensure data integrity while connecting users directly with their representatives without bias or intermediaries.",
+      "description": "An open political data platform that gives citizens access to voting records and legislative information. Uses modern web technologies to ensure data accuracy and provides direct connections between voters and representatives without third-party filtering.",
       "technologies": ["React", "Bluesky/ATProtocol", "Neo4j", "Python", "LangChain", "Hugging Face Transformers"],
       "link": "https://tyreepearson.replit.app/projects/poligraph",
       "github": "https://github.com/tyreepearson/poligraph",
@@ -48,7 +48,7 @@ export const portfolioData: PortfolioData = { // Apply the type
     },
     {
       "title": "RESELLR",
-      "description": "All-in-one management platform for e-commerce resellers that consolidates inventory, pricing, and analytics across multiple marketplaces. Optimizes listing strategies and automates cross-platform synchronization to maximize profit margins and streamline operations.",
+      "description": "A comprehensive management tool for e-commerce sellers working across multiple platforms. Helps track inventory, manage pricing, and analyze sales data in one place. Features automated tools to synchronize listings across different marketplaces and optimize pricing strategies.",
       "technologies": ["Loveable", "Bolt.new", "Webflow", "Framer", "21st.dev"],
       "link": "https://tyreepearson.replit.app/projects/resellr",
       "github": "https://github.com/tyreepearson/resellr",

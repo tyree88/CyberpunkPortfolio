@@ -118,9 +118,9 @@
             </div>
 
             <div class="stats-display">
-              <div class="stat-row">
+              <div class="stat-row specialty-row">
                 <div class="stat-label">SPECIALTY</div>
-                <div class="stat-value">{portfolioData.about.specialty}</div>
+                <div class="stat-value specialty-value">{portfolioData.about.specialty}</div>
               </div>
               <div class="stat-row">
                 <div class="stat-label">LOCATION</div>
@@ -156,7 +156,7 @@
                 <div class="exp-duration">{job.duration}</div>
               </div>
               <div class="experience-description">
-                <TypewriterText text={job.description} speed={20} />
+                <TypewriterText text={job.description} speed={60} />
               </div>
               <div class="experience-skills">
                 {#each job.skills as skill}
@@ -406,11 +406,16 @@
   }
 
   .stat-row {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 120px 1fr;
     padding: 0.5rem;
     background-color: rgba(0, 0, 0, 0.3);
     border-left: 3px solid #49c5b6;
+  }
+  
+  .specialty-row {
+    grid-template-columns: 120px 1fr;
+    margin-bottom: 5px;
   }
 
   .stat-label {
@@ -420,8 +425,20 @@
 
   .stat-value {
     color: #fff;
+    max-width: 100%;
+    text-wrap: wrap;
+    font-size: 0.85rem;
   }
 
+  .specialty-value {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 5px 8px;
+    border: 1px solid rgba(73, 197, 182, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4) inset;
+    line-height: 1.3;
+  }
+  
   .available {
     color: #4CAF50;
   }

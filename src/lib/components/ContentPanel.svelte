@@ -114,7 +114,7 @@
             </div>
 
             <div class="bio-text info-box">
-              <TypewriterText text={portfolioData.about.bio} speed={30} />
+              <TypewriterText text={portfolioData.about.bio} speed={120} />
             </div>
 
             <div class="stats-display">
@@ -156,7 +156,7 @@
                 <div class="exp-duration">{job.duration}</div>
               </div>
               <div class="experience-description">
-                <TypewriterText text={job.description} speed={5} />
+                <TypewriterText text={job.description} speed={20} />
               </div>
               <div class="experience-skills">
                 {#each job.skills as skill}

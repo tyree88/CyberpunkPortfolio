@@ -6,7 +6,7 @@ export const portfolioData: PortfolioData = { // Apply the type
   about: {
     name: "TYREE PEARSON",
     title: "NETRUNNER / FULL-STACK VIBE CODER",
-    specialty: "Technical Consulting|Solutions Engineering|Full Stack Development",
+    specialty: "Technical Consulting • Solutions Engineering • Full Stack Dev",
     location: "Night City",
     status: "AVAILABLE FOR HIRE",
     bio: "Software developer specializing in web frameworks like Svelte, React, and Three.js. I use modern AI-powered code editors for efficient development and collaboration. Also experienced with low-code platforms for rapid prototyping. My focus is creating immersive digital experiences with cutting-edge technologies, combining different tools to build unique and engaging user interfaces."

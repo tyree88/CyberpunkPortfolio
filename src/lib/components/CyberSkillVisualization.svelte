@@ -90,64 +90,85 @@
 
   // Recalculate on resize
   let resizeObserver: ResizeObserver;
-  onMount(() => {
-    if (container) {
-        resizeObserver = new ResizeObserver(() => {
-            calculateLayout();
-        });
-        resizeObserver.observe(container);
+  let animationsInitialized = false;
+  
+  // Function to initialize animations when elements are ready
+  function initializeAnimations() {
+    // Check if elements exist before creating animations
+    const nodeWrappers = document.querySelectorAll('.skill-node-wrapper');
+    const centralCore = document.querySelector('.central-core');
+    const connectingLines = document.querySelectorAll('.connecting-line');
+    
+    if (nodeWrappers.length > 0 && !animationsInitialized) {
+      // Initial animation for nodes appearing
+      gsap.from(nodeWrappers, {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: 'back.out(1.7)',
+        delay: 0.5
+      });
+
+      // Subtle floating/breathing animation to nodes
+      gsap.to(nodeWrappers, {
+        y: '+=5',
+        x: '+=3',
+        rotation: '+=2',
+        repeat: -1,
+        yoyo: true,
+        duration: 3,
+        ease: 'sine.inOut',
+        stagger: {
+          each: 0.2,
+          from: 'random'
+        }
+      });
+      
+      animationsInitialized = true;
     }
-
-    // Initial animation for nodes appearing
-    gsap.from('.skill-node-wrapper', {
-      opacity: 0,
-      scale: 0.5,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: 'back.out(1.7)',
-      delay: 0.5
-    });
-
-    // Subtle floating/breathing animation to nodes
-    gsap.to('.skill-node-wrapper', {
-      y: '+=5',
-      x: '+=3',
-      rotation: '+=2',
-      repeat: -1,
-      yoyo: true,
-      duration: 3,
-      ease: 'sine.inOut',
-      stagger: {
-        each: 0.2,
-        from: 'random'
-      }
-    });
-
-     // Core animation
-     gsap.to('.central-core', {
+    
+    if (centralCore) {
+      // Core animation
+      gsap.to(centralCore, {
         boxShadow: `0 0 15px 5px var(--core-shadow), inset 0 0 10px 2px var(--core-shadow)`,
         repeat: -1,
         yoyo: true,
         duration: 2,
         ease: 'sine.inOut'
-     });
-
-     // Line animation (example: drawing effect)
-     gsap.from('.connecting-line', {
-        drawSVG: "0%", // Requires GSAP DrawSVGPlugin if you have Club GreenSock
-        // Fallback: Animate stroke-dashoffset if DrawSVGPlugin is not available
-        // strokeDasharray: 500, // Estimate length or calculate dynamically
-        // strokeDashoffset: 500,
+      });
+    }
+    
+    if (connectingLines.length > 0) {
+      // Line animation (simplified to avoid missing DrawSVGPlugin)
+      gsap.from(connectingLines, {
+        opacity: 0,
         duration: 1,
         stagger: 0.1,
         delay: 0.8, // After nodes appear
         ease: 'power1.inOut'
-     });
+      });
+    }
+  }
+  
+  onMount(() => {
+    if (container) {
+      resizeObserver = new ResizeObserver(() => {
+        calculateLayout();
+        
+        // Try to initialize animations after layout calculation
+        setTimeout(initializeAnimations, 300);
+      });
+      resizeObserver.observe(container);
+      
+      // Initial attempt to initialize animations
+      setTimeout(initializeAnimations, 300);
+    }
 
     return () => {
-        if (resizeObserver && container) {
-            resizeObserver.unobserve(container);
-        }
+      if (resizeObserver && container) {
+        resizeObserver.unobserve(container);
+      }
     };
   });
 

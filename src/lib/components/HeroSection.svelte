@@ -196,16 +196,7 @@
         ease: "steps(3)" // Cycle through a few states quickly
       }, "<0.2"); // Start slightly after CPU
 
-    // Add scan effect elements (if needed, or create a dedicated component)
-    if (cyberCircuits) {
-      const scanLine = document.createElement('div');
-      scanLine.classList.add('scan-line');
-      cyberCircuits.appendChild(scanLine);
-
-      const scanInterference = document.createElement('div');
-      scanInterference.classList.add('scan-interference');
-      cyberCircuits.appendChild(scanInterference);
-    }
+    // Scan effects are now added directly in the HTML markup
 
   });
 
@@ -218,6 +209,11 @@
 </script>
 
 <div class="hero-section" bind:this={heroContainer}>
+  <!-- Cyberpunk 2077 style UI elements -->
+  <div class="scan-line"></div>
+  <div class="scan-interference"></div>
+  <div class="noise-overlay"></div>
+  
   <div class="hero-content">
     <div class="title-section">
       <GlitchText text={title} class_name="hero-title" />
@@ -307,12 +303,51 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
     overflow: hidden;
     padding: 2rem;
     /* Add filter property for glitch effect */
     filter: hue-rotate(0deg) brightness(1) contrast(1);
-    will-change: filter; /* Performance hint for filter animation */
+    will-change: filter, transform; /* Performance hint for animations */
+    animation: heroGlitch 15s ease-in-out infinite;
+  }
+  
+  /* Cyberpunk UI glitch effect */
+  @keyframes heroGlitch {
+    0%, 100% {
+      filter: none;
+    }
+    92% {
+      filter: none;
+    }
+    92.5% {
+      filter: brightness(1.1) contrast(1.3) hue-rotate(-5deg);
+      transform: translate(-0.5px, 0);
+    }
+    93% {
+      filter: brightness(0.9) contrast(1.2) hue-rotate(5deg);
+      transform: translate(0.5px, 0);
+    }
+    93.5% {
+      filter: none;
+      transform: none;
+    }
+    94.5% {
+      filter: brightness(1.2) contrast(0.9);
+      transform: translate(-1px, 0.5px);
+    }
+    95% {
+      filter: none;
+      transform: none;
+    }
+    95.5% {
+      filter: brightness(0.8) contrast(1.3);
+      transform: translate(1px, -0.5px);
+    }
+    96% {
+      filter: none;
+      transform: none;
+    }
   }
 
   .hero-section::before {
@@ -322,28 +357,65 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* New Cyberpunk Gradient */
+    /* Cyberpunk 2077 style background with image and overlays */
     background:
+      /* Dark overlay gradient */
       linear-gradient(
         135deg,
-        rgba(13, 13, 26, 0.95) 0%, /* Dark Blue/Purple */
-        rgba(var(--color-red-rgb), 0.3) 30%, /* Red/Pink streak */
-        rgba(26, 26, 51, 0.8) 40%,
-        rgba(var(--color-teal-rgb), 0.4) 65%, /* Teal streak */
-        rgba(13, 13, 26, 0.95) 100% /* Dark Blue/Purple */
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.7) 100%
       ),
-      /* Optional subtle noise overlay */
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23ffffff' fill-opacity='0.02' d='M0 2h2v2H0zM2 0h2v2H2z'/%3E%3C/svg%3E");
-    background-size: 400% 400%, 4px 4px; /* Enlarge gradient for animation, keep noise size */
+      /* Cyberpunk yellow glitch effect */
+      radial-gradient(
+        at 70% 20%,
+        rgba(236, 208, 111, 0.4) 0%,
+        transparent 50%
+      ),
+      /* Cyberpunk blue/teal accent */
+      radial-gradient(
+        at 30% 80%,
+        rgba(73, 197, 182, 0.4) 0%,
+        transparent 50%
+      ),
+      /* Actual background image */
+      url('/images/backgrounds/CyberpunkBackground.jpeg');
+    background-size: 400% 400%, 100% 100%, 100% 100%, cover;
+    background-position: 0 0, 0 0, 0 0, center center;
     z-index: 0;
     opacity: 1;
-    animation: subtleGradientShift 25s ease infinite; /* Add animation */
+    /* Blend modes for better integration */
+    background-blend-mode: normal, overlay, overlay, normal;
+    animation: subtleGradientShift 25s ease infinite, backgroundGlitch 10s ease-in-out infinite alternate;
   }
 
   @keyframes subtleGradientShift {
-    0% { background-position: 0% 50%; } /* Start position */
-    50% { background-position: 100% 50%; } /* Move horizontally */
-    100% { background-position: 0% 50%; } /* Return to start */
+    0% { background-position: 0% 50%, 0 0, 0 0, center center; } /* Start position */
+    50% { background-position: 100% 50%, 0 0, 0 0, center center; } /* Move horizontally */
+    100% { background-position: 0% 50%, 0 0, 0 0, center center; } /* Return to start */
+  }
+  
+  @keyframes backgroundGlitch {
+    0%, 100% {
+      filter: brightness(1) contrast(1) hue-rotate(0deg);
+      transform: scale(1) translate(0, 0);
+    }
+    20% {
+      filter: brightness(1.05) contrast(1.05) hue-rotate(2deg);
+      transform: scale(1.01) translate(-0.2%, 0.1%);
+    }
+    40% {
+      filter: brightness(0.98) contrast(0.98) hue-rotate(-1deg);
+      transform: scale(1) translate(0.1%, -0.1%);
+    }
+    60% {
+      filter: brightness(1.02) contrast(1.02) hue-rotate(0deg);
+      transform: scale(1.005) translate(0, 0);
+    }
+    80% {
+      filter: brightness(0.95) contrast(1.05) hue-rotate(-2deg);
+      transform: scale(0.995) translate(-0.1%, 0.2%);
+    }
   }
 
   .hero-content {
@@ -549,18 +621,48 @@
   .stat-value { font-size: 0.9rem; color: var(--color-teal); }
   .text-active { color: var(--color-teal); animation: blink 2s infinite; }
 
-  /* Scan line animation (keep if not componentized) */
-  :global(.scan-line) { /* Keep global if created in JS */
+  /* Scan line and cyberpunk effects */
+  .scan-line {
     position: absolute; top: 0; left: 0; width: 100%; height: 3px;
     background: linear-gradient(to right, rgba(var(--color-teal-rgb), 0) 0%, rgba(var(--color-teal-rgb), 0.5) 50%, rgba(var(--color-teal-rgb), 0) 100%);
     z-index: 10; pointer-events: none; animation: scanAnimation 4s linear infinite;
     opacity: 0.7; filter: drop-shadow(0 0 2px rgba(var(--color-teal-rgb), 0.8));
   }
-  :global(.scan-interference) { /* Keep global if created in JS */
+  
+  .scan-interference {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(to bottom, transparent 0%, rgba(var(--color-teal-rgb), 0.02) 50%, transparent 100%);
     z-index: 9; pointer-events: none; animation: interferenceAnimation 4s ease-in-out infinite;
     opacity: 0.3;
+  }
+  
+  /* Cyberpunk 2077 style noise overlay */
+  .noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    z-index: 8;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    animation: noiseAnimation 0.5s steps(1) infinite;
+  }
+  
+  @keyframes noiseAnimation {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-1px, 1px); }
+    20% { transform: translate(1px, -1px); }
+    30% { transform: translate(-1px, -1px); }
+    40% { transform: translate(1px, 1px); }
+    50% { transform: translate(-1px, 0); }
+    60% { transform: translate(1px, 0); }
+    70% { transform: translate(0, 1px); }
+    80% { transform: translate(0, -1px); }
+    90% { transform: translate(1px, -1px); }
+    100% { transform: translate(0, 0); }
   }
 
   @keyframes scanAnimation {

@@ -303,13 +303,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.92); /* Darker background - more authentic to Cyberpunk 2077 */
     overflow: hidden;
     padding: 2rem;
-    /* Add filter property for glitch effect */
-    filter: hue-rotate(0deg) brightness(1) contrast(1);
+    
+    /* Performance optimizations */
     will-change: filter, transform; /* Performance hint for animations */
-    animation: heroGlitch 15s ease-in-out infinite;
+    transform: translateZ(0); /* Force GPU acceleration */
+    
+    /* Base filter for cyberpunk aesthetics */
+    filter: hue-rotate(0deg) brightness(1) contrast(1);
+    
+    /* Authentic Cyberpunk 2077 glitch animation - only runs occasionally */
+    animation: heroGlitch 20s ease-in-out infinite;
+    
+    /* Improved accessibility */
+    color-scheme: dark; /* Inform browsers this is a dark theme */
   }
   
   /* Cyberpunk UI glitch effect */
@@ -357,65 +366,53 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Cyberpunk 2077 style background with image and overlays */
+    /* Authentic Cyberpunk 2077 style background with layered gradients
+       Based on the game's UI design language and color scheme */
     background:
-      /* Dark overlay gradient */
+      /* Deep base gradient - authentic dark Cyberpunk base */
       linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(0, 0, 0, 0.4) 50%,
-        rgba(0, 0, 0, 0.7) 100%
+        165deg,
+        rgba(3, 6, 15, 0.97) 0%,
+        rgba(9, 14, 24, 0.95) 50%,
+        rgba(16, 24, 38, 0.93) 100%
       ),
-      /* Cyberpunk yellow glitch effect */
+      
+      /* Cyberpunk red accent gradient - simulates the game's characteristic red accent */
       radial-gradient(
-        at 70% 20%,
-        rgba(236, 208, 111, 0.4) 0%,
-        transparent 50%
+        circle at 85% 15%,
+        rgba(var(--color-red-rgb), 0.18) 0%,
+        rgba(var(--color-red-rgb), 0.09) 30%,
+        transparent 70%
       ),
-      /* Cyberpunk blue/teal accent */
+      
+      /* Cyberpunk teal scanner gradient - authentic to the game's scanning interface */
       radial-gradient(
-        at 30% 80%,
-        rgba(73, 197, 182, 0.4) 0%,
-        transparent 50%
+        circle at 20% 40%,
+        rgba(var(--color-teal-rgb), 0.22) 0%,
+        rgba(var(--color-teal-rgb), 0.11) 40%,
+        transparent 70%
       ),
-      /* Actual background image */
-      url('/images/backgrounds/CyberpunkBackground.jpeg');
-    background-size: 400% 400%, 100% 100%, 100% 100%, cover;
-    background-position: 0 0, 0 0, 0 0, center center;
+      
+      /* Secondary gold accent - for depth and color diversity */
+      radial-gradient(
+        ellipse at 50% 90%,
+        rgba(var(--color-gold-rgb), 0.16) 0%,
+        rgba(var(--color-gold-rgb), 0.08) 30%,
+        transparent 60%
+      ),
+      
+      /* Authentic digital distortion pattern - mimics the game's digital/glitch aesthetic */
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0%,
+        transparent 99.5%,
+        rgba(var(--color-teal-rgb), 0.1) 99.5%,
+        rgba(var(--color-teal-rgb), 0.1) 100%
+      );
     z-index: 0;
     opacity: 1;
-    /* Blend modes for better integration */
-    background-blend-mode: normal, overlay, overlay, normal;
-    animation: subtleGradientShift 25s ease infinite, backgroundGlitch 10s ease-in-out infinite alternate;
-  }
-
-  @keyframes subtleGradientShift {
-    0% { background-position: 0% 50%, 0 0, 0 0, center center; } /* Start position */
-    50% { background-position: 100% 50%, 0 0, 0 0, center center; } /* Move horizontally */
-    100% { background-position: 0% 50%, 0 0, 0 0, center center; } /* Return to start */
-  }
-  
-  @keyframes backgroundGlitch {
-    0%, 100% {
-      filter: brightness(1) contrast(1) hue-rotate(0deg);
-      transform: scale(1) translate(0, 0);
-    }
-    20% {
-      filter: brightness(1.05) contrast(1.05) hue-rotate(2deg);
-      transform: scale(1.01) translate(-0.2%, 0.1%);
-    }
-    40% {
-      filter: brightness(0.98) contrast(0.98) hue-rotate(-1deg);
-      transform: scale(1) translate(0.1%, -0.1%);
-    }
-    60% {
-      filter: brightness(1.02) contrast(1.02) hue-rotate(0deg);
-      transform: scale(1.005) translate(0, 0);
-    }
-    80% {
-      filter: brightness(0.95) contrast(1.05) hue-rotate(-2deg);
-      transform: scale(0.995) translate(-0.1%, 0.2%);
-    }
+    /* Blend modes authentic to Cyberpunk 2077 UI - creating depth and integrating layers */
+    background-blend-mode: normal, overlay, screen, color-dodge, multiply;
   }
 
   .hero-content {
@@ -436,52 +433,83 @@
   :global(.hero-title) { /* Keep global if GlitchText needs it */
     font-size: 3rem;
     font-weight: bold;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--color-teal); /* Use CSS var */
+    font-family: 'Rajdhani', 'Chakra Petch', sans-serif; /* Cyberpunk style font */
+    letter-spacing: 0.05em;
+    color: var(--color-teal);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(var(--color-teal-rgb), 0.8);
+    line-height: 1.1;
   }
 
   .subtitle {
     font-size: 1.2rem;
-    color: var(--color-red); /* Use CSS var */
-    margin-bottom: 1rem;
+    color: var(--color-gold);
+    font-family: 'Rajdhani', 'Chakra Petch', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 5px rgba(var(--color-gold-rgb), 0.6);
     text-transform: uppercase;
-    letter-spacing: 1px;
   }
 
   .description {
-    font-size: 1rem;
-    max-width: 600px;
-    margin: 0 auto;
-    color: rgba(var(--color-teal-rgb), 0.8); /* Use CSS var */
-    border: 1px solid rgba(var(--color-teal-rgb), 0.3);
-    padding: 1rem;
-    background-color: rgba(0, 0, 0, 0.5);
-    position: relative;
-    /* clip-path is controlled by GSAP */
+    position: relative; /* Need this for pseudo elements */
+    max-width: 800px;
+    background-color: rgba(15, 20, 30, 0.8); /* Darker background */
+    color: var(--color-light);
+    padding: 1.5rem;
+    margin: 1rem auto; /* Centered horizontally */
+    border: 1px solid rgba(var(--color-teal-rgb), 0.5);
+    border-radius: 2px; /* Very slight radius */
+    box-shadow: 0 0 30px rgba(var(--color-teal-rgb), 0.3), inset 0 0 10px rgba(var(--color-teal-rgb), 0.1);
+    font-family: 'Rajdhani', 'Chakra Petch', monospace;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+    
+    /* Cyberpunk-style scan effect - more authentic */
+    backdrop-filter: blur(1px) brightness(1.1); /* Subtle effect */
+    
+    /* Animation for subtle breathing effect - authentic to Cyberpunk scan interfaces */
+    animation: descriptionPulse 8s ease-in-out infinite;
   }
 
-  .description::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 10px;
-    height: 10px;
-    border-top: 2px solid var(--color-teal);
-    border-left: 2px solid var(--color-teal);
-  }
-
+  /* Corner elements - styled more like authentic Cyberpunk 2077 UI with larger, more angular corners */
+  .description::before,
   .description::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
+    border-width: 2px; /* Thicker border */
+    z-index: 1;
+  }
+
+  .description::before {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid var(--color-teal);
+    border-left: 2px solid var(--color-teal);
+    animation: cornerGlow 5s ease-in-out infinite alternate;
+  }
+
+  .description::after {
+    bottom: -1px;
+    right: -1px;
     border-bottom: 2px solid var(--color-teal);
     border-right: 2px solid var(--color-teal);
+    animation: cornerGlow 5s ease-in-out infinite alternate-reverse;
+    box-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.5);
+  }
+  
+  /* Subtle animations for description */
+  @keyframes descriptionPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(var(--color-teal-rgb), 0.1), inset 0 0 8px rgba(var(--color-teal-rgb), 0.05); }
+    50% { box-shadow: 0 0 15px rgba(var(--color-teal-rgb), 0.2), inset 0 0 12px rgba(var(--color-teal-rgb), 0.1); }
+  }
+  
+  @keyframes cornerGlow {
+    0%, 100% { opacity: 0.9; filter: drop-shadow(0 0 2px rgba(var(--color-teal-rgb), 0.7)); }
+    50% { opacity: 1; filter: drop-shadow(0 0 3px rgba(var(--color-teal-rgb), 0.9)); }
   }
 
   .after-description {
@@ -591,35 +619,115 @@
   @keyframes gridSlidePositive { 0% { background-position: 0 0; } 100% { background-position: 100px 100px; } }
   @keyframes gridSlideNegative { 0% { background-position: 0 0; } 100% { background-position: 100px -100px; } }
 
-  /* REMOVED :global styles for .floating-skill, .data-flow-line, .cyber-pulse */
-
-  /* System stats */
+  /* System stats - styled like Cyberpunk 2077 status displays */
   .system-stats {
     position: absolute; /* Position relative to hero-content */
     bottom: 1rem; /* Adjust positioning */
     right: 1rem;
     display: flex;
-    gap: 1rem;
+    gap: 0.8rem;
     z-index: 5; /* Ensure stats are above grid/background */
+    
+    /* Authentic Cyberpunk 2077 container style */
+    padding: 0.3rem;
+    background-color: rgba(5, 10, 15, 0.5);
+    border: 1px solid rgba(var(--color-teal-rgb), 0.2);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(var(--color-teal-rgb), 0.1);
   }
 
   .stat {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.3rem 0.6rem; /* Add some padding */
-    background-color: rgba(0,0,0,0.4); /* Slight background */
-    border: 1px solid rgba(var(--color-teal-rgb), 0.1); /* Faint border */
-    animation: pulseGlow 3s ease-in-out infinite; /* Apply the glow */
+    padding: 0.3rem 0.5rem; /* Slightly reduced padding for more compact look */
+    
+    /* Authentic Cyberpunk 2077 stat panel style */
+    background-color: rgba(10, 15, 25, 0.7); /* Darker, more authentic background */
+    border: 1px solid rgba(var(--color-teal-rgb), 0.3); /* Slightly more visible border */
+    position: relative;
+    
+    /* Corner decorations for tech look */
+    clip-path: polygon(
+      0% 0%, 
+      calc(100% - 8px) 0%, 
+      100% 8px, 
+      100% 100%, 
+      8px 100%, 
+      0% calc(100% - 8px)
+    );
+    
+    /* Authentic Cyberpunk UI animation - subtle pulse effect */
+    animation: statPanelPulse 4s ease-in-out infinite; /* Slower, subtler animation */
+    
+    /* Better performance */
+    will-change: box-shadow, transform;
+    transform: translateZ(0); /* Force GPU acceleration */
   }
+  
+  /* Tech line accent - authentic to Cyberpunk 2077 UI panels */
+  .stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      rgba(var(--color-teal-rgb), 0.1),
+      rgba(var(--color-teal-rgb), 0.5),
+      rgba(var(--color-teal-rgb), 0.1)
+    );
+  }
+  
   .stat-label {
-    font-size: 0.7rem;
-    /* color: var(--color-red); <- Base color set by animation */
-    margin-bottom: 0.1rem;
-    animation: cycleStatColor 6s linear infinite; /* Apply color cycle */
+    font-size: 0.65rem; /* Slightly smaller */
+    font-weight: 600; /* Semi-bold for better visibility */
+    text-transform: uppercase; /* Consistent with Cyberpunk 2077 UI style */
+    letter-spacing: 0.05em; /* Wider letter spacing for tech look */
+    margin-bottom: 0.2rem;
+    
+    /* Authentic color scheme with animation */
+    color: var(--color-gold); /* Use gold color for labels - authentic to CP2077 */
+    text-shadow: 0 0 3px rgba(var(--color-gold-rgb), 0.5); /* Subtle glow */
   }
-  .stat-value { font-size: 0.9rem; color: var(--color-teal); }
-  .text-active { color: var(--color-teal); animation: blink 2s infinite; }
+  
+  .stat-value { 
+    font-size: 0.85rem; 
+    font-family: 'Rajdhani', 'Chakra Petch', monospace; /* More cyberpunk font */
+    font-weight: 500;
+    color: var(--color-teal); /* Use teal for values */
+    text-shadow: 0 0 4px rgba(var(--color-teal-rgb), 0.7); /* Stronger glow for values */
+  }
+  
+  .text-active { 
+    color: var(--color-teal); 
+    position: relative;
+    
+    /* More authentic blinking animation - resembles Cyberpunk 2077 status indicators */
+    animation: activeTextBlink 2.5s infinite; 
+  }
+  
+  /* Cyberpunk 2077 style text blink for "ACTIVE" status */
+  @keyframes activeTextBlink {
+    0%, 100% { opacity: 1; text-shadow: 0 0 4px rgba(var(--color-teal-rgb), 0.7); }
+    40% { opacity: 1; text-shadow: 0 0 4px rgba(var(--color-teal-rgb), 0.7); }
+    50% { opacity: 0.7; text-shadow: 0 0 2px rgba(var(--color-teal-rgb), 0.4); }
+    60% { opacity: 1; text-shadow: 0 0 4px rgba(var(--color-teal-rgb), 0.7); }
+  }
+  
+  /* Authentic panel glow animation */
+  @keyframes statPanelPulse {
+    0%, 100% { 
+      box-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.2);
+      transform: scale(1); 
+    }
+    50% { 
+      box-shadow: 0 0 8px rgba(var(--color-teal-rgb), 0.3); 
+      transform: scale(1.02);
+    }
+  }
 
   /* Scan line and cyberpunk effects */
   .scan-line {

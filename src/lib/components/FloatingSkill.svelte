@@ -73,41 +73,69 @@
         return;
     }
 
-    // Initial delayed appearance
-    gsap.to(element, {
-      opacity: 1,
-      duration: 0.5,
-      delay: initialDelay,
-      ease: "power1.inOut"
-    });
+    // Initial delayed appearance with Cyberpunk-style data load animation
+    gsap.fromTo(element, 
+      {
+        opacity: 0,
+        scale: 0.7,
+        filter: "blur(2px)"
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.3,
+        delay: initialDelay,
+        ease: "power2.out",
+        onComplete: () => {
+          // Flash effect like data loading completion
+          gsap.to(element, {
+            backgroundColor: "rgba(var(--color-teal-rgb), 0.2)",
+            duration: 0.1,
+            yoyo: true,
+            repeat: 1
+          });
+        }
+      }
+    );
 
-    // Floating animation
+    // Performance optimized floating animation - using transforms only
+    // This is more GPU-friendly than animating multiple properties
     floatingTween = gsap.to(element, {
-      x: `random(-15, 15)`,
-      y: `random(-15, 15)`,
-      rotation: `random(-3, 3)`,
-      duration: `random(4, 8)`,
+      x: `random(-10, 10)`, // Smaller range for more subtle motion
+      y: `random(-10, 10)`,
+      rotation: `random(-2, 2)`, // Less rotation
+      duration: `random(5, 7)`, // More consistent durations
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
-      delay: initialDelay + Math.random() * 0.5 // Add slight random offset to start
+      delay: initialDelay + Math.random() * 0.3, // Smaller delay variation
+      
+      // Performance optimization
+      force3D: true, // Forces 3D transforms for better GPU acceleration
+      overwrite: true
     });
 
-    // Pulsing animation (scale and shadow)
+    // Simplified pulsing animation that uses CSS variables for performance
+    // We'll only animate a single property to reduce JS overhead
+    const pulseColor = Math.random() > 0.7 
+      ? 'var(--color-red-rgb)' 
+      : (Math.random() > 0.5 ? 'var(--color-teal-rgb)' : 'var(--color-gold-rgb)');
+    
     pulseTween = gsap.to(element, {
-      scale: `random(0.95, 1.05)`,
-      // Use CSS variables for colors
-      boxShadow: Math.random() > 0.5
-        ? '0 0 8px rgba(var(--color-teal-rgb), 0.7)' // Assumes --color-teal-rgb exists
-        : '0 0 8px rgba(var(--color-red-rgb), 0.7)', // Assumes --color-red-rgb exists
-      duration: `random(2, 4)`,
+      "--pulse-intensity": Math.random() > 0.5 ? "0.3" : "0.5", // CSS variable for glow intensity
+      duration: 2 + Math.random(), // Randomized duration
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
-      delay: initialDelay + Math.random() * 2
+      delay: initialDelay,
+      onStart: () => {
+        // Set the pulse color on start
+        element.style.setProperty('--pulse-color', pulseColor);
+      }
     });
 
-    // Start glitching if enabled
+    // Start glitching if enabled - with more authentic Cyberpunk 2077 style
     if (glitch) {
       scheduleSkillGlitch();
     }
@@ -131,6 +159,7 @@
 
 <style>
   .floating-skill {
+    /* Base properties */
     position: absolute;
     font-family: 'Roboto Mono', monospace; /* Or your chosen mono font */
     font-size: 0.8rem;
@@ -140,13 +169,24 @@
     border: 1px solid rgba(var(--color-teal-rgb), 0.5); /* Use RGB version for opacity */
     white-space: nowrap;
     z-index: 3;
+    
+    /* Performance optimizations */
     transform-origin: center;
-    box-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.5);
-    text-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.8);
+    box-shadow: 0 0 5px rgba(var(--pulse-color, var(--color-teal-rgb)), var(--pulse-intensity, 0.5));
+    text-shadow: 0 0 5px rgba(var(--pulse-color, var(--color-teal-rgb)), 0.8);
+    will-change: transform; /* Reduced properties for better performance */
+    
+    /* Visual enhancements */
     backdrop-filter: blur(1px);
-    will-change: transform, opacity, box-shadow, color, text-shadow; /* Performance hint */
-    animation: cycleSkillGlow 9s ease-in-out infinite; /* Apply new color cycle animation */
+    
+    /* Authentic Cyberpunk 2077 touch - simulating data transmission */
+    border-left: 2px solid var(--color-teal);
+    
+    /* Accessibility - ensure good contrast */
+    --high-contrast: rgba(0, 0, 0, 0.9);
+    
     /* Initial state set by JS */
+    /* Using CSS variable animation instead of keyframes for better performance */
   }
 
   /* Corner elements */

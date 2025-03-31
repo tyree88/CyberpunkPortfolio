@@ -43,9 +43,21 @@
   .glitch-text {
     display: inline-block;
     position: relative;
-    color: #49c5b6;
+    color: var(--color-teal); /* Use CSS variable instead of hardcoded value */
     letter-spacing: 1px;
     cursor: default;
+    
+    /* Authentic Cyberpunk 2077 styling */
+    font-family: 'Rajdhani', 'Chakra Petch', sans-serif; /* More cyberpunk-like font */
+    font-weight: 600; /* Semi-bold for better visibility */
+    text-transform: uppercase; /* Many Cyberpunk UI elements use uppercase */
+    
+    /* Improve clarity with text shadow */
+    text-shadow: 0 0 2px rgba(var(--color-teal-rgb), 0.5);
+    
+    /* Performance optimizations */
+    will-change: transform, opacity; /* Hint for browser optimization */
+    transform: translateZ(0); /* Force GPU acceleration */
   }
   
   .glitch-text::before,
@@ -57,105 +69,123 @@
     height: 100%;
     left: 0;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    
+    /* Faster transition for more responsive feel */
+    transition: opacity 0.1s ease;
+    
+    /* Performance optimization */
+    will-change: clip, text-shadow, transform;
+    
+    /* Critical for performance - reduce painted areas */
+    backface-visibility: hidden;
   }
   
   .glitch-text::before {
-    left: 2px;
-    text-shadow: -1px 0 #ff5252;
+    left: 1.5px; /* Reduced offset for subtler effect */
+    text-shadow: -1px 0 var(--color-red); /* Use CSS variable */
     clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim-1 5s infinite linear alternate-reverse;
+    
+    /* Faster, more efficient animation */
+    animation: glitch-anim-1 3s infinite linear alternate-reverse;
+    animation-play-state: paused;
   }
   
   .glitch-text::after {
-    left: -2px;
-    text-shadow: -1px 0 #49c5b6;
+    left: -1.5px; /* Reduced offset for subtler effect */
+    text-shadow: -1px 0 var(--color-teal); /* Use CSS variable */
     clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim-2 5s infinite linear alternate-reverse;
+    
+    /* Faster, more efficient animation */
+    animation: glitch-anim-2 2.7s infinite linear alternate-reverse;
+    animation-play-state: paused;
   }
   
-  /* Show glitch effect on hover or periodically */
+  /* Show glitch effect on hover with authentic Cyberpunk styling */
   .glitch-text.hover::before,
   .glitch-text.hover::after {
-    opacity: 0.8;
+    opacity: 0.85; /* Slightly reduced opacity for better readability */
+    animation-play-state: running; /* Only run animations on hover for performance */
   }
   
-  /* Random pseudo-elements to simulate glitching */
+  /* Add highlight glow on hover - authentic to Cyberpunk 2077 UI */
+  .glitch-text.hover {
+    text-shadow: 0 0 4px rgba(var(--color-teal-rgb), 0.8);
+    animation: pulse-glow 1.5s infinite alternate;
+  }
+  
+  /* Random pseudo-elements to simulate glitching - more specific and performance-friendly */
   .glitch-text:nth-child(3n)::before,
   .glitch-text:nth-child(3n)::after {
-    animation-duration: 3.7s;
-    opacity: 0.3;
+    animation-duration: 2.9s; /* Faster animation */
+    opacity: 0.2; /* Reduced default opacity */
   }
   
+  /* Cyberpunk UI often has subtle animated elements */
+  @keyframes pulse-glow {
+    from { text-shadow: 0 0 3px rgba(var(--color-teal-rgb), 0.7); }
+    to { text-shadow: 0 0 5px rgba(var(--color-teal-rgb), 0.9); }
+  }
+  
+  /* More authentic Cyberpunk 2077 glitch animations */
+  /* Based on the game's UI with sharper, more digital distortions */
+  /* Reduced keyframe count for better performance while maintaining effect */
   @keyframes glitch-anim-1 {
     0% {
-      clip: rect(2px, 9999px, 14px, 0);
-    }
-    10% {
-      clip: rect(26px, 9999px, 94px, 0);
+      clip: rect(1px, 9999px, 6px, 0);
+      transform: translateX(-1px);
     }
     20% {
-      clip: rect(39px, 9999px, 30px, 0);
-    }
-    30% {
-      clip: rect(82px, 9999px, 79px, 0);
+      clip: rect(18px, 9999px, 22px, 0);
+      transform: translateX(1px);
     }
     40% {
-      clip: rect(36px, 9999px, 13px, 0);
-    }
-    50% {
-      clip: rect(22px, 9999px, 53px, 0);
+      clip: rect(42px, 9999px, 54px, 0);
+      transform: translateX(-0.5px);
     }
     60% {
-      clip: rect(67px, 9999px, 98px, 0);
-    }
-    70% {
-      clip: rect(18px, 9999px, 13px, 0);
+      clip: rect(12px, 9999px, 16px, 0);
+      transform: translateX(0.5px);
     }
     80% {
-      clip: rect(94px, 9999px, 4px, 0);
-    }
-    90% {
-      clip: rect(22px, 9999px, 76px, 0);
+      clip: rect(32px, 9999px, 44px, 0);
+      transform: translateX(-1px);
     }
     100% {
-      clip: rect(1px, 9999px, 48px, 0);
+      clip: rect(5px, 9999px, 10px, 0);
+      transform: translateX(1px);
     }
   }
   
   @keyframes glitch-anim-2 {
     0% {
-      clip: rect(68px, 9999px, 23px, 0);
+      clip: rect(34px, 9999px, 42px, 0);
+      transform: translateX(1px) translateY(1px);
     }
-    10% {
-      clip: rect(82px, 9999px, 64px, 0);
-    }
-    20% {
-      clip: rect(68px, 9999px, 14px, 0);
-    }
-    30% {
-      clip: rect(4px, 9999px, 15px, 0);
-    }
-    40% {
-      clip: rect(11px, 9999px, 36px, 0);
+    25% {
+      clip: rect(16px, 9999px, 24px, 0);
+      transform: translateX(-1px) translateY(-1px);
     }
     50% {
-      clip: rect(8px, 9999px, 4px, 0);
+      clip: rect(4px, 9999px, 12px, 0);
+      transform: translateX(1px) translateY(-0.5px);
     }
-    60% {
-      clip: rect(43px, 9999px, 81px, 0);
-    }
-    70% {
-      clip: rect(34px, 9999px, 96px, 0);
-    }
-    80% {
-      clip: rect(13px, 9999px, 61px, 0);
-    }
-    90% {
-      clip: rect(57px, 9999px, 30px, 0);
+    75% {
+      clip: rect(28px, 9999px, 36px, 0);
+      transform: translateX(-1px) translateY(0.5px);
     }
     100% {
-      clip: rect(84px, 9999px, 7px, 0);
+      clip: rect(10px, 9999px, 18px, 0);
+      transform: translateX(1px) translateY(1px);
+    }
+  }
+  
+  /* Additional scanline effect animation - authentic to Cyberpunk 2077 */
+  @keyframes scanline {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 0 100%;
     }
   }
 </style>

@@ -5,9 +5,8 @@
 
   // Define component properties
   export const title: string = "CYBERPUNK DEV"; // Changed to const as we're using the logo now
-  export let subtitle: string = "PORTFOLIO_2077";
   // Use const for description since it's not passed in as a prop
-  export const description: string = "Welcome to my digital portfolio. Navigate with arrow keys and press [ENTER] to select an option.";
+  export const description: string = "Welcome to my digital portfolio.";
   
   // Setup event dispatcher
   const dispatch = createEventDispatcher();
@@ -54,48 +53,23 @@
     <!-- Title Section - Replaced with logo image -->
     <div class="title-container">
       <img src="/images/tyreepearson-logo.png" alt="CYBERPUNK DEV" class="logo-image" />
-      <div class="subtitle">{subtitle}</div>
     </div>
     
-    <!-- Menu Section -->
+    <!-- Simplified Menu Section - Single Button -->
     <div class="menu-container">
-      <div class="menu-title">
-        <h2>MAIN MENU</h2>
-      </div>
-      
-      <div class="menu-options">
-        {#each options as option, i}
-          <div 
-            class="menu-option {selectedOption === i ? 'selected' : ''}"
-            data-id={option.id}
-            on:click={() => selectOption(option.id)}
-            on:keydown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                selectOption(option.id);
-              }
-            }}
-            on:mouseenter={() => { selectedOption = i }}
-            role="button"
-            tabindex="0"
-          >
-            <div class="option-marker">{selectedOption === i ? '>' : ''}</div>
-            <div class="option-text">{option.text}</div>
-          </div>
-          
-          {#if selectedOption === i}
-            <div class="option-description">
-              {option.description}
-            </div>
-          {/if}
-        {/each}
-      </div>
-      
-      <div class="menu-footer">
-        <div class="controls-hint">
-          <span>↑/↓: NAVIGATE</span>
-          <span>ENTER: SELECT</span>
-        </div>
+      <div class="enter-button-wrapper">
+        <button 
+          class="enter-button"
+          on:click={() => selectOption('about')}
+          on:keydown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              selectOption('about');
+            }
+          }}
+        >
+          ENTER THE PORTFOLIO
+        </button>
       </div>
     </div>
     
@@ -153,13 +127,6 @@
     filter: drop-shadow(0 0 15px rgba(255, 0, 76, 0.8));
   }
   
-  .subtitle {
-    font-size: 1.8rem;
-    color: #fcee0a;
-    text-shadow: 0 0 8px rgba(252, 238, 10, 0.7);
-    text-transform: uppercase;
-  }
-  
   .menu-container {
     background: linear-gradient(135deg, 
       rgba(0, 30, 60, 0.9) 0%, 
@@ -169,77 +136,66 @@
     border: 1px solid rgba(0, 255, 255, 0.3);
     border-left: 4px solid #00ffff;
     width: 90%;
-    max-width: 800px;
+    max-width: 400px;
     padding: 2rem;
     box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-  }
-  
-  .menu-title h2 {
-    font-size: 2.2rem;
-    color: #00ffff;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
-    margin-bottom: 2rem;
-    text-align: center;
-    letter-spacing: 0.1em;
-  }
-  
-  .menu-options {
-    margin: 2rem 0;
-  }
-  
-  .menu-option {
-    display: flex;
-    align-items: center;
-    padding: 0.8rem 1rem;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #ffffff;
-    font-size: 1.3rem;
-    letter-spacing: 0.05em;
-    border-left: 3px solid transparent;
-  }
-  
-  .menu-option.selected {
-    background-color: rgba(0, 255, 255, 0.1);
-    color: #00ffff;
-    border-left: 3px solid #00ffff;
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
-  }
-  
-  .option-marker {
-    width: 20px;
-    margin-right: 10px;
-    color: #ff004c;
-    font-weight: bold;
-  }
-  
-  .option-text {
-    flex: 1;
-  }
-  
-  .option-description {
-    padding: 0.8rem 1rem 1.2rem 2.5rem;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-    border-left: 1px dashed rgba(0, 255, 255, 0.3);
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .menu-footer {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(0, 255, 255, 0.2);
     display: flex;
     justify-content: center;
+    align-items: center;
   }
   
-  .controls-hint {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-    display: flex;
-    gap: 1.5rem;
+  .enter-button-wrapper {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .enter-button {
+    background: linear-gradient(90deg, 
+      rgba(255, 0, 76, 0.05) 0%, 
+      rgba(255, 0, 76, 0.3) 50%,
+      rgba(255, 0, 76, 0.05) 100%
+    );
+    border: 2px solid #ff004c;
+    color: #ffffff;
+    font-family: 'Rajdhani', 'Chakra Petch', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(255, 0, 76, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .enter-button:hover, .enter-button:focus {
+    background-color: rgba(255, 0, 76, 0.4);
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 25px rgba(255, 0, 76, 0.5);
+  }
+  
+  .enter-button:before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 1px solid rgba(255, 0, 76, 0.5);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .enter-button:hover:before {
+    opacity: 1;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
   }
   
   .copyright {
@@ -285,14 +241,12 @@
   /* Responsive styles */
   @media (max-width: 768px) {
     .logo-image { max-width: 300px; }
-    .subtitle { font-size: 1.5rem; }
     .menu-container { width: 95%; padding: 1.5rem; }
-    .menu-title h2 { font-size: 1.8rem; }
-    .menu-option { font-size: 1.1rem; }
+    .enter-button { font-size: 1.5rem; padding: 0.8rem 1.5rem; }
   }
   
   @media (max-width: 480px) {
     .logo-image { max-width: 250px; }
-    .subtitle { font-size: 1.2rem; }
+    .enter-button { font-size: 1.2rem; padding: 0.7rem 1.2rem; }
   }
 </style>

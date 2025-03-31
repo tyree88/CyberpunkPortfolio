@@ -116,25 +116,15 @@
   </div>
 {:else if !showMainContent}
   <div class="hero-container">
-    <HeroSection>
-      <button 
-        slot="after-description"
-        class="enter-button" 
-        on:click={enterMainContent}
-        on:keydown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            enterMainContent();
-          }
-        }}
-        aria-label="Enter Cyberdeck"
-      >
-        <span class="enter-text">ENTER CYBERDECK</span>
-        <div class="button-corner top-left"></div>
-        <div class="button-corner top-right"></div>
-        <div class="button-corner bottom-left"></div>
-        <div class="button-corner bottom-right"></div>
-      </button>
-    </HeroSection>
+    <HeroSection on:optionSelected={(e) => {
+      const optionId = e.detail.optionId;
+      console.log('Option selected:', optionId);
+      enterMainContent();
+      // Set initial section based on the option selected
+      if (optionId) {
+        $currentSection = optionId;
+      }
+    }} />
   </div>
 {:else}
   <div class="main-container">

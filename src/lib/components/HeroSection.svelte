@@ -68,7 +68,17 @@
             }
           }}
         >
-          ENTER THE PORTFOLIO
+          <div class="button-content">
+            <span class="button-text">ENTER THE PORTFOLIO</span>
+            <div class="hack-tags">
+              <span class="tag">QUICKHACK</span>
+            </div>
+          </div>
+          <div class="ram-cost">
+            <span class="cost-value">
+              <span class="plus-sign">+</span> 2
+            </span>
+          </div>
         </button>
       </div>
     </div>
@@ -101,6 +111,7 @@
     background: url('/images/start-screen.webp') center center / cover no-repeat;
     opacity: 0.8;
     z-index: 0;
+    filter: brightness(0.9) saturate(1.1) hue-rotate(-10deg);
   }
   
   .start-screen {
@@ -124,21 +135,16 @@
     max-width: 450px;
     height: auto;
     margin-bottom: 1rem;
-    filter: drop-shadow(0 0 15px rgba(255, 0, 76, 0.8));
+    filter: drop-shadow(0 0 15px rgba(73, 197, 182, 0.8));
   }
   
   .menu-container {
-    background: linear-gradient(135deg, 
-      rgba(0, 30, 60, 0.9) 0%, 
-      rgba(5, 15, 40, 0.95) 50%,
-      rgba(20, 0, 30, 0.9) 100%
-    );
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    border-left: 4px solid #00ffff;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(73, 197, 182, 0.3);
     width: 90%;
     max-width: 400px;
     padding: 2rem;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(73, 197, 182, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,52 +156,93 @@
   }
   
   .enter-button {
-    background: linear-gradient(90deg, 
-      rgba(255, 0, 76, 0.05) 0%, 
-      rgba(255, 0, 76, 0.3) 50%,
-      rgba(255, 0, 76, 0.05) 100%
-    );
-    border: 2px solid #ff004c;
-    color: #ffffff;
-    font-family: 'Rajdhani', 'Chakra Petch', sans-serif;
-    font-size: 1.8rem;
-    font-weight: bold;
-    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(73, 197, 182, 0.3);
+    color: #49c5b6;
+    font-family: 'Roboto Mono', monospace;
     text-transform: uppercase;
-    padding: 1rem 2rem;
+    padding: 0.8rem 1.5rem;
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(255, 0, 76, 0.3);
     position: relative;
-    overflow: hidden;
+  }
+  
+  .enter-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #49c5b6;
+    opacity: 0.7;
   }
   
   .enter-button:hover, .enter-button:focus {
-    background-color: rgba(255, 0, 76, 0.4);
-    color: #ffffff;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 25px rgba(255, 0, 76, 0.5);
+    background-color: rgba(73, 197, 182, 0.2);
+    border-color: rgba(73, 197, 182, 0.7);
+    color: #ECD06F;
+    box-shadow: 0 0 10px rgba(73, 197, 182, 0.3);
+    text-shadow: 0 0 8px rgba(73, 197, 182, 0.5);
+    transform: translateY(-2px);
   }
   
-  .enter-button:before {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border: 1px solid rgba(255, 0, 76, 0.5);
-    opacity: 0;
-    transition: all 0.3s ease;
+  .enter-button:hover .tag,
+  .enter-button:focus .tag {
+    color: #ECD06F;
+    border-color: rgba(236, 208, 111, 0.5);
+    background-color: rgba(73, 197, 182, 0.1);
   }
   
-  .enter-button:hover:before {
-    opacity: 1;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
+  .enter-button:hover .cost-value,
+  .enter-button:focus .cost-value {
+    color: #ECD06F;
+  }
+  
+  .button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .button-text {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+  
+  .hack-tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .tag {
+    font-size: 0.6rem;
+    color: rgba(73, 197, 182, 0.7);
+    padding: 0.1rem 0.3rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(73, 197, 182, 0.3);
+  }
+  
+  .ram-cost {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .cost-value {
+    font-size: 1.1rem;
+    color: #49c5b6;
+  }
+  
+  .plus-sign {
+    font-size: 0.8rem;
+    font-weight: bold;
   }
   
   .copyright {
@@ -214,7 +261,7 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(to right, rgba(0, 255, 255, 0) 0%, rgba(0, 255, 255, 0.5) 50%, rgba(0, 255, 255, 0) 100%);
+    background: linear-gradient(to right, rgba(73, 197, 182, 0) 0%, rgba(73, 197, 182, 0.5) 50%, rgba(73, 197, 182, 0) 100%);
     z-index: 10;
     pointer-events: none;
     animation: scanAnimation 4s linear infinite;
@@ -242,11 +289,15 @@
   @media (max-width: 768px) {
     .logo-image { max-width: 300px; }
     .menu-container { width: 95%; padding: 1.5rem; }
-    .enter-button { font-size: 1.5rem; padding: 0.8rem 1.5rem; }
+    .button-text { font-size: 1.3rem; }
+    .tag { font-size: 0.55rem; }
+    .cost-value { font-size: 1rem; }
   }
   
   @media (max-width: 480px) {
     .logo-image { max-width: 250px; }
-    .enter-button { font-size: 1.2rem; padding: 0.7rem 1.2rem; }
+    .button-text { font-size: 1.1rem; }
+    .enter-button { padding: 0.7rem 1rem; }
+    .tag { font-size: 0.5rem; }
   }
 </style>

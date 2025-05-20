@@ -66,7 +66,6 @@ declare module '$env/static/private' {
 	export const npm_package_version: string;
 	export const GIT_ASKPASS: string;
 	export const REPL_IMAGE: string;
-	export const DIRENV_CONFIG: string;
 	export const INIT_CWD: string;
 	export const REPLIT_PID1_FLAG_NIXMODULES_BEFORE_REPLIT_NIX: string;
 	export const XDG_CACHE_HOME: string;
@@ -181,7 +180,6 @@ declare module '$env/dynamic/private' {
 		npm_package_version: string;
 		GIT_ASKPASS: string;
 		REPL_IMAGE: string;
-		DIRENV_CONFIG: string;
 		INIT_CWD: string;
 		REPLIT_PID1_FLAG_NIXMODULES_BEFORE_REPLIT_NIX: string;
 		XDG_CACHE_HOME: string;

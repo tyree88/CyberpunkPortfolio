@@ -25,6 +25,17 @@ export const portfolioData: PortfolioData = { // Apply the type
       }
     },
     {
+      "title": "NOTION CONSULTING",
+      "description": "Notion Consultation site presenting my projects, templates, and ideas.",
+      "technologies": ["Notion", "MCP", "N8N", "Databases", "",],
+      "link": "https://tyreepearson.streamlit.app/",
+      "github": "https://github.com/tyreepearson/data-science-portfolio",
+      "preview": {
+        "type": "image",
+        "src": "/images/portfolio/Streamlit.png"
+      },
+    },
+    {
       "title": "DATA & AUTOMATION HUB",
       "description": "A collection of Python-based data science projects featuring predictive analytics, automation tools, and data pipelines. Includes interactive dashboards for data visualization, demonstrations of machine learning models, and automated data processing with performance tracking tools.",
       "technologies": ["Python", "Pandas", "Scikit-learn", "Streamlit", "Prefect", "Matplotlib", "AWS/Azure/GCP", "Docker"],
@@ -36,7 +47,7 @@ export const portfolioData: PortfolioData = { // Apply the type
       },
     },
     {
-      "title": "POLIGRAPH",
+      "title": "POLIGRAPH [In Progress]",
       "description": "An open political data platform that gives citizens access to voting records and legislative information. Uses modern web technologies to ensure data accuracy and provides direct connections between voters and representatives without third-party filtering.",
       "technologies": ["React", "Bluesky/ATProtocol", "Neo4j", "Python", "LangChain", "Hugging Face Transformers"],
       "link": "https://tyreepearson.replit.app/projects/poligraph",
@@ -47,7 +58,7 @@ export const portfolioData: PortfolioData = { // Apply the type
       }
     },
     {
-      "title": "RESELLR",
+      "title": "RESELLR [In Progress]",
       "description": "A comprehensive management tool for e-commerce sellers working across multiple platforms. Helps track inventory, manage pricing, and analyze sales data in one place. Features automated tools to synchronize listings across different marketplaces and optimize pricing strategies.",
       "technologies": ["Loveable", "Bolt.new", "Webflow", "Framer", "21st.dev"],
       "link": "https://tyreepearson.replit.app/projects/resellr",
